@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% block titulo %}Informe generado — Dropi QA{% endblock %}
+
+{% block contenido %}
+<div class="card card-pad" style="max-width:420px;text-align:center;">
+  <div class="eyebrow">Manifiesto consolidado</div>
+  <h1 style="font-size:18px;">{% if alcance == 'hoy' %}Informe de evaluaciones de hoy{% else %}Informe histórico completo{% endif %}</h1>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:700;color:var(--sello-tinta);margin:14px 0 2px;">{{ total }}</div>
+  <div class="hint" style="margin-bottom:18px;">evaluaciones incluidas</div>
+
+  <a class="btn btn-primario" href="/descargar/{{ nombre_archivo }}">Descargar informe (Excel)</a>
+
+  {% if drive_resultado %}
+    {% if drive_resultado.ok %}
+      <div class="aviso" style="background:var(--verde-100);color:var(--verde-600);padding:11px 14px;border-radius:10px;font-size:12px;margin-top:16px;text-align:left;">☁ Guardado en Google Drive: {{ drive_resultado.carpeta }}</div>
+    {% else %}
+      <div class="aviso" style="background:var(--ambar-100);color:var(--ambar-600);padding:11px 14px;border-radius:10px;font-size:12px;margin-top:16px;text-align:left;">⚠ No se guardó en Drive: {{ drive_resultado.motivo }}</div>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

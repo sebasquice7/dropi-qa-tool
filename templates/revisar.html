@@ -1,0 +1,104 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block titulo %}Revisar evaluación — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .cabecera-eval { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .cabecera-eval .meta { color: var(--ink-600); font-size: 13px; margin-top: 3px; }
+
+  .cat-title { font-weight: 700; color: var(--naranja-700); margin: 0 0 12px; font-size: 14.5px; border-bottom: 2px solid var(--naranja-100); padding-bottom: 8px; }
+  .card { margin-bottom: 16px; }
+  .item { display: grid; grid-template-columns: 1fr 92px; gap: 14px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--ink-100); }
+  .item:last-child { border-bottom: none; }
+  .item-nombre { font-size: 13px; font-weight: 600; color: var(--ink-900); }
+  .item-peso { color: var(--ink-400); font-weight: 400; font-size: 11.5px; }
+  .item textarea { width: 100%; font-size: 12px; margin-top: 6px; min-height: 44px; }
+  .item input[type=number] { text-align: center; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+  .critico-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ink-100); }
+  .critico-row:last-child { border-bottom: none; }
+  .critico-row input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--rojo-600); flex-shrink: 0; }
+  .critico-row label { font-size: 13px; flex: 0 0 260px; font-weight: 500; }
+  .critico-row input[type=text] { flex: 1; font-size: 12px; padding: 8px 10px; }
+
+  textarea.bloque { width: 100%; min-height: 120px; font-size: 13.5px; }
+
+  .btn-generar { position: sticky; bottom: 16px; box-shadow: 0 4px 20px rgba(26,22,19,0.18); font-size: 15px; padding: 15px; }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="card" style="margin-bottom:20px;">
+  <div class="cabecera-eval">
+    <div>
+      <h1 style="font-size:19px;">{{ metadata.agente }} — {{ metadata.bandeja }}</h1>
+      <div class="meta">ID {{ metadata.id_caso }} · {{ metadata.pais }} · {{ metadata.fecha }}{% if metadata.evaluado_con_ia %} · evaluado con {{ metadata.evaluado_con_ia }}{% endif %}</div>
+    </div>
+    {{ m.sello_puntaje(nota.nota_final * 100, tamano=76) }}
+  </div>
+</div>
+
+<form action="/generar" method="post">
+  <input type="hidden" name="token" value="{{ token }}">
+
+  <div class="card">
+    <div class="cat-title">Resumen del caso</div>
+    <textarea class="bloque" name="resumen_caso" style="min-height:60px;">{{ evaluacion.resumen_caso }}</textarea>
+  </div>
+
+  {% for cat in categorias %}
+  <div class="card">
+    <div class="cat-title">{{ cat.nombre }} ({{ (cat.peso_categoria*100) | round(0) | int }}%)</div>
+    {% for it in cat['items'] %}
+      {% set ev = evaluacion['items'][it.id] %}
+      {% if it.id == 'apego_guia_operativa' and evaluacion.guia_utilizada %}
+        <div class="item" style="border-bottom:none;padding-bottom:0;">
+          <div style="grid-column: 1 / -1;">
+            {% if evaluacion.guia_utilizada.encontrada %}
+              <span class="badge badge-verde">📘 Guía usada: {{ evaluacion.guia_utilizada.titulo }}</span>
+            {% else %}
+              <span class="badge badge-ambar">⬜ Sin guía operativa aplicable a este caso</span>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+      <div class="item">
+        <div>
+          <div class="item-nombre">{{ it.nombre }} <span class="item-peso">(máx {{ (it.peso*100)|round(0)|int }}%)</span></div>
+          <textarea name="justificacion__{{ it.id }}">{{ ev.justificacion }}</textarea>
+        </div>
+        <input type="number" step="0.001" min="0" max="{{ it.peso }}" name="puntaje__{{ it.id }}" value="{{ ev.puntaje }}">
+      </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+  <div class="card">
+    <div class="cat-title">⚠ Ítems críticos</div>
+    <div class="hint" style="margin-bottom:8px;">Marca solo si ocurrió — cualquiera marcado fuerza la nota final a 0%.</div>
+    {% for c in items_criticos %}
+      {% set ev = evaluacion.items_criticos[c.id] %}
+      <div class="critico-row">
+        <input type="checkbox" name="critico__{{ c.id }}" {% if c.id in criticos_activados %}checked{% endif %}>
+        <label>{{ c.nombre }}</label>
+        <input type="text" name="critico_just__{{ c.id }}" value="{{ ev.justificacion }}" placeholder="Justificación (si aplica)">
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="cat-title">✅ Lo positivo</div>
+    <div class="hint" style="margin-bottom:8px;">Un punto por línea.</div>
+    <textarea class="bloque" name="lo_positivo">{{ evaluacion.lo_positivo | join('\n') }}</textarea>
+  </div>
+
+  <div class="card">
+    <div class="cat-title">📈 Oportunidades de mejora</div>
+    <div class="hint" style="margin-bottom:8px;">Un punto por línea.</div>
+    <textarea class="bloque" name="oportunidades_mejora">{{ evaluacion.oportunidades_mejora | join('\n') }}</textarea>
+  </div>
+
+  <button class="btn btn-primario btn-generar" type="submit">Generar Excel y Word finales</button>
+</form>
+{% endblock %}

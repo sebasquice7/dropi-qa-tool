@@ -1,0 +1,26 @@
+# --- Secretos: NUNCA deben subirse a un repositorio ---
+.env
+.env.*
+!.env.example
+
+# --- Datos reales de clientes / historial de evaluaciones ---
+historial_evaluaciones.json
+uso_ia_log.jsonl
+ultimo_lote.json
+uploads/
+salidas/
+logs/
+
+# --- Entorno y cachés de Python ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- Editor / sistema ---
+.vscode/
+.DS_Store
+
+# --- PDFs sueltos que se hayan usado para pruebas manuales ---
+*.pdf

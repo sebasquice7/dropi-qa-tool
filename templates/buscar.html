@@ -1,0 +1,82 @@
+{% extends "_base.html" %}
+{% block titulo %}Buscar historial — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .form-busqueda { display: grid; grid-template-columns: repeat(5, 1fr) auto; gap: 10px; align-items: end; }
+  .form-busqueda label { margin: 0 0 5px; font-size: 11px; }
+  .form-busqueda input { font-size: 13px; padding: 9px 10px; }
+  @media (max-width: 1000px) { .form-busqueda { grid-template-columns: 1fr 1fr; } }
+
+  table.resultados { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.resultados th { text-align: left; color: var(--ink-400); font-weight: 600; padding: 8px; border-bottom: 2px solid var(--ink-100); font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.resultados td { padding: 10px 8px; border-bottom: 1px solid var(--ink-100); }
+  table.resultados tr.critico { background: var(--rojo-100); }
+  table.resultados tr:hover { background: var(--ink-50); cursor: pointer; }
+  .nota-celda { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .id-celda { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--ink-500); }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Registro de manifiestos</div>
+  <h1>Buscar en el historial</h1>
+  <div class="subt">Encuentra una evaluación pasada específica, por asesor, ID de caso, fecha o texto.</div>
+</div>
+
+<div class="card card-pad" style="margin-bottom:18px;">
+  <form class="form-busqueda" method="get" action="/buscar">
+    <div>
+      <label>Asesor</label>
+      <input type="text" name="asesor" value="{{ filtros.asesor }}" placeholder="Nombre">
+    </div>
+    <div>
+      <label>ID de caso</label>
+      <input type="text" name="id_caso" value="{{ filtros.id_caso }}" placeholder="ID">
+    </div>
+    <div>
+      <label>Texto en comentarios</label>
+      <input type="text" name="texto" value="{{ filtros.texto }}" placeholder="Ej. personalización">
+    </div>
+    <div>
+      <label>Desde</label>
+      <input type="text" name="fecha_desde" value="{{ filtros.fecha_desde }}" placeholder="YYYY-MM-DD">
+    </div>
+    <div>
+      <label>Hasta</label>
+      <input type="text" name="fecha_hasta" value="{{ filtros.fecha_hasta }}" placeholder="YYYY-MM-DD">
+    </div>
+    <button type="submit" class="btn btn-primario" style="width:auto;padding:10px 22px;">Buscar</button>
+  </form>
+</div>
+
+{% if hay_filtros %}
+  <div class="hint" style="margin-bottom:10px;">{{ resultados|length }} resultado(s)</div>
+  {% if resultados %}
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="resultados">
+        <thead>
+          <tr><th>Fecha</th><th>Asesor</th><th>Bandeja</th><th>ID Caso</th><th>País</th><th>Nota</th></tr>
+        </thead>
+        <tbody>
+          {% for r in resultados %}
+            <tr class="{{ 'critico' if r.critico_activado }}" onclick="window.location='/buscar/detalle/{{ r.timestamp }}'">
+              <td>{{ r.fecha }}</td>
+              <td>{{ r.agente }}</td>
+              <td>{{ r.bandeja }}</td>
+              <td class="id-celda">{{ r.id_caso }}</td>
+              <td>{{ r.pais }}</td>
+              <td class="nota-celda">{{ (r.nota_final*100)|round(0)|int }}%{% if r.critico_activado %} ⚠{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="card" style="text-align:center;color:var(--ink-500);padding:40px;">No se encontró ninguna evaluación con esos filtros.</div>
+  {% endif %}
+{% else %}
+  <div class="card" style="text-align:center;color:var(--ink-500);padding:40px;">Usa cualquiera de los filtros de arriba para buscar (no hace falta llenarlos todos).</div>
+{% endif %}
+{% endblock %}

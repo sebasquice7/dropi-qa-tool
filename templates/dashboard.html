@@ -1,0 +1,518 @@
+{% extends "_base.html" %}
+{% block titulo %}Dashboard en vivo — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  .top-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+  .actualizado { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-500); white-space: nowrap; }
+  .estado-punto { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--verde-postal); margin-right: 5px; animation: pulso 2s infinite; }
+  @keyframes pulso { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .filtros { display: flex; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); padding: 12px 16px; border-radius: var(--radius-md); box-shadow: var(--sombra); margin-bottom: 18px; flex-wrap: wrap; }
+  .filtros select { width: auto; padding: 8px 10px; font-size: 12.5px; }
+  .filtros .separador { width: 1px; height: 22px; background: var(--line); }
+  .meta-box { display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 12.5px; }
+  .meta-box input { width: 52px; padding: 6px; text-align: center; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .meta-box button { border: none; background: var(--naranja-500); color: white; border-radius: 6px; padding: 7px 12px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .meta-guardado { font-size: 11px; color: var(--verde-postal); opacity: 0; transition: opacity .3s; font-weight: 600; }
+
+  /* --- Bento grid --- */
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 14px; }
+  .card h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-500); margin: 0 0 4px; font-weight: 600; }
+  .card-hint { font-size: 11px; color: var(--ink-500); margin: 0 0 12px; }
+  .card-pad { padding: 18px 20px; }
+
+  /* Tira de KPIs tipo manifiesto, con divisores punteados verticales */
+  .kpis { grid-column: span 6; display: grid; grid-template-columns: repeat(5, 1fr); padding: 0; }
+  .kpi-card { text-align: center; position: relative; padding: 18px 10px; }
+  .kpi-card:not(:last-child)::after { content: ""; position: absolute; right: 0; top: 14px; bottom: 14px; width: 1px; background-image: repeating-linear-gradient(to bottom, var(--line) 0 5px, transparent 5px 10px); }
+  .kpi-card .valor { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: var(--ink); }
+  .kpi-card .valor.chico { font-size: 13.5px; font-family: 'Inter', sans-serif; }
+  .kpi-card .etiqueta { font-size: 10.5px; color: var(--ink-500); margin-top: 5px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .kpi-delta { font-size: 10.5px; font-weight: 700; margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
+  .kpi-delta.sube { color: var(--verde-postal); }
+  .kpi-delta.baja { color: var(--rojo); }
+  .kpi-delta.igual { color: var(--ink-300); }
+
+  #kpi-promedio {
+    width: 62px; height: 62px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 17px;
+    color: var(--verde-postal); position: relative; transform: rotate(-4deg);
+  }
+  #kpi-promedio::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid currentColor; opacity: 0.9; }
+  #kpi-promedio::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; border: 1px dashed currentColor; opacity: 0.5; }
+
+  .c-span-3 { grid-column: span 3; }
+  .c-span-4 { grid-column: span 4; }
+  .c-span-6 { grid-column: span 6; }
+
+  .chart-box { position: relative; height: 210px; }
+  .chart-box.alto { height: 250px; }
+  .chart-box.chico { height: 160px; }
+  .chart-box canvas { max-width: 100%; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; color: var(--ink-500); font-weight: 600; padding: 6px 8px; border-bottom: 2px solid var(--line); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+  td { padding: 8px; border-bottom: 1px solid var(--line); }
+  tr.fila-critico { background: var(--rojo-bg); }
+  .badge-crit { background: var(--rojo); color: white; border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 700; }
+
+  .temas-lista { list-style: none; padding: 0; margin: 0; }
+  .temas-lista li { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+  .temas-lista .barra { height: 7px; background: var(--naranja-500); border-radius: 4px; opacity: 0.85; }
+  .temas-lista .conteo { color: var(--ink-500); font-family: 'JetBrains Mono', monospace; font-size: 11px; min-width: 26px; text-align: right; }
+
+  .vacio { text-align: center; padding: 80px 20px; color: var(--ink-500); }
+  .vacio img { height: 50px; opacity: 0.4; margin-bottom: 16px; }
+
+  .tabla-mapa-calor { border-collapse: collapse; font-size: 11.5px; width: 100%; min-width: 600px; }
+  .tabla-mapa-calor th { text-align: left; padding: 8px 10px; color: var(--ink-500); font-weight: 600; white-space: nowrap; }
+  .tabla-mapa-calor th.col-cat { writing-mode: vertical-rl; text-orientation: mixed; text-align: right; padding-bottom: 8px; font-size: 10px; }
+  .tabla-mapa-calor td { padding: 0; text-align: center; }
+  .tabla-mapa-calor td.nombre-asesor { text-align: left; padding: 8px 10px; white-space: nowrap; font-weight: 600; color: var(--ink); }
+  .celda-calor { display: block; padding: 10px 4px; font-weight: 700; color: white; font-family: 'JetBrains Mono', monospace; border-radius: 5px; }
+
+  @media (max-width: 900px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .kpis { grid-template-columns: repeat(2, 1fr); grid-column: span 2; }
+    .c-span-3, .c-span-4, .c-span-6 { grid-column: span 2; }
+    .meta-box { margin-left: 0; }
+  }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="top-row">
+  <div class="page-header" style="margin-bottom:0;">
+    <div class="eyebrow">Panel de control · Tiempo real</div>
+    <h1>Dashboard de calidad</h1>
+    <div class="subt">Calidad de soporte, actualizado en tiempo real</div>
+  </div>
+  <div class="actualizado"><span class="estado-punto"></span>ACTUALIZADO: <span id="hora-actualizado">—</span></div>
+</div>
+
+<div class="filtros">
+  <select id="filtro-periodo" onchange="cargarDatos()">
+    <option value="hoy">Hoy</option>
+    <option value="semana">Esta semana</option>
+    <option value="mes">Este mes</option>
+    <option value="todo" selected>Todo el historial</option>
+  </select>
+  <select id="filtro-pais" onchange="cargarDatos()">
+    <option value="">🌎 Todos los países</option>
+  </select>
+  <select id="filtro-bandeja" onchange="cargarDatos()">
+    <option value="">📁 Todas las bandejas</option>
+  </select>
+  <div class="separador"></div>
+  <div class="meta-box">
+    🎯 Meta de calidad:
+    <input type="number" id="input-meta" min="0" max="100" step="1">
+    <span>%</span>
+    <button onclick="guardarMeta()">Guardar</button>
+    <span class="meta-guardado" id="meta-guardado-msg">✓ Guardada</span>
+  </div>
+</div>
+
+<div id="contenido-vacio" class="vacio" style="display:none;">
+  <img src="/static/dropi_logo.png" alt="">
+  <div>No hay evaluaciones que coincidan con estos filtros.<br>Ajusta el periodo/país/bandeja, o evalúa una conversación y vuelve aquí.</div>
+</div>
+
+<div id="contenido-dashboard" style="display:none;">
+<div class="bento">
+
+  <div class="card kpis">
+    <div class="kpi-card">
+      <div class="valor" id="kpi-total">—</div>
+      <div class="etiqueta">Evaluaciones</div>
+      <div class="kpi-delta" id="kpi-total-delta"></div>
+    </div>
+    <div class="kpi-card">
+      <div id="kpi-promedio">—</div>
+      <div class="etiqueta">Nota promedio</div>
+      <div class="kpi-delta" id="kpi-promedio-delta"></div>
+    </div>
+    <div class="kpi-card"><div class="valor" id="kpi-criticos">—</div><div class="etiqueta">% con ítem crítico</div></div>
+    <div class="kpi-card"><div class="valor chico" id="kpi-mejor">—</div><div class="etiqueta">Mejor asesor</div></div>
+    <div class="kpi-card"><div class="valor chico" id="kpi-peor">—</div><div class="etiqueta">Asesor a reforzar</div></div>
+  </div>
+
+  <div class="card c-span-3 card-pad">
+    <h2>⚠ Problemas más frecuentes</h2>
+    <div class="card-hint">Categorías con menor % de cumplimiento sobre su propio máximo</div>
+    <div class="chart-box"><canvas id="chart-problemas"></canvas></div>
+    <select class="selector-secundario" id="selector-categoria" onchange="mostrarItemsCategoria()" style="margin-top:14px;"></select>
+    <div class="chart-box chico"><canvas id="chart-items-categoria"></canvas></div>
+    <div id="items-categoria-vacio" class="card-hint" style="text-align:center;padding:16px;background:var(--ambar-bg);border-radius:8px;">Sin datos de ítems individuales disponibles para esta categoría todavía.</div>
+    <div id="aviso-sin-detalle" class="card-hint" style="display:none;text-align:center;padding:16px;background:var(--ambar-bg);border-radius:8px;margin-top:10px;">
+      💡 Ninguna de tus evaluaciones actuales tiene el detalle por ítem individual guardado (son de antes de esta actualización). Evalúa 2-3 conversaciones nuevas y esta sección se llenará sola con el ítem exacto que más está fallando en cada categoría.
+    </div>
+  </div>
+  <div class="card c-span-3 card-pad">
+    <h2>📊 Distribución de notas</h2>
+    <div class="card-hint">Cuántas evaluaciones caen en cada rango</div>
+    <div class="chart-box"><canvas id="chart-distribucion"></canvas></div>
+    <h2 style="margin-top:20px;">🔑 Temas recurrentes</h2>
+    <div class="card-hint">Palabras que más se repiten en las oportunidades de mejora</div>
+    <ul class="temas-lista" id="lista-temas"></ul>
+  </div>
+
+  <div class="card c-span-6 card-pad">
+    <h2>📈 Nota promedio por asesor</h2>
+    <div class="card-hint">La línea punteada es la meta de calidad configurada arriba</div>
+    <div class="chart-box alto"><canvas id="chart-asesores-nota"></canvas></div>
+  </div>
+
+  <div class="card c-span-6 card-pad">
+    <h2>📉 Tendencia por asesor</h2>
+    <div class="card-hint">Nota promedio por día — te muestra si cada asesor va mejorando o empeorando</div>
+    <div class="chart-box alto"><canvas id="chart-tendencia"></canvas></div>
+  </div>
+
+  <div class="card c-span-3 card-pad">
+    <h2>👤 Gestión individual del asesor</h2>
+    <select class="selector-secundario" id="selector-asesor" onchange="mostrarAsesor()">
+      <option value="">Elige un asesor...</option>
+    </select>
+    <div class="chart-box"><canvas id="chart-asesor-categorias"></canvas></div>
+    <div id="detalle-asesor-vacio" class="card-hint" style="text-align:center;padding:20px 0;">Selecciona un asesor arriba para ver su desglose por categoría.</div>
+    <a id="link-coaching" class="btn btn-secundario" style="display:none;margin-top:12px;" href="#">🧑‍🏫 Ver plan de coaching completo →</a>
+  </div>
+
+  <div class="card c-span-3 card-pad">
+    <h2>📋 Resumen por asesor</h2>
+    <table>
+      <thead><tr><th>Asesor</th><th>Evals.</th><th>Promedio</th><th>Debilidad</th></tr></thead>
+      <tbody id="tabla-asesores"></tbody>
+    </table>
+  </div>
+
+  <div class="card c-span-6 card-pad">
+    <h2>🌡 Mapa de calor del equipo</h2>
+    <div class="card-hint">Todos los asesores contra todas las categorías, de un solo vistazo</div>
+    <div style="overflow-x:auto;">
+      <table id="tabla-mapa-calor" class="tabla-mapa-calor"></table>
+    </div>
+  </div>
+
+  <div class="card c-span-6 card-pad">
+    <h2>🌍 Comparativa por país</h2>
+    <div class="card-hint">Nota promedio, sin importar el filtro de país activo arriba</div>
+    <div class="chart-box"><canvas id="chart-paises"></canvas></div>
+  </div>
+
+</div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+let ultimosDatos = null;
+let charts = {};
+const PALETA = ["#F26522", "#2E7D32", "#1565C0", "#8E24AA", "#C62828", "#00838F", "#F9A825", "#5D4037"];
+const colorEficiencia = v => v < 75 ? "#C62828" : v < 90 ? "#F9A825" : "#2E7D32";
+
+async function cargarDatos() {
+  const periodo = document.getElementById("filtro-periodo").value;
+  const pais = document.getElementById("filtro-pais").value;
+  const bandeja = document.getElementById("filtro-bandeja").value;
+
+  try {
+    const resp = await fetch(`/api/dashboard?periodo=${periodo}&pais=${encodeURIComponent(pais)}&bandeja=${encodeURIComponent(bandeja)}`);
+    const datos = await resp.json();
+    ultimosDatos = datos;
+    renderizar(datos);
+    document.getElementById("hora-actualizado").textContent = new Date().toLocaleTimeString("es-CO");
+  } catch (e) {
+    console.error("Error cargando dashboard:", e);
+  }
+}
+
+function renderizar(datos) {
+  actualizarOpciones("filtro-pais", datos.paises_disponibles);
+  actualizarOpciones("filtro-bandeja", datos.bandejas_disponibles);
+
+  if (!document.activeElement || document.activeElement.id !== "input-meta") {
+    document.getElementById("input-meta").value = Math.round(datos.meta * 100);
+  }
+
+  const vacio = document.getElementById("contenido-vacio");
+  const contenido = document.getElementById("contenido-dashboard");
+  if (!datos.hay_datos) {
+    vacio.style.display = "block";
+    contenido.style.display = "none";
+    return;
+  }
+  vacio.style.display = "none";
+  contenido.style.display = "block";
+
+  document.getElementById("kpi-total").textContent = datos.total;
+  document.getElementById("kpi-promedio").textContent = Math.round(datos.nota_promedio * 100) + "%";
+  document.getElementById("kpi-criticos").textContent = Math.round(datos.pct_con_critico * 100) + "%";
+  document.getElementById("kpi-mejor").textContent = `${datos.mejor_asesor.nombre} (${Math.round(datos.mejor_asesor.nota*100)}%)`;
+  document.getElementById("kpi-peor").textContent = `${datos.peor_asesor.nombre} (${Math.round(datos.peor_asesor.nota*100)}%)`;
+
+  renderizarDelta(datos.comparacion);
+
+  const etiquetasProblemas = datos.eficiencia_categorias.map(f => f.categoria);
+  const valoresProblemas = datos.eficiencia_categorias.map(f => Math.round(f.eficiencia * 1000) / 10);
+  dibujarChart("chart-problemas", {
+    type: "bar",
+    data: { labels: etiquetasProblemas, datasets: [{ data: valoresProblemas, backgroundColor: valoresProblemas.map(colorEficiencia), borderRadius: 4 }] },
+    options: { indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 100, ticks: { callback: v => v + "%" } } } },
+  });
+
+  const selectorCat = document.getElementById("selector-categoria");
+  const avisoSinDetalle = document.getElementById("aviso-sin-detalle");
+
+  if (!datos.hay_detalle_items) {
+    selectorCat.style.display = "none";
+    document.getElementById("chart-items-categoria").style.display = "none";
+    document.getElementById("items-categoria-vacio").style.display = "none";
+    avisoSinDetalle.style.display = "block";
+  } else {
+    selectorCat.style.display = "block";
+    avisoSinDetalle.style.display = "none";
+    const catPrevia = selectorCat.value;
+    selectorCat.innerHTML = datos.eficiencia_categorias.map(f => `<option value="${f.categoria}">${f.categoria} (${Math.round(f.eficiencia*100)}%)</option>`).join("");
+    selectorCat.value = catPrevia && [...selectorCat.options].some(o => o.value === catPrevia) ? catPrevia : etiquetasProblemas[0];
+    mostrarItemsCategoria();
+  }
+
+  const rangos = Object.keys(datos.por_rango);
+  dibujarChart("chart-distribucion", {
+    type: "doughnut",
+    data: { labels: rangos, datasets: [{ data: rangos.map(r => datos.por_rango[r]), backgroundColor: PALETA }] },
+    options: { plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 } } } } },
+  });
+
+  const listaTemas = document.getElementById("lista-temas");
+  if (datos.temas_recurrentes.length === 0) {
+    listaTemas.innerHTML = '<li style="color:#999;">Sin suficientes datos de texto todavía.</li>';
+  } else {
+    const maxConteo = Math.max(...datos.temas_recurrentes.map(t => t.conteo));
+    listaTemas.innerHTML = datos.temas_recurrentes.map(t => `
+      <li>
+        <span style="min-width:110px;text-transform:capitalize;">${t.palabra}</span>
+        <span class="barra" style="width:${Math.round((t.conteo/maxConteo)*100)}px;"></span>
+        <span class="conteo">${t.conteo}</span>
+      </li>`).join("");
+  }
+
+  const asesoresNombres = Object.keys(datos.promedio_por_asesor);
+  const asesoresValores = asesoresNombres.map(a => Math.round(datos.promedio_por_asesor[a] * 1000) / 10);
+  const metaPct = Math.round(datos.meta * 1000) / 10;
+  dibujarChart("chart-asesores-nota", {
+    data: {
+      labels: asesoresNombres,
+      datasets: [
+        { type: "bar", label: "Nota", data: asesoresValores, backgroundColor: asesoresValores.map(colorEficiencia), borderRadius: 4, order: 2 },
+        { type: "line", label: "Meta", data: asesoresNombres.map(() => metaPct), borderColor: "#333", borderDash: [6, 4], pointRadius: 0, borderWidth: 2, order: 1 },
+      ],
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 100, ticks: { callback: v => v + "%" } } } },
+  });
+
+  const fechas = datos.tendencia.fechas;
+  const datasetsTendencia = datos.tendencia.asesores.map((asesor, i) => ({
+    type: "line", label: asesor,
+    data: datos.tendencia.series[asesor].map(v => v === null ? null : Math.round(v * 1000) / 10),
+    borderColor: PALETA[i % PALETA.length], backgroundColor: PALETA[i % PALETA.length],
+    spanGaps: true, tension: 0.3,
+  }));
+  datasetsTendencia.push({ type: "line", label: "Meta", data: fechas.map(() => metaPct), borderColor: "#999", borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 });
+  dibujarChart("chart-tendencia", {
+    data: { labels: fechas, datasets: datasetsTendencia },
+    options: { scales: { y: { min: 0, max: 100, ticks: { callback: v => v + "%" } } } },
+  });
+
+  const selector = document.getElementById("selector-asesor");
+  const seleccionPrevia = selector.value;
+  selector.innerHTML = '<option value="">Elige un asesor...</option>' +
+    datos.por_asesor_detalle.map(f => `<option value="${f.asesor}">${f.asesor}</option>`).join("");
+  if (seleccionPrevia) selector.value = seleccionPrevia;
+  mostrarAsesor();
+
+  const tbody = document.getElementById("tabla-asesores");
+  tbody.innerHTML = datos.por_asesor_detalle.map(f => `
+    <tr class="${f.criticos > 0 ? 'fila-critico' : ''}">
+      <td>${f.asesor}${f.criticos > 0 ? ' <span class="badge-crit">' + f.criticos + ' crítico(s)</span>' : ''}</td>
+      <td>${f.total_evaluaciones}</td>
+      <td><strong>${Math.round(f.nota_promedio*100)}%</strong></td>
+      <td style="font-size:11px;color:#888;">${f.categoria_debil || '-'}</td>
+    </tr>`).join("");
+
+  dibujarMapaCalor(datos);
+  dibujarComparativaPaises(datos);
+}
+
+function dibujarMapaCalor(datos) {
+  const tabla = document.getElementById("tabla-mapa-calor");
+  const categorias = datos.eficiencia_categorias.map(f => f.categoria);
+  const asesores = datos.por_asesor_detalle;
+
+  if (!asesores.length || !categorias.length) {
+    tabla.innerHTML = "";
+    return;
+  }
+
+  const colorCelda = v => {
+    if (v === undefined || v === null) return "#E4DDD5";
+    if (v < 75) return "#C62828";
+    if (v < 90) return "#F9A825";
+    return "#1D7A4C";
+  };
+
+  let html = "<thead><tr><th>Asesor</th>";
+  categorias.forEach(cat => { html += `<th class="col-cat">${cat}</th>`; });
+  html += "</tr></thead><tbody>";
+
+  asesores.forEach(a => {
+    html += `<tr><td class="nombre-asesor">${a.asesor}</td>`;
+    categorias.forEach(cat => {
+      const val = a.categorias_eficiencia ? a.categorias_eficiencia[cat] : undefined;
+      const pct = val !== undefined ? Math.round(val * 100) : null;
+      const color = colorCelda(pct);
+      html += `<td><span class="celda-calor" style="background:${color};" title="${a.asesor} — ${cat}: ${pct !== null ? pct + '%' : 'sin datos'}">${pct !== null ? pct + '%' : '—'}</span></td>`;
+    });
+    html += "</tr>";
+  });
+  html += "</tbody>";
+  tabla.innerHTML = html;
+}
+
+function dibujarComparativaPaises(datos) {
+  const paises = Object.keys(datos.promedio_por_pais || {});
+  if (!paises.length) return;
+
+  const valores = paises.map(p => Math.round(datos.promedio_por_pais[p].nota_promedio * 1000) / 10);
+  const totales = paises.map(p => datos.promedio_por_pais[p].total);
+
+  dibujarChart("chart-paises", {
+    type: "bar",
+    data: {
+      labels: paises.map((p, i) => `${p} (${totales[i]})`),
+      datasets: [{ data: valores, backgroundColor: valores.map(colorEficiencia), borderRadius: 4 }],
+    },
+    options: { indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 100, ticks: { callback: v => v + "%" } } } },
+  });
+}
+
+function renderizarDelta(comparacion) {
+  const elTotal = document.getElementById("kpi-total-delta");
+  const elPromedio = document.getElementById("kpi-promedio-delta");
+  if (!comparacion || !comparacion.hay_comparacion) {
+    elTotal.textContent = "";
+    elPromedio.textContent = "";
+    return;
+  }
+  const delta = Math.round(comparacion.delta_nota * 1000) / 10;
+  const clase = delta > 0.4 ? "sube" : delta < -0.4 ? "baja" : "igual";
+  const flecha = delta > 0.4 ? "↑" : delta < -0.4 ? "↓" : "→";
+  elPromedio.className = "kpi-delta " + clase;
+  elPromedio.textContent = `${flecha} ${delta > 0 ? "+" : ""}${delta}% vs periodo anterior`;
+  elTotal.className = "kpi-delta igual";
+  elTotal.textContent = `(antes: ${comparacion.total_anterior})`;
+}
+
+function actualizarOpciones(idSelect, opciones) {
+  const select = document.getElementById(idSelect);
+  const actual = select.value;
+  const primeraOpcion = select.options[0];
+  select.innerHTML = "";
+  select.appendChild(primeraOpcion);
+  opciones.forEach(op => {
+    const o = document.createElement("option");
+    o.value = op; o.textContent = op;
+    select.appendChild(o);
+  });
+  select.value = actual;
+}
+
+function mostrarItemsCategoria() {
+  const categoria = document.getElementById("selector-categoria").value;
+  const vacio = document.getElementById("items-categoria-vacio");
+  const canvas = document.getElementById("chart-items-categoria");
+  const items = (ultimosDatos.eficiencia_items || {})[categoria];
+
+  if (!items || items.length === 0) {
+    vacio.style.display = "block";
+    canvas.style.display = "none";
+    return;
+  }
+  vacio.style.display = "none";
+  canvas.style.display = "block";
+
+  const etiquetas = items.map(f => f.item_nombre);
+  const valores = items.map(f => Math.round(f.eficiencia * 1000) / 10);
+  dibujarChart("chart-items-categoria", {
+    type: "bar",
+    data: { labels: etiquetas, datasets: [{ data: valores, backgroundColor: valores.map(colorEficiencia), borderRadius: 4 }] },
+    options: { indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 100, ticks: { callback: v => v + "%" } }, y: { ticks: { font: { size: 10 } } } } },
+  });
+}
+
+function mostrarAsesor() {
+  const nombre = document.getElementById("selector-asesor").value;
+  const vacio = document.getElementById("detalle-asesor-vacio");
+  const canvas = document.getElementById("chart-asesor-categorias");
+  const linkCoaching = document.getElementById("link-coaching");
+
+  if (!nombre || !ultimosDatos) {
+    vacio.style.display = "block";
+    canvas.style.display = "none";
+    linkCoaching.style.display = "none";
+    return;
+  }
+  const fila = ultimosDatos.por_asesor_detalle.find(f => f.asesor === nombre);
+  if (!fila) return;
+
+  vacio.style.display = "none";
+  canvas.style.display = "block";
+  linkCoaching.style.display = "block";
+  linkCoaching.href = `/coaching/${encodeURIComponent(nombre)}`;
+
+  const categorias = Object.keys(fila.categorias_eficiencia);
+  const valores = categorias.map(c => Math.round(fila.categorias_eficiencia[c] * 1000) / 10);
+  dibujarChart("chart-asesor-categorias", {
+    type: "bar",
+    data: { labels: categorias, datasets: [{ data: valores, backgroundColor: valores.map(colorEficiencia), borderRadius: 4 }] },
+    options: {
+      indexAxis: "y",
+      plugins: { legend: { display: false }, title: { display: true, text: `${nombre} — ${fila.total_evaluaciones} evaluación(es), promedio ${Math.round(fila.nota_promedio*100)}%`, font: { size: 12 } } },
+      scales: { x: { min: 0, max: 100, ticks: { callback: v => v + "%" } } },
+    },
+  });
+}
+
+async function guardarMeta() {
+  const valor = parseFloat(document.getElementById("input-meta").value) / 100;
+  if (isNaN(valor) || valor < 0 || valor > 1) return;
+  try {
+    await fetch("/api/dashboard/meta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ meta: valor }),
+    });
+    const msg = document.getElementById("meta-guardado-msg");
+    msg.style.opacity = "1";
+    setTimeout(() => { msg.style.opacity = "0"; }, 1800);
+    cargarDatos();
+  } catch (e) {
+    console.error("Error guardando meta:", e);
+  }
+}
+
+function dibujarChart(idCanvas, config) {
+  if (charts[idCanvas]) charts[idCanvas].destroy();
+  const ctx = document.getElementById(idCanvas).getContext("2d");
+  config.options = Object.assign({ responsive: true, maintainAspectRatio: false }, config.options || {});
+  charts[idCanvas] = new Chart(ctx, config);
+}
+
+cargarDatos();
+setInterval(cargarDatos, 30000);
+</script>
+{% endblock %}

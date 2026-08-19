@@ -1,0 +1,36 @@
+{% extends "_base.html" %}
+{% block titulo %}Elegir asesor — Dropi QA{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Datos incompletos del manifiesto</div>
+  <h1>{% if asesores %}Se detectaron varios asesores{% else %}No se detectó ningún asesor{% endif %}</h1>
+  <div class="subt">
+    {% if asesores %}Elige a quién quieres evaluar en esta conversación.{% else %}Escribe el nombre del asesor a evaluar en esta conversación.{% endif %}
+  </div>
+</div>
+
+<div class="card card-pad" style="max-width:480px;">
+  <form action="/evaluar-con-asesor" method="post">
+    <input type="hidden" name="token" value="{{ token }}">
+    <input type="hidden" name="ruta_pdf" value="{{ ruta_pdf }}">
+    <input type="hidden" name="bandeja" value="{{ bandeja }}">
+    <input type="hidden" name="id_caso" value="{{ id_caso }}">
+    <input type="hidden" name="pais" value="{{ pais }}">
+    <input type="hidden" name="auditor">
+
+    <label style="margin-top:0;">Asesor</label>
+    {% if asesores %}
+      <select name="asesor">
+        {% for a in asesores %}
+          <option value="{{ a }}">{{ a }}</option>
+        {% endfor %}
+      </select>
+    {% else %}
+      <input type="text" name="asesor" placeholder="Nombre del asesor" required>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primario" style="margin-top:18px;">Continuar</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+# Dependencias adicionales SOLO para desarrollo — no hacen falta para correr
+# el programa, solo para correr las pruebas automatizadas (tests/).
+#
+# Instalar con:  pip install -r requirements-dev.txt -r requirements.txt
+# Correr pruebas con:  python -m pytest tests/
+pytest==9.1.1

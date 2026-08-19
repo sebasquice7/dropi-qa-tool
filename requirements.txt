@@ -1,0 +1,22 @@
+# Versiones FIJAS (no ">="), probadas juntas y funcionando — así un
+# `pip install` de acá a varios meses no trae una versión nueva sin avisar
+# que rompa algo silenciosamente.
+#
+# Para actualizar una librería a propósito:
+#   1. pip install --upgrade nombre_libreria
+#   2. python -m pytest tests/  (deben seguir pasando las 46 pruebas)
+#   3. Recién ahí, actualiza el número aquí a la versión que quedó instalada
+pdfplumber==0.11.9
+google-genai==2.18.0
+openpyxl==3.1.5
+python-docx==1.2.0
+python-dotenv==1.2.2
+flask==3.1.3
+
+# anthropic y openai son opcionales: solo hacen falta si activas Claude y/o
+# ChatGPT como IAs adicionales para comparar (ambas requieren facturación de pago).
+# Ya están instaladas y el código las soporta; sin las API keys en el .env
+# simplemente no se usan, no rompen nada.
+anthropic==0.122.0
+openai==3.0.0
+

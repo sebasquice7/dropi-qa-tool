@@ -1,0 +1,118 @@
+{% extends "_base.html" %}
+{% block titulo %}Simulador de presupuesto — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  .fuente-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px; margin-bottom: 18px; }
+  .fuente-real { background: var(--verde-100); color: var(--verde-600); }
+  .fuente-estimado { background: var(--ambar-100); color: var(--ambar-600); }
+
+  .controles { display: flex; gap: 16px; align-items: end; flex-wrap: wrap; margin-bottom: 20px; }
+  .campo-control { flex: 1; min-width: 220px; }
+  .campo-control label { margin: 0 0 6px; }
+  .campo-control input[type=range] { width: 100%; margin-top: 8px; }
+  .valor-grande { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: var(--sello-tinta); }
+
+  table.tabla-precios { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.tabla-precios th { text-align: left; color: var(--ink-400); font-weight: 600; padding: 8px; border-bottom: 2px solid var(--ink-100); font-size: 11px; text-transform: uppercase; }
+  table.tabla-precios td { padding: 10px 8px; border-bottom: 1px solid var(--ink-100); }
+  table.tabla-precios tr.verde { background: var(--verde-100); }
+  table.tabla-precios tr.ambar { background: var(--ambar-100); }
+  table.tabla-precios tr.rojo { background: var(--rojo-100); }
+  .nombre-modelo { font-weight: 700; }
+  .nota-modelo { font-size: 11px; color: var(--ink-600); display: block; font-weight: 400; }
+  .costo-destacado { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+
+  .chart-box { position: relative; height: 260px; margin-top: 16px; }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Costos proyectados</div>
+  <h1>Simulador de presupuesto de IA</h1>
+  <div class="subt">Cuánto costaría evaluar tu volumen de conversaciones con cada modelo — se actualiza mientras mueves el control.</div>
+</div>
+
+<div id="fuente-datos" class="fuente-badge fuente-estimado">Cargando...</div>
+
+<div class="card card-pad" style="margin-bottom:18px;">
+  <div class="controles">
+    <div class="campo-control">
+      <label>Conversaciones a evaluar por día: <span class="valor-grande" id="valor-conversaciones">5,000</span></label>
+      <input type="range" id="slider-conversaciones" min="100" max="20000" step="100" value="5000">
+    </div>
+  </div>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;margin-bottom:18px;">
+  <table class="tabla-precios">
+    <thead>
+      <tr><th>Modelo</th><th>Precio entrada/salida ($/M tok)</th><th>Costo por evaluación</th><th>Costo diario</th><th>Costo mensual</th></tr>
+    </thead>
+    <tbody id="tabla-modelos"></tbody>
+  </table>
+</div>
+
+<div class="card card-pad">
+  <h2 style="font-size:14px;margin:0 0 4px;">Costo mensual por modelo</h2>
+  <div class="chart-box"><canvas id="chart-presupuesto"></canvas></div>
+</div>
+
+<script>
+let chartPresupuesto = null;
+
+function formatoUSD(valor) {
+  return "$" + valor.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+async function actualizar() {
+  const conversaciones = document.getElementById("slider-conversaciones").value;
+  document.getElementById("valor-conversaciones").textContent = Number(conversaciones).toLocaleString("es-CO");
+
+  const resp = await fetch(`/api/presupuesto?conversaciones_dia=${conversaciones}`);
+  const datos = await resp.json();
+
+  const badge = document.getElementById("fuente-datos");
+  if (datos.base.fuente === "real") {
+    badge.className = "fuente-badge fuente-real";
+    badge.textContent = `✅ Basado en datos reales de tu uso (${datos.base.total_muestras} evaluaciones medidas)`;
+  } else {
+    const faltan = 10 - (datos.base.total_muestras || 0);
+    badge.className = "fuente-badge fuente-estimado";
+    badge.textContent = `⚠ Estimación de referencia — todavía faltan ${faltan > 0 ? faltan : 10} evaluaciones reales para calcular esto con tus datos`;
+  }
+
+  const tbody = document.getElementById("tabla-modelos");
+  tbody.innerHTML = datos.modelos.map(m => `
+    <tr class="${m.color}">
+      <td><span class="nombre-modelo">${m.nombre}</span><span class="nota-modelo">${m.nota}</span></td>
+      <td>$${m.input.toFixed(2)} / $${m.output.toFixed(2)}</td>
+      <td class="costo-destacado">${formatoUSD(m.costo_evaluacion)}</td>
+      <td class="costo-destacado">${formatoUSD(m.costo_diario)}</td>
+      <td class="costo-destacado">${formatoUSD(m.costo_mensual)}</td>
+    </tr>
+  `).join("");
+
+  const ctx = document.getElementById("chart-presupuesto").getContext("2d");
+  const coloresHex = { verde: "#1D7A4C", ambar: "#B4790E", rojo: "#C33A2E" };
+  if (chartPresupuesto) chartPresupuesto.destroy();
+  chartPresupuesto = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: datos.modelos.map(m => m.nombre),
+      datasets: [{ data: datos.modelos.map(m => m.costo_mensual), backgroundColor: datos.modelos.map(m => coloresHex[m.color]), borderRadius: 4 }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => "$" + v.toLocaleString("en-US") } } },
+    },
+  });
+}
+
+document.getElementById("slider-conversaciones").addEventListener("input", actualizar);
+actualizar();
+</script>
+{% endblock %}

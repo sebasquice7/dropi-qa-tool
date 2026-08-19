@@ -1,0 +1,168 @@
+{% extends "_base.html" %}
+{% block titulo %}Evaluar — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .tabs { display: flex; gap: 4px; background: var(--card); border: 1px solid var(--line); padding: 4px; border-radius: var(--radius-sm); margin-bottom: 22px; width: fit-content; }
+  .tabs label { font-size: 12.5px; font-weight: 600; padding: 7px 16px; border-radius: 7px; cursor: pointer; color: var(--ink-500); }
+  input.tab-radio { display: none; }
+  #tab-individual:checked ~ .tabs label[for="tab-individual"],
+  #tab-lote:checked ~ .tabs label[for="tab-lote"] { background: var(--ink); color: white; }
+  .panel { display: none; }
+  #tab-individual:checked ~ .panel-individual { display: block; }
+  #tab-lote:checked ~ .panel-lote { display: block; }
+
+  .manifiesto-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 22px; }
+  .manifiesto-header .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-500); }
+  .campo-bloque { padding: 18px 22px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; }
+  .grid-2 .campo-bloque:first-child { border-right: 1px solid var(--line); }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } .grid-2 .campo-bloque:first-child { border-right: none; } }
+
+  .dropzone { margin: 0 22px 18px; border: 1.5px dashed var(--line-fuerte); border-radius: 10px; padding: 24px; text-align: center; color: var(--ink-500); font-size: 13px; position: relative; transition: border-color .12s, background .12s; }
+  .dropzone:hover { border-color: var(--naranja-500); background: var(--naranja-50); }
+  .dropzone .icono { font-family: 'JetBrains Mono', monospace; font-size: 18px; color: var(--sello-tinta); margin-bottom: 6px; }
+  .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+  .acciones-bloque { padding: 20px 22px; }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Manifiesto de evaluación</div>
+  <h1>Evaluar conversación</h1>
+  <div class="subt">Sube el PDF exportado de Intercom y deja que la IA haga la primera inspección.</div>
+</div>
+
+<input type="radio" name="tab" id="tab-individual" class="tab-radio" checked>
+<input type="radio" name="tab" id="tab-lote" class="tab-radio">
+
+<div class="tabs">
+  <label for="tab-individual">Una conversación</label>
+  <label for="tab-lote">Varias a la vez</label>
+</div>
+
+<div class="panel panel-individual">
+  <div class="card" style="max-width:640px;">
+    <form action="/evaluar" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="auditor">
+
+      <div class="manifiesto-header">
+        <strong style="font-size:13px;">Datos del caso</strong>
+      </div>
+      <hr class="perforado">
+
+      <div class="dropzone">
+        <input type="file" id="pdf-input" name="pdf" accept="application/pdf" required>
+        <div class="icono">⇓</div>
+        Arrastra el PDF de la conversación, o haz clic para buscarlo
+      </div>
+      <div id="deteccion-status" class="hint" style="padding:0 22px 14px;margin-top:-10px;"></div>
+
+      <hr class="perforado">
+      <div class="grid-2">
+        <div class="campo-bloque">
+          <label>Bandeja</label>
+          <input type="text" id="bandeja-input" name="bandeja" placeholder="Ej. Garantías, Wallet">
+        </div>
+        <div class="campo-bloque">
+          <label>ID del caso</label>
+          <input type="text" id="id-caso-input" name="id_caso" placeholder="Ej. 215475175505780">
+        </div>
+      </div>
+      <hr class="perforado">
+      <div class="grid-2">
+        <div class="campo-bloque">
+          <label>País <span class="hint">se detecta del PDF</span></label>
+          <input type="text" id="pais-input" name="pais" placeholder="Automático si es posible">
+        </div>
+        <div class="campo-bloque">
+          <label>Asesor <span class="hint">se detecta si hay 1 solo</span></label>
+          <input type="text" id="asesor-input" name="asesor" placeholder="Automático si es posible">
+        </div>
+      </div>
+      <hr class="perforado">
+
+      <div class="acciones-bloque">
+        <button type="submit" class="btn btn-primario">Evaluar conversación</button>
+
+        {% if proveedores_disponibles|length >= 2 %}
+          <button type="submit" formaction="/evaluar-comparar" class="btn btn-secundario" style="margin-top:10px;">
+            Comparar con {{ proveedores_disponibles|length }} IAs ({{ proveedores_disponibles|map('title')|join(', ') }})
+          </button>
+        {% else %}
+          <div class="hint" style="margin-top:12px;line-height:1.5;">
+            Comparación entre varias IAs: solo tienes <strong>{{ proveedores_info[proveedores_disponibles[0]].nombre if proveedores_disponibles else 'ninguna' }}</strong> configurada.
+            Agrega <code>ANTHROPIC_API_KEY</code> y/o <code>OPENAI_API_KEY</code> a tu <code>.env</code> para activarla.
+          </div>
+          <button type="submit" formaction="/evaluar-comparar-demo" class="btn btn-demo" style="margin-top:10px;">
+            Vista de demostración (para presentar el alcance)
+          </button>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel panel-lote">
+  <div class="card" style="max-width:640px;">
+    <div class="manifiesto-header">
+      <strong style="font-size:13px;">Varios PDFs de una vez</strong>
+    </div>
+    <hr class="perforado">
+    <div class="campo-bloque">
+      <div class="hint" style="margin-bottom:12px;">Cada uno se detecta y evalúa automáticamente, sin pantalla de revisión. Si un PDF tiene 0 asesores detectados, queda listo para completar con un clic.</div>
+      <form action="/evaluar_lote" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="auditor">
+        <input type="file" name="pdfs" accept="application/pdf" multiple required>
+        <button type="submit" class="btn btn-secundario" style="margin-top:16px;">Evaluar en lote</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const pdfInput = document.getElementById("pdf-input");
+  const statusEl = document.getElementById("deteccion-status");
+
+  pdfInput.addEventListener("change", async () => {
+    if (!pdfInput.files.length) return;
+    statusEl.textContent = "Leyendo el PDF para autocompletar los campos...";
+
+    const datos = new FormData();
+    datos.append("pdf", pdfInput.files[0]);
+
+    try {
+      const respuesta = await fetch("/detectar", { method: "POST", body: datos });
+      if (!respuesta.ok) throw new Error("No se pudo leer el PDF");
+      const info = await respuesta.json();
+
+      const bandejaEl = document.getElementById("bandeja-input");
+      const idCasoEl = document.getElementById("id-caso-input");
+      const paisEl = document.getElementById("pais-input");
+      const asesorEl = document.getElementById("asesor-input");
+
+      if (info.bandeja && !bandejaEl.value) bandejaEl.value = info.bandeja;
+      if (info.id_caso && !idCasoEl.value) idCasoEl.value = info.id_caso;
+      if (info.pais && !paisEl.value) paisEl.value = info.pais;
+      if (info.asesores && info.asesores.length === 1 && !asesorEl.value) {
+        asesorEl.value = info.asesores[0];
+      }
+
+      let mensaje = info.bandeja_es_sugerencia
+        ? "Datos autocompletados — la Bandeja es solo una sugerencia, verifícala. "
+        : "Datos autocompletados desde el PDF. ";
+      if (info.pais_es_sugerencia) {
+        mensaje += "El País también es una sugerencia, verifícalo. ";
+      }
+      if (info.duplicado) {
+        mensaje += `⚠ Este ID ya se evaluó antes (${info.duplicado.fecha}, ${info.duplicado.agente}, ${Math.round(info.duplicado.nota_final*100)}%).`;
+      }
+      statusEl.textContent = mensaje;
+    } catch (e) {
+      statusEl.textContent = "No se pudieron autocompletar los datos, complétalos a mano";
+    }
+  });
+</script>
+{% endblock %}

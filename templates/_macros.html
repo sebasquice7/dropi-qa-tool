@@ -1,0 +1,12 @@
+{% macro sello_puntaje(porcentaje, tamano=88, etiqueta=None) %}
+  {% set pct = porcentaje | round(0) | int %}
+  {% set color = '#24443E' if pct >= 90 else ('#9C6B12' if pct >= 70 else '#B8342A') %}
+  <div style="display:inline-flex;flex-direction:column;align-items:center;gap:8px;">
+    <div class="sello" style="--tam:{{ tamano }}px;--color-sello:{{ color }};">
+      <span class="valor">{{ pct }}</span>
+    </div>
+    {% if etiqueta %}
+      <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;color:var(--ink-500);text-transform:uppercase;">{{ etiqueta }}</span>
+    {% endif %}
+  </div>
+{% endmacro %}

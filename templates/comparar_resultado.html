@@ -1,0 +1,103 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block titulo %}Comparar evaluaciones — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .columnas { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 22px; }
+  .col-card { text-align: center; padding: 20px; }
+  .col-card.error { background: var(--rojo-bg); }
+  .col-card h2 { font-size: 14.5px; margin: 0 0 12px; color: var(--ink); font-weight: 700; }
+  .criticos-lista { font-size: 12px; color: var(--rojo); font-weight: 600; margin-top: 10px; }
+  .error-texto { font-size: 12px; color: var(--rojo); }
+
+  .banner-demo { background: var(--ambar-bg); color: var(--ambar); border: 1px solid #ffe08a; padding: 14px 18px; border-radius: 12px; font-size: 13px; margin-bottom: 20px; line-height: 1.5; }
+  .badge-simulado { display: inline-block; background: var(--ambar-bg); color: var(--ambar); font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; margin-bottom: 10px; letter-spacing: 0.5px; }
+  .col-card.simulado { border: 1px dashed #e0b658; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { text-align: left; color: var(--ink-500); font-weight: 600; padding: 7px 8px; border-bottom: 2px solid var(--line); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+  td { padding: 9px 8px; border-bottom: 1px solid var(--line); }
+  .si { color: var(--rojo); font-weight: 700; }
+  .no { color: var(--verde-postal); }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Verificación cruzada</div>
+  <h1>Comparación entre modelos de IA</h1>
+  <div class="subt">{{ metadata.agente }} · {{ metadata.bandeja }} · ID {{ metadata.id_caso }}</div>
+</div>
+
+{% if modo_demo %}
+  <div class="banner-demo">
+    🎬 <strong>Vista de demostración</strong> — la evaluación de Gemini es real; las de Claude y ChatGPT están <strong>simuladas</strong> (variaciones sobre la evaluación real) para mostrar cómo se vería la comparación una vez actives esas API keys de pago. No representan una llamada real a esos modelos.
+  </div>
+{% endif %}
+
+<div class="columnas">
+  {% for proveedor, r in resultados.items() %}
+    {% set info = proveedores_info.get(proveedor, {}) %}
+    {% if 'error' in r %}
+      <div class="card col-card error">
+        <h2>{{ info.get('nombre', proveedor) }}</h2>
+        <div class="error-texto">⚠ No se pudo evaluar con este modelo: {{ r.error }}</div>
+      </div>
+    {% else %}
+      {% set tiene_critico = r.nota.critico_activado %}
+      {% set es_simulado = r.get('simulado', False) %}
+      <div class="card col-card {% if es_simulado %}simulado{% endif %}">
+        {% if es_simulado %}<div class="badge-simulado">🎬 SIMULADO (demo)</div>{% endif %}
+        <h2>{{ info.get('nombre', proveedor) }}</h2>
+        {{ m.sello_puntaje(r.nota.nota_final * 100, tamano=88) }}
+        {% if tiene_critico %}
+          <div class="criticos-lista">⚠ Ítem crítico: {{ r.nota.critico_activado }}</div>
+        {% endif %}
+        {% if es_simulado %}
+          <a class="btn deshabilitado" style="margin-top:14px;">No disponible (simulado)</a>
+        {% else %}
+          <a class="btn btn-primario" style="margin-top:14px;" href="/evaluar-comparar/elegir/{{ token }}/{{ proveedor }}">Usar esta evaluación →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% if resultados.values() | selectattr('nota', 'defined') | list | length > 1 %}
+<div class="card card-pad">
+  <h2 style="font-size:14.5px;margin:0 0 4px;">⚖ Dónde discrepan los modelos</h2>
+  <div class="hint" style="margin-bottom:14px;">Ítems críticos donde no todos los modelos coincidieron — vale la pena revisarlos con más cuidado antes de elegir.</div>
+  <table>
+    <thead><tr><th>Ítem crítico</th>{% for proveedor, r in resultados.items() %}{% if 'error' not in r %}<th>{{ proveedores_info.get(proveedor, {}).get('nombre', proveedor) }}</th>{% endif %}{% endfor %}</tr></thead>
+    <tbody>
+      {% set ids_criticos = [] %}
+      {% for proveedor, r in resultados.items() %}
+        {% if 'error' not in r %}
+          {% for cid in r.evaluacion.items_criticos.keys() %}
+            {% if cid not in ids_criticos %}{% set _ = ids_criticos.append(cid) %}{% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+      {% for cid in ids_criticos %}
+        {% set valores = [] %}
+        {% for proveedor, r in resultados.items() %}
+          {% if 'error' not in r %}{% set _ = valores.append(r.evaluacion.items_criticos.get(cid, {}).get('ocurrio', 'No')) %}{% endif %}
+        {% endfor %}
+        {% if valores | unique | list | length > 1 %}
+          <tr>
+            <td>{{ cid }}</td>
+            {% for proveedor, r in resultados.items() %}
+              {% if 'error' not in r %}
+                {% set v = r.evaluacion.items_criticos.get(cid, {}).get('ocurrio', 'No') %}
+                <td class="{% if v|lower == 'si' %}si{% else %}no{% endif %}">{{ v }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

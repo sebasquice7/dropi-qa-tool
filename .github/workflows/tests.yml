@@ -1,0 +1,45 @@
+name: Pruebas automatizadas
+
+# Cuándo se activa este robot:
+#   - Cada vez que se sube código directo a main
+#   - Cada vez que alguien abre o actualiza un Pull Request hacia main
+# Así, nadie puede subir un cambio que rompa algo sin que quede visible de inmediato.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pruebas:
+    name: Correr las 46 pruebas
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"  # acelera corridas futuras reutilizando dependencias ya descargadas
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Correr las pruebas
+        run: python -m pytest tests/ -v
+
+      - name: Confirmar que el código compile sin errores de sintaxis
+        run: |
+          python -c "
+          import ast, glob
+          archivos = glob.glob('**/*.py', recursive=True)
+          archivos = [f for f in archivos if '.venv' not in f]
+          for f in archivos:
+              ast.parse(open(f, encoding='utf-8').read())
+          print(f'{len(archivos)} archivos .py — todos compilan sin errores')
+          "

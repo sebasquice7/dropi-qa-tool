@@ -1,0 +1,63 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block titulo %}Resultado del lote — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .fila { background: var(--card-bg); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--sombra); padding: 16px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .fila.ok { border-left: 4px solid var(--verde-postal); }
+  .fila.omitido { border-left: 4px solid var(--ambar); }
+  .fila.error { border-left: 4px solid var(--rojo); }
+  .archivo { font-weight: 700; font-size: 13px; word-break: break-all; color: var(--ink); font-family: 'JetBrains Mono', monospace; }
+  .detalle { font-size: 12px; color: var(--ink-500); margin-top: 4px; }
+  .links a { font-size: 12px; color: var(--naranja-600); text-decoration: none; margin-right: 12px; font-weight: 600; }
+  .critico { color: var(--rojo); font-weight: 700; font-size: 11px; }
+  .duplicado { color: var(--ambar); font-weight: 700; font-size: 11px; margin-top: 4px; }
+  .btn-completar { display: inline-block; margin-top: 8px; background: var(--naranja-500); color: white; text-decoration: none; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 7px; }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Lote procesado</div>
+  <h1>Resultado de la evaluación en lote</h1>
+  <div class="subt">
+    <span class="badge badge-verde">{{ resultados|selectattr('estado','equalto','ok')|list|length }} evaluadas</span>
+    <span class="badge badge-ambar">{{ resultados|selectattr('estado','equalto','omitido')|list|length }} omitidas</span>
+    <span class="badge badge-rojo">{{ resultados|selectattr('estado','equalto','error')|list|length }} con error</span>
+    &nbsp;· {{ resultados|length }} PDFs en total
+  </div>
+</div>
+
+{% for r in resultados %}
+  <div class="fila {{ r.estado }}">
+    <div>
+      <div class="archivo">{{ r.archivo }}</div>
+      {% if r.estado == 'ok' %}
+        <div class="detalle">
+          {{ r.asesor }} · {{ r.bandeja }}{% if r.bandeja_es_sugerencia %} (sugerida){% endif %} · {{ r.pais or "país sin detectar" }}{% if r.pais_es_sugerencia %} (sugerido){% endif %} · ID {{ r.id_caso }}
+          {% if r.critico %}<span class="critico"> · ⚠ crítico: {{ r.critico }}</span>{% endif %}
+          {% if not r.drive_ok %}<span class="critico"> · no se guardó en Drive</span>{% endif %}
+        </div>
+        {% if r.duplicado %}
+          <div class="duplicado">⚠ Este ID ya se había evaluado antes ({{ r.duplicado.fecha }}, {{ r.duplicado.agente }}, {{ (r.duplicado.nota_final*100)|round(0)|int }}%)</div>
+        {% endif %}
+        <div class="links" style="margin-top:8px;">
+          <a href="/descargar/{{ r.word_nombre }}">📄 Word</a>
+          <a href="/descargar/{{ r.excel_nombre }}">📊 Excel</a>
+        </div>
+      {% elif r.estado == 'omitido' %}
+        <div class="detalle">{{ r.motivo }}</div>
+        <a class="btn-completar" href="/evaluar_lote/continuar/{{ r.token }}">Completar evaluación de este caso →</a>
+      {% else %}
+        <div class="detalle">{{ r.motivo }}</div>
+      {% endif %}
+    </div>
+    {% if r.estado == 'ok' %}
+      {{ m.sello_puntaje(r.nota_final * 100, tamano=58) }}
+    {% else %}
+      <span class="badge badge-{{ 'ambar' if r.estado == 'omitido' else 'rojo' }}">{{ r.estado }}</span>
+    {% endif %}
+  </div>
+{% endfor %}
+{% endblock %}
