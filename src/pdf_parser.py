@@ -62,6 +62,30 @@ class Conversacion:
                     vistos[m.remitente.strip()] += 1
         return vistos
 
+    def texto_de_gali(self) -> str:
+        """Solo los mensajes que envió Gali (el bot), concatenados — para
+        evaluar específicamente lo que el bot le dijo al cliente, sin mezclar
+        con lo que dijo el asesor humano después."""
+        return "\n".join(m.texto for m in self.mensajes if m.remitente.strip().lower() in BOTS_CONOCIDOS)
+
+    def texto_de_notas_internas(self) -> Optional[str]:
+        """ENGANCHE PARA LA API DE INTERCOM (todavía no conectada).
+
+        Las notas internas (visibles solo para el equipo, no para el
+        cliente) se muestran en Intercom con un color distinto a los
+        mensajes normales — pero esa marca se pierde al exportar a PDF: todo
+        queda como texto plano, sin ninguna forma confiable de saber cuáles
+        líneas eran una nota interna y cuáles un mensaje real al cliente.
+
+        Por eso, leyendo desde PDF, este método siempre devuelve None — no
+        porque falte código, sino porque el dato de origen (el PDF) no trae
+        esa distinción. Cuando exista un parser basado en la API de Intercom
+        (que sí expone las notas como un campo separado y confirmado), ese
+        parser puede implementar este mismo método devolviendo el texto real
+        — y evaluator.py ya está listo para recibirlo y usarlo con
+        confianza total, sin ningún otro cambio."""
+        return None
+
     def texto_plano(self) -> str:
         """Serializa la conversación en un texto legible para pasar al modelo de evaluación."""
         lineas = []
@@ -154,6 +178,7 @@ ID_PATTERNS_TEXTO = [
     re.compile(r"ID\s+Garant[íi]a:?\s*(\d+)", re.IGNORECASE),
     re.compile(r"ID\s+Orden\s+Dropi:?\s*(\d+)", re.IGNORECASE),
     re.compile(r"ID\s+de\s+Orden:?\s*(\d+)", re.IGNORECASE),
+    re.compile(r"Ticket\s+ID:?\s*#?(\d+)", re.IGNORECASE),
 ]
 
 PAISES_POR_PALABRA_CLAVE = {

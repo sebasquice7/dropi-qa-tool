@@ -36,7 +36,7 @@
     <div class="cat-header">
       <div class="nombre">{{ cat.nombre }}</div>
       <div>
-        <input type="number" step="0.5" name="cat__{{ cat.nombre }}" value="{{ (cat.peso_categoria*100) | round(1) }}">
+        <input type="number" step="0.1" name="cat__{{ cat.nombre }}" value="{{ (cat.peso_categoria*100) | round(1) }}">
         <span class="pct">%</span>
       </div>
     </div>
@@ -50,7 +50,7 @@
           {% endif %}
         </div>
         <div>
-          <input type="number" step="0.5" name="item__{{ it.id }}" value="{{ (it.peso*100) | round(1) }}"
+          <input type="number" step="0.1" name="item__{{ it.id }}" value="{{ (it.peso*100) | round(1) }}"
                  {% if es_protegido %}min="{{ (items_protegidos[it.id]*100)|round(1) }}"{% endif %}>
           <span class="pct">%</span>
         </div>

@@ -66,12 +66,13 @@
   .vacio { text-align: center; padding: 80px 20px; color: var(--ink-500); }
   .vacio img { height: 50px; opacity: 0.4; margin-bottom: 16px; }
 
-  .tabla-mapa-calor { border-collapse: collapse; font-size: 11.5px; width: 100%; min-width: 600px; }
-  .tabla-mapa-calor th { text-align: left; padding: 8px 10px; color: var(--ink-500); font-weight: 600; white-space: nowrap; }
-  .tabla-mapa-calor th.col-cat { writing-mode: vertical-rl; text-orientation: mixed; text-align: right; padding-bottom: 8px; font-size: 10px; }
+  .tabla-mapa-calor { border-collapse: separate; border-spacing: 3px; font-size: 11px; width: 100%; min-width: 600px; }
+  .tabla-mapa-calor th { text-align: left; padding: 4px 6px 10px; color: var(--ink-500); font-weight: 600; font-size: 10.5px; }
+  .tabla-mapa-calor th.col-cat { position: relative; height: 85px; padding: 0; vertical-align: bottom; }
+  .tabla-mapa-calor th.col-cat span { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%) rotate(-40deg); transform-origin: bottom left; white-space: nowrap; font-size: 9.5px; }
   .tabla-mapa-calor td { padding: 0; text-align: center; }
-  .tabla-mapa-calor td.nombre-asesor { text-align: left; padding: 8px 10px; white-space: nowrap; font-weight: 600; color: var(--ink); }
-  .celda-calor { display: block; padding: 10px 4px; font-weight: 700; color: white; font-family: 'JetBrains Mono', monospace; border-radius: 5px; }
+  .tabla-mapa-calor td.nombre-asesor { text-align: left; padding: 5px 8px; white-space: nowrap; font-weight: 600; color: var(--ink); font-size: 11.5px; }
+  .celda-calor { display: block; padding: 6px 3px; font-weight: 700; font-family: 'JetBrains Mono', monospace; border-radius: 6px; font-size: 10.5px; }
 
   @media (max-width: 900px) {
     .bento { grid-template-columns: repeat(2, 1fr); }
@@ -89,21 +90,31 @@
     <h1>Dashboard de calidad</h1>
     <div class="subt">Calidad de soporte, actualizado en tiempo real</div>
   </div>
-  <div class="actualizado"><span class="estado-punto"></span>ACTUALIZADO: <span id="hora-actualizado">—</span></div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <button id="btn-descargar-excel" class="btn btn-secundario" style="font-size:12.5px;padding:8px 14px;">📥 Descargar como Excel</button>
+    <div class="actualizado"><span class="estado-punto"></span>ACTUALIZADO: <span id="hora-actualizado">—</span></div>
+  </div>
 </div>
 
 <div class="filtros">
-  <select id="filtro-periodo" onchange="cargarDatos()">
+  <select id="filtro-periodo" onchange="cambiarPeriodo()">
     <option value="hoy">Hoy</option>
     <option value="semana">Esta semana</option>
     <option value="mes">Este mes</option>
     <option value="todo" selected>Todo el historial</option>
+    <option value="personalizado">Rango personalizado...</option>
   </select>
+  <input type="date" id="filtro-fecha-desde" onchange="cargarDatos()" style="display:none;width:auto;padding:8px 10px;font-size:12.5px;">
+  <span id="filtro-fecha-separador" style="display:none;color:var(--ink-500);">→</span>
+  <input type="date" id="filtro-fecha-hasta" onchange="cargarDatos()" style="display:none;width:auto;padding:8px 10px;font-size:12.5px;">
   <select id="filtro-pais" onchange="cargarDatos()">
     <option value="">🌎 Todos los países</option>
   </select>
   <select id="filtro-bandeja" onchange="cargarDatos()">
     <option value="">📁 Todas las bandejas</option>
+  </select>
+  <select id="filtro-area" onchange="cargarDatos()">
+    <option value="">🗂 Todas las áreas</option>
   </select>
   <div class="separador"></div>
   <div class="meta-box">
@@ -199,7 +210,7 @@
 
   <div class="card c-span-6 card-pad">
     <h2>🌍 Comparativa por país</h2>
-    <div class="card-hint">Nota promedio, sin importar el filtro de país activo arriba</div>
+    <div class="card-hint">Comparación justa: usa la misma cantidad de evaluaciones (las más recientes) para cada país — el número entre paréntesis es esa muestra pareja. Los países marcados con ⚠ todavía no tienen el mínimo de 5 evaluaciones para entrar a la comparación justa (se muestran en gris, con su propio promedio real)</div>
     <div class="chart-box"><canvas id="chart-paises"></canvas></div>
   </div>
 
@@ -212,15 +223,33 @@
 let ultimosDatos = null;
 let charts = {};
 const PALETA = ["#F26522", "#2E7D32", "#1565C0", "#8E24AA", "#C62828", "#00838F", "#F9A825", "#5D4037"];
-const colorEficiencia = v => v < 75 ? "#C62828" : v < 90 ? "#F9A825" : "#2E7D32";
+const colorEficiencia = v => v < 75 ? "#B8342A" : v < 90 ? "#9C6B12" : "#24443E";  // Riesgo / A mejorar / Cumplimiento
+
+function cambiarPeriodo() {
+  const esPersonalizado = document.getElementById("filtro-periodo").value === "personalizado";
+  document.getElementById("filtro-fecha-desde").style.display = esPersonalizado ? "" : "none";
+  document.getElementById("filtro-fecha-separador").style.display = esPersonalizado ? "" : "none";
+  document.getElementById("filtro-fecha-hasta").style.display = esPersonalizado ? "" : "none";
+  if (!esPersonalizado) cargarDatos();
+  // Si es personalizado, se espera a que el usuario elija ambas fechas (dispara cargarDatos() al cambiar cada input)
+}
 
 async function cargarDatos() {
   const periodo = document.getElementById("filtro-periodo").value;
   const pais = document.getElementById("filtro-pais").value;
   const bandeja = document.getElementById("filtro-bandeja").value;
+  const area = document.getElementById("filtro-area").value;
+  const fechaDesde = document.getElementById("filtro-fecha-desde").value;
+  const fechaHasta = document.getElementById("filtro-fecha-hasta").value;
+
+  if (periodo === "personalizado" && (!fechaDesde || !fechaHasta)) return;  // esperar a que elija ambas
 
   try {
-    const resp = await fetch(`/api/dashboard?periodo=${periodo}&pais=${encodeURIComponent(pais)}&bandeja=${encodeURIComponent(bandeja)}`);
+    let url = `/api/dashboard?periodo=${periodo}&pais=${encodeURIComponent(pais)}&bandeja=${encodeURIComponent(bandeja)}&area=${encodeURIComponent(area)}`;
+    if (periodo === "personalizado") {
+      url += `&fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}`;
+    }
+    const resp = await fetch(url);
     const datos = await resp.json();
     ultimosDatos = datos;
     renderizar(datos);
@@ -233,6 +262,7 @@ async function cargarDatos() {
 function renderizar(datos) {
   actualizarOpciones("filtro-pais", datos.paises_disponibles);
   actualizarOpciones("filtro-bandeja", datos.bandejas_disponibles);
+  actualizarOpciones("filtro-area", datos.areas_disponibles);
 
   if (!document.activeElement || document.activeElement.id !== "input-meta") {
     document.getElementById("input-meta").value = Math.round(datos.meta * 100);
@@ -359,14 +389,14 @@ function dibujarMapaCalor(datos) {
   }
 
   const colorCelda = v => {
-    if (v === undefined || v === null) return "#E4DDD5";
-    if (v < 75) return "#C62828";
-    if (v < 90) return "#F9A825";
-    return "#1D7A4C";
+    if (v === undefined || v === null) return { bg: "#EFEBE4", texto: "var(--ink-300)" };
+    if (v < 75) return { bg: "var(--rojo-bg)", texto: "var(--rojo)" };       // Riesgo
+    if (v < 90) return { bg: "var(--ambar-bg)", texto: "var(--ambar)" };     // A mejorar
+    return { bg: "var(--verde-postal-bg)", texto: "var(--verde-postal)" };   // Cumplimiento
   };
 
   let html = "<thead><tr><th>Asesor</th>";
-  categorias.forEach(cat => { html += `<th class="col-cat">${cat}</th>`; });
+  categorias.forEach(cat => { html += `<th class="col-cat"><span>${cat}</span></th>`; });
   html += "</tr></thead><tbody>";
 
   asesores.forEach(a => {
@@ -374,8 +404,8 @@ function dibujarMapaCalor(datos) {
     categorias.forEach(cat => {
       const val = a.categorias_eficiencia ? a.categorias_eficiencia[cat] : undefined;
       const pct = val !== undefined ? Math.round(val * 100) : null;
-      const color = colorCelda(pct);
-      html += `<td><span class="celda-calor" style="background:${color};" title="${a.asesor} — ${cat}: ${pct !== null ? pct + '%' : 'sin datos'}">${pct !== null ? pct + '%' : '—'}</span></td>`;
+      const c = colorCelda(pct);
+      html += `<td><span class="celda-calor" style="background:${c.bg};color:${c.texto};" title="${a.asesor} — ${cat}: ${pct !== null ? pct + '%' : 'sin datos'}">${pct !== null ? pct + '%' : '—'}</span></td>`;
     });
     html += "</tr>";
   });
@@ -384,17 +414,25 @@ function dibujarMapaCalor(datos) {
 }
 
 function dibujarComparativaPaises(datos) {
-  const paises = Object.keys(datos.promedio_por_pais || {});
-  if (!paises.length) return;
+  const todos = Object.keys(datos.promedio_por_pais || {});
+  if (!todos.length) return;
+
+  // Los países sin suficientes datos van al final, en gris, separados
+  // visualmente de la comparación justa real — no se mezclan con los que sí
+  // tienen un mínimo razonable de evaluaciones.
+  const comparables = todos.filter(p => datos.promedio_por_pais[p].suficientes_datos);
+  const insuficientes = todos.filter(p => !datos.promedio_por_pais[p].suficientes_datos);
+  const paises = [...comparables, ...insuficientes];
 
   const valores = paises.map(p => Math.round(datos.promedio_por_pais[p].nota_promedio * 1000) / 10);
   const totales = paises.map(p => datos.promedio_por_pais[p].total);
+  const colores = paises.map((p, i) => datos.promedio_por_pais[p].suficientes_datos ? colorEficiencia(valores[i]) : "#C9C6BB");
 
   dibujarChart("chart-paises", {
     type: "bar",
     data: {
-      labels: paises.map((p, i) => `${p} (${totales[i]})`),
-      datasets: [{ data: valores, backgroundColor: valores.map(colorEficiencia), borderRadius: 4 }],
+      labels: paises.map((p, i) => datos.promedio_por_pais[p].suficientes_datos ? `${p} (${totales[i]})` : `${p} (${totales[i]}) ⚠`),
+      datasets: [{ data: valores, backgroundColor: colores, borderRadius: 4 }],
     },
     options: { indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 100, ticks: { callback: v => v + "%" } } } },
   });
@@ -511,6 +549,21 @@ function dibujarChart(idCanvas, config) {
   config.options = Object.assign({ responsive: true, maintainAspectRatio: false }, config.options || {});
   charts[idCanvas] = new Chart(ctx, config);
 }
+
+document.getElementById("btn-descargar-excel").addEventListener("click", () => {
+  const periodo = document.getElementById("filtro-periodo").value;
+  const pais = document.getElementById("filtro-pais").value;
+  const bandeja = document.getElementById("filtro-bandeja").value;
+  const area = document.getElementById("filtro-area").value;
+  const fechaDesde = document.getElementById("filtro-fecha-desde").value;
+  const fechaHasta = document.getElementById("filtro-fecha-hasta").value;
+
+  let url = `/dashboard/exportar-excel?periodo=${periodo}&pais=${encodeURIComponent(pais)}&bandeja=${encodeURIComponent(bandeja)}&area=${encodeURIComponent(area)}`;
+  if (periodo === "personalizado") {
+    url += `&fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}`;
+  }
+  window.location.href = url;
+});
 
 cargarDatos();
 setInterval(cargarDatos, 30000);

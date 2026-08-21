@@ -47,7 +47,11 @@ class Config:
     anthropic_api_key: str = os.environ.get("ANTHROPIC_API_KEY", "")
     anthropic_model: str = os.environ.get("ANTHROPIC_MODEL", "")
     openai_api_key: str = os.environ.get("OPENAI_API_KEY", "")
-    openai_model: str = os.environ.get("OPENAI_MODEL", "")
+    # gpt-4.1 por defecto: es el modelo con el que trabaja Gali (el bot de
+    # Intercom), así que evaluar con el mismo modelo ayuda a que la IA
+    # entienda mejor sus patrones típicos de respuesta. Se puede cambiar con
+    # la variable de entorno OPENAI_MODEL si el equipo prefiere otro.
+    openai_model: str = os.environ.get("OPENAI_MODEL", "gpt-4.1")
     proveedor_forzado: str = os.environ.get("QA_PROVEEDOR", "")
 
     # --- Google Drive (respaldo de archivos) ---

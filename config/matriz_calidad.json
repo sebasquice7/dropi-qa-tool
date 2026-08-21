@@ -37,42 +37,62 @@
     },
     {
       "nombre": "PROCEDIMIENTO Y SOLUCION",
-      "peso_categoria": 0.3,
+      "peso_categoria": 0.24,
       "items": [
         {
           "id": "precision_tecnica",
           "nombre": "Precisión técnica y efectividad de la solución brindada",
-          "peso": 0.06,
+          "peso": 0.048,
           "que_evalua": "Que la solución dada sea la correcta y resuelva el problema de raíz.",
           "que_tener_en_cuenta": "Instrucciones técnicas exactas. Dar información inventada o errónea castiga este punto."
         },
         {
           "id": "expectativas_reales",
           "nombre": "Gestiona expectativas reales y evita falsas promesas (tiempos de entrega y liberación de saldos)",
-          "peso": 0.05,
+          "peso": 0.04,
           "que_evalua": "Honestidad operativa. Prohibido prometer cosas fuera de las políticas para cerrar el chat rápido.",
           "que_tener_en_cuenta": "Debe apegarse a los tiempos reales de Dropi, no inventar plazos."
         },
         {
           "id": "primer_contacto",
           "nombre": "Resuelve en primer contacto o gestiona escalamiento correcto",
-          "peso": 0.08,
+          "peso": 0.064,
           "que_evalua": "Capacidad resolutiva y fin del 'paseo al cliente'.",
           "que_tener_en_cuenta": "Si requiere traslado, moverlo de inmediato al equipo correcto, sin rebotes injustificados."
         },
         {
           "id": "acuerdos_tiempos",
           "nombre": "Establece acuerdos, tiempos de espera claros y maneja el estado correcto en Intercom (Snooze)",
-          "peso": 0.05,
+          "peso": 0.04,
           "que_evalua": "Organización y claridad en los pasos a seguir.",
           "que_tener_en_cuenta": "Debe indicar qué pasará después y usar Snooze por el tiempo pactado."
         },
         {
           "id": "apego_guia_operativa",
           "nombre": "Sigue el procedimiento documentado en la guía operativa correspondiente (cuando aplica)",
-          "peso": 0.06,
+          "peso": 0.048,
           "que_evalua": "Que el asesor haya seguido los pasos del procedimiento documentado en la guía operativa oficial correspondiente a ese tipo de caso (si existe una guía aplicable).",
           "que_tener_en_cuenta": "MUY IMPORTANTE: si en este prompt no se incluyó ninguna guía operativa de referencia para este caso, significa que no hay una guía documentada que aplique — en ese caso, califica este ítem con el puntaje máximo automáticamente (no es una falla del asesor, simplemente no había un procedimiento específico que seguir). Solo baja el puntaje si SÍ se incluyó una guía abajo y el asesor se desvió de sus pasos sin justificación."
+        }
+      ]
+    },
+    {
+      "nombre": "INTERACCIÓN CON GALI",
+      "peso_categoria": 0.06,
+      "items": [
+        {
+          "id": "gali_ticket_completo",
+          "nombre": "Gali creó el ticket con información completa",
+          "peso": 0.03,
+          "que_evalua": "Si Gali (el bot de Intercom) creó correctamente el ticket antes de escalar al asesor humano, con la información del cliente completa y correcta (no un ticket vacío o a medias).",
+          "que_tener_en_cuenta": "Compara lo que Gali reportó contra la base de conocimiento oficial si hay referencia disponible en el prompt. Si Gali no participó en esta conversación (fue directo a un asesor humano), califica con el puntaje máximo — no aplica, no es una falla."
+        },
+        {
+          "id": "asesor_valida_info_gali",
+          "nombre": "El asesor validó la información que generó Gali",
+          "peso": 0.03,
+          "que_evalua": "Si el asesor humano revisó y validó (no asumió ciegamente) la información que Gali ya había recopilado, antes de continuar con el caso.",
+          "que_tener_en_cuenta": "Un asesor que repite o corrige algo que Gali dijo mal demuestra que sí validó. Uno que repite un error de Gali sin cuestionarlo, no validó. Si Gali no participó en esta conversación, califica con el puntaje máximo — no aplica."
         }
       ]
     },

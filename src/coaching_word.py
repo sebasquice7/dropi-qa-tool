@@ -65,6 +65,13 @@ def generar_word_coaching(asesor: str, datos: dict, plan: dict, ruta_salida: str
     run_sub.font.color.rgb = GRIS
     doc.add_paragraph()
 
+    seguimiento = plan.get("seguimiento_compromisos", "")
+    if seguimiento and "no hay compromisos previos" not in seguimiento:
+        _titulo_seccion(doc, "🔁 Seguimiento del compromiso anterior")
+        p_seg = doc.add_paragraph(seguimiento)
+        p_seg.runs[0].bold = True
+        doc.add_paragraph()
+
     _titulo_seccion(doc, "Resumen general")
     doc.add_paragraph(plan.get("resumen_general", ""))
     p_tend = doc.add_paragraph()
@@ -104,6 +111,78 @@ def generar_word_coaching(asesor: str, datos: dict, plan: dict, ruta_salida: str
         row = tabla.add_row().cells
         row[0].text = cat
         row[1].text = f"{round(val*100,1)}%"
+
+    # --- Evolución real: mes actual vs. mes anterior — el ciclo natural de
+    # coaching a este volumen (~40 evaluaciones/asesor/mes), y se mantiene
+    # útil para siempre, sin importar cuántos meses de historial se acumulen ---
+    if datos.get("mes_anterior"):
+        doc.add_paragraph()
+        _titulo_seccion(doc, "Evolución mes a mes")
+        p_evidencia = doc.add_paragraph()
+        p_evidencia.add_run(
+            f"{datos['mes_anterior']} ({datos['cantidad_mes_anterior']} evaluaciones)   →   "
+            f"{datos['mes_actual']} ({datos['cantidad_mes_actual']} evaluaciones)"
+        ).italic = True
+
+        tabla_evol = doc.add_table(rows=1, cols=4)
+        tabla_evol.style = "Light Grid Accent 2"
+        hdr2 = tabla_evol.rows[0].cells
+        for i, texto in enumerate(["Categoría", f"Mes anterior ({datos['mes_anterior']})", f"Mes actual ({datos['mes_actual']})", "Cambio"]):
+            hdr2[i].text = texto
+            for p in hdr2[i].paragraphs:
+                for r in p.runs:
+                    r.bold = True
+            _shade_cell(hdr2[i], "404040")
+
+        cat_mes_anterior = datos.get("categorias_mes_anterior", {})
+        cat_mes_actual = datos.get("categorias_mes_actual", {})
+        for cat, _ in datos["categorias_ordenadas"]:
+            pct_anterior = cat_mes_anterior.get(cat)
+            pct_actual = cat_mes_actual.get(cat)
+            if pct_anterior is None or pct_actual is None:
+                continue
+            fila = tabla_evol.add_row().cells
+            fila[0].text = cat
+            fila[1].text = f"{pct_anterior*100:.0f}%"
+            fila[2].text = f"{pct_actual*100:.0f}%"
+            diferencia = (pct_actual - pct_anterior) * 100
+            simbolo = "▲" if diferencia > 0.5 else ("▼" if diferencia < -0.5 else "=")
+            fila[3].text = f"{simbolo} {diferencia:+.0f} pts"
+            color_cambio = RGBColor(0x1D, 0x7A, 0x4C) if diferencia > 0.5 else (RGBColor(0xC0, 0x00, 0x00) if diferencia < -0.5 else RGBColor(0x6B, 0x67, 0x59))
+            fila[3].paragraphs[0].runs[0].font.color.rgb = color_cambio
+    elif datos.get("mes_actual"):
+        doc.add_paragraph()
+        _titulo_seccion(doc, "Evolución mes a mes")
+        p_sin_mes_anterior = doc.add_paragraph()
+        p_sin_mes_anterior.add_run(
+            f"Todas las evaluaciones de este asesor son de {datos['mes_actual']} — todavía no hay "
+            "un mes anterior completo con el cual comparar la tendencia."
+        ).italic = True
+
+    # --- Firma: aquí es donde de verdad debe ir — el coordinador se compromete
+    # a un plan de acción basado en la tendencia real del periodo, no en un
+    # caso individual suelto ---
+    doc.add_paragraph()
+    _titulo_seccion(doc, "Compromiso de mejora")
+    doc.add_paragraph(
+        "El coordinador y el asesor revisaron juntos este plan de coaching, y se comprometen a dar "
+        "seguimiento a las acciones acordadas antes de la próxima conversación de desarrollo."
+    )
+    doc.add_paragraph("_" * 70)
+    doc.add_paragraph()
+
+    p_firma_coord = doc.add_paragraph()
+    p_firma_coord.add_run("Firma del coordinador: ").bold = True
+    p_firma_coord.add_run("_" * 35)
+    p_firma_coord.add_run("      Fecha: ").bold = True
+    p_firma_coord.add_run("_" * 15)
+
+    doc.add_paragraph()
+    p_firma_asesor = doc.add_paragraph()
+    p_firma_asesor.add_run("Firma del asesor: ").bold = True
+    p_firma_asesor.add_run("_" * 35)
+    p_firma_asesor.add_run("      Fecha: ").bold = True
+    p_firma_asesor.add_run("_" * 15)
 
     doc.add_paragraph()
     nota_pie = doc.add_paragraph()

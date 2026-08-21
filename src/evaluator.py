@@ -65,7 +65,7 @@ def _cargar_politica_sla() -> str:
         return f.read()
 
 
-def _construir_prompt(conversacion_texto: str, asesor: str, matriz: dict, politica: str, politica_sla: str = "", guia_relevante: dict = None) -> str:
+def _construir_prompt(conversacion_texto: str, asesor: str, matriz: dict, politica: str, politica_sla: str = "", guia_relevante: dict = None, contexto_gali: str = "", texto_notas_internas: str = None) -> str:
     items_desc = []
     for cat in matriz["categorias"]:
         items_desc.append(f"\n### {cat['nombre']} (peso total: {cat['peso_categoria']*100:.0f}%)")
@@ -107,6 +107,10 @@ Tu tarea es evaluar la gestión del asesor **{asesor}** en la siguiente conversa
 {"=== POLÍTICA DE TIEMPOS DE RESPUESTA (SLA) ===" + chr(10) + politica_sla if politica_sla else ""}
 
 {("=== GUÍA OPERATIVA DE REFERENCIA PARA ESTE CASO (\"" + guia_relevante["titulo"] + "\") ===" + chr(10) + "Esta es la guía oficial del proceso que aplica a este caso específico. Úsala como referencia real para el ítem \"apego_guia_operativa\" — compara los pasos que dio el asesor contra los pasos documentados aquí." + chr(10) + chr(10) + guia_relevante["texto"]) if guia_relevante else "=== GUÍA OPERATIVA: no se encontró ninguna guía documentada que aplique específicamente a este caso. El ítem \"apego_guia_operativa\" debe calificarse con el puntaje máximo (no aplica, no es una falla). ==="}
+
+{("=== BASE DE CONOCIMIENTO DE GALI (referencia oficial) ===" + chr(10) + contexto_gali) if contexto_gali else "=== BASE DE CONOCIMIENTO DE GALI: no se encontró ninguna pregunta/respuesta oficial que aplique a lo que Gali dijo en este caso. Los ítems sobre Gali deben calificarse según el criterio general (no penalizar por falta de una referencia específica). ==="}
+
+{("=== NOTAS INTERNAS DEL EQUIPO (fuente confirmada, aisladas del resto de la conversación) ===" + chr(10) + "Estas líneas SÍ están confirmadas como notas internas (no visibles al cliente) — evalúa el ítem \"Claridad y argumentación en Notas Internas\" con confianza total, usando SOLO este texto como evidencia." + chr(10) + chr(10) + texto_notas_internas) if texto_notas_internas else "=== NOTAS INTERNAS DEL EQUIPO: no se pudo aislar con certeza cuáles líneas de la conversación son notas internas y cuáles son mensajes al cliente (limitación del formato PDF exportado, no de este caso en particular). Para el ítem \"Claridad y argumentación en Notas Internas\", sé CONSERVADOR: solo penaliza si encuentras evidencia muy clara e inequívoca dentro de la conversación completa (por ejemplo, un comentario que menciona explícitamente ser una nota interna o de seguimiento). Ante la duda genuina, no penalices — es preferible no calificar con certeza baja que penalizar por una mala interpretación del formato. ==="}
 
 === MATRIZ DE CALIDAD (ítems y pesos) ===
 {"".join(items_desc)}
@@ -291,6 +295,8 @@ def evaluar_conversacion(
     proveedor: str = None,
     pais: str = None,
     bandeja: str = None,
+    texto_gali: str = None,
+    texto_notas_internas: str = None,
 ) -> dict:
     """
     proveedor: "gemini" (gratis, por defecto) o "anthropic" (de pago).
@@ -303,6 +309,24 @@ def evaluar_conversacion(
     ninguna guía que coincida con esa bandeja, el ítem se evalúa como "no
     aplica" (puntaje máximo), no como una falla — así se evita el problema de
     penalizar por no seguir un paso que ni siquiera correspondía a ese caso.
+
+    texto_gali: si se pasa (los mensajes que envió Gali en esta conversación),
+    el programa busca en la base de conocimiento de Gali las preguntas/
+    respuestas oficiales relevantes, y se las da a la IA como referencia para
+    evaluar si Gali dio información correcta.
+
+    texto_notas_internas: ENGANCHE PARA LA API DE INTERCOM (todavía no
+    conectada). Hoy, leyendo desde PDF, no hay forma de aislar con certeza
+    cuáles líneas de la conversación fueron notas internas del equipo (no
+    visibles al cliente) — en la interfaz de Intercom se ven en una caja
+    amarilla distinta, pero esa marca se pierde al exportar a PDF, todo
+    queda como texto plano igual de ambiguo. La API de Intercom sí expone
+    las notas como un campo separado y confirmado. Cuando ese dato llegue
+    (vía este parámetro), el ítem "Claridad y argumentación en Notas
+    Internas" se evalúa con evidencia real y aislada, con confianza total —
+    sin este parámetro, se evalúa igual que siempre, pero con una instrucción
+    explícita de ser conservador, ya que no hay certeza de qué es nota y qué
+    es mensaje al cliente.
     """
     proveedor = proveedor or config.proveedor_forzado
     if not proveedor:
@@ -325,7 +349,15 @@ def evaluar_conversacion(
         except Exception as e:
             log.warning("No se pudo buscar la guía operativa: %s", e)
 
-    prompt = _construir_prompt(conversacion_texto, asesor, matriz, politica, politica_sla, guia_relevante)
+    contexto_gali = ""
+    if texto_gali and pais:
+        try:
+            from faqs_gali_buscador import contexto_faqs_gali
+            contexto_gali = contexto_faqs_gali(texto_gali, pais)
+        except Exception as e:
+            log.warning("No se pudo buscar en la base de conocimiento de Gali: %s", e)
+
+    prompt = _construir_prompt(conversacion_texto, asesor, matriz, politica, politica_sla, guia_relevante, contexto_gali, texto_notas_internas)
 
     if proveedor == "gemini":
         api_key = api_key or config.gemini_api_key
@@ -432,7 +464,7 @@ def evaluar_conversacion_multi(conversacion_texto: str, asesor: str, proveedores
     return resultados
 
 
-def _construir_prompt_coaching(datos: dict) -> str:
+def _construir_prompt_coaching(datos: dict, compromisos_anteriores: dict = None) -> str:
     """Arma el prompt para que la IA sintetice un plan de coaching a partir del
     HISTORIAL COMPLETO de un asesor (varias evaluaciones), no de una sola
     conversación — el objetivo es detectar patrones reales, no repetir lo que
@@ -444,17 +476,32 @@ def _construir_prompt_coaching(datos: dict) -> str:
     )
 
     oportunidades_texto = "\n".join(
-        f"- ({o['fecha']}) {o['texto']}" for o in datos["oportunidades_recientes"]
+        f"- (ID {o['id_caso'] or 'N/A'}, {o['fecha']}) {o['texto']}" for o in datos["oportunidades_recientes"]
     ) or "(sin datos de texto disponibles todavía para este asesor)"
 
     positivos_texto = "\n".join(
-        f"- ({p['fecha']}) {p['texto']}" for p in datos["positivos_recientes"]
+        f"- (ID {p['id_caso'] or 'N/A'}, {p['fecha']}) {p['texto']}" for p in datos["positivos_recientes"]
     ) or "(sin datos de texto disponibles todavía para este asesor)"
 
     criticos_texto = (
         f"{datos['total_criticos']} ítem(s) crítico(s) activado(s) en el periodo: {', '.join(datos['criticos_detalle'])}"
         if datos["total_criticos"] else "Ningún ítem crítico activado en el periodo — buen historial en ese sentido."
     )
+
+    if compromisos_anteriores:
+        acciones_previas = "\n".join(f"- {a}" for a in compromisos_anteriores.get("plan_accion", [])) or "(sin acciones registradas)"
+        compromisos_texto = f"""=== COMPROMISOS DE LA SESIÓN DE COACHING ANTERIOR ({compromisos_anteriores.get('guardado_en', '')}) ===
+En esa sesión, el plan de acción acordado fue:
+{acciones_previas}
+
+Nota promedio en ese momento: {round(compromisos_anteriores.get('nota_promedio', 0)*100, 1)}%
+Nota promedio ahora: {round(datos['nota_promedio']*100, 1)}%
+
+IMPORTANTE: en el campo "seguimiento_compromisos" de tu respuesta, evalúa HONESTAMENTE si estos compromisos se cumplieron,
+comparando los números de antes contra los de ahora, y citando evidencia real (con ID de caso) de las oportunidades de
+mejora recientes de abajo — si el mismo problema sigue apareciendo, dilo directamente, no lo suavices."""
+    else:
+        compromisos_texto = "=== COMPROMISOS DE LA SESIÓN ANTERIOR: no aplica, esta es la primera vez que se genera un plan de coaching para este asesor. ==="
 
     tendencia_cruda = (
         f"Primera mitad del periodo: {round(datos['nota_primera_mitad']*100,1)}% -> "
@@ -478,6 +525,8 @@ Eficiencia por categoría (ordenado de la más débil a la más fuerte):
 
 Ítems críticos: {criticos_texto}
 
+{compromisos_texto}
+
 Oportunidades de mejora detectadas en sus evaluaciones recientes (evidencia real, más reciente primero):
 {oportunidades_texto}
 
@@ -490,32 +539,42 @@ con exactamente esta forma:
 
 {{
   "resumen_general": "2-3 frases resumiendo el desempeño general del asesor en este periodo, en tono profesional pero humano — esto lo va a leer su líder antes de una conversación de desarrollo con él/ella",
-  "tendencia": "1-2 frases: ¿está mejorando, estable o empeorando? básate en los números de arriba, sé específico",
-  "fortalezas_consistentes": ["fortaleza 1 con evidencia breve", "fortaleza 2 con evidencia breve"],
+  "seguimiento_compromisos": "Si hay compromisos de una sesión anterior (ver arriba): 2-4 frases evaluando HONESTAMENTE si se cumplieron, con cifras exactas y al menos 1 ID de caso como evidencia. Si el problema persiste, dilo directo. Si no hay sesión anterior, escribe exactamente: 'Este es el primer plan de coaching de este asesor — no hay compromisos previos que evaluar.'",
+  "tendencia": "3-4 frases, citando SIEMPRE los porcentajes exactos en cifras (ej. 'pasó de 84% a 82.2%', nunca 'de ochenta y cuatro a ochenta y dos'): ¿está mejorando, estable o empeorando? Compara primera mitad vs. segunda mitad del periodo con el número exacto, y menciona también qué categoría específica explica ese cambio (la que más subió o más bajó). Sé específico, no genérico.",
+  "alerta_tendencia": "'ninguna' si el cambio entre mitades es menor a 3 puntos porcentuales, 'atencion' si bajó entre 3 y 8 puntos, 'critica' si bajó más de 8 puntos o hay un ítem crítico en el periodo",
+  "fortalezas_consistentes": ["fortaleza 1 con evidencia breve, citando el ID del caso de donde sale la evidencia", "fortaleza 2 con evidencia breve, citando el ID"],
   "areas_prioritarias": [
-    {{"area": "nombre corto del área", "evidencia": "1-2 frases citando patrones reales de las oportunidades de mejora de arriba", "impacto": "alto, medio o bajo"}}
+    {{"area": "nombre corto del área", "evidencia": "1-2 frases citando patrones reales de las oportunidades de mejora de arriba — SIEMPRE menciona el ID del caso (o los IDs, si citas más de uno) como evidencia concreta, no solo la fecha", "impacto": "alto, medio o bajo"}}
   ],
-  "plan_accion": ["acción concreta y específica 1 para la próxima capacitación/1:1", "acción concreta 2", "acción concreta 3"]
+  "plan_accion": ["acción concreta y específica 1 para la próxima capacitación/1:1, citando el ID del caso real que se va a usar como ejemplo (no solo la fecha)", "acción concreta 2, con su ID si aplica", "acción concreta 3"]
 }}
 
 Reglas:
 1. Basa TODO en los datos reales de arriba — no inventes patrones que no estén respaldados por la evidencia.
-2. "areas_prioritarias": máximo 3, ordenadas de mayor a menor impacto. Si el asesor no tiene problemas claros, dilo honestamente (no inventes debilidades por rellenar).
-3. "plan_accion": deben ser acciones ESPECÍFICAS y accionables en una conversación de coaching real, no genéricas tipo "mejorar la comunicación" — ejemplo bueno: "Practicar 3 respuestas de cierre que confirmen satisfacción del cliente antes de cerrar el chat, usando el caso del {datos.get('ultima_fecha','')} como ejemplo de qué evitar".
-4. No uses asteriscos ni markdown en ningún texto.
-5. Tono: profesional, constructivo, directo — ni demasiado duro ni condescendiente.
+2. NÚMEROS SIEMPRE EN CIFRAS, nunca en palabras — escribe "84%" y "82.2%", nunca "ochenta y cuatro por ciento". Esto aplica a todos los campos, no solo a "tendencia".
+3. CITA EL ID DEL CASO, no solo la fecha, en "fortalezas_consistentes", "areas_prioritarias" y "plan_accion" — cada vez que menciones un caso real de las oportunidades/positivos de arriba, usa el formato "el caso ID {{numero}}", para que quien lea el plan pueda ir a buscarlo directo en el programa sin tener que adivinar cuál fue.
+4. "areas_prioritarias": máximo 3, ordenadas de mayor a menor impacto. Si el asesor no tiene problemas claros, dilo honestamente (no inventes debilidades por rellenar).
+5. "plan_accion": deben ser acciones ESPECÍFICAS, accionables, y basadas en evidencia real citada con ID — nunca genéricas tipo "mejorar la comunicación". Ejemplo bueno: "Revisar el caso ID 215475502389312 en la sesión 1:1, donde el asesor no confirmó la satisfacción del cliente antes de cerrar el chat, y practicar 3 frases de cierre alternativas".
+6. No uses asteriscos ni markdown en ningún texto.
+7. Tono: profesional, constructivo, directo — ni demasiado duro ni condescendiente. Sé asertivo: afirma lo que los datos muestran con seguridad, sin rodeos ni frases vagas tipo "podría ser que" — si la evidencia lo respalda, dilo con precisión. El objetivo final es que el asesor MEJORE, no solo documentar que le fue mal — enmarca las áreas prioritarias como oportunidades concretas de crecimiento, no como una lista de fallas.
 """
 
 
-def generar_coaching(datos: dict, proveedor: str = None, api_key: str = None) -> dict:
+def generar_coaching(datos: dict, proveedor: str = None, api_key: str = None, compromisos_anteriores: dict = None) -> dict:
     """A partir de los datos agregados de un asesor (ver coaching.datos_para_coaching),
     le pide a la IA que sintetice un plan de coaching. Reutiliza toda la
-    infraestructura de proveedores/cadena de respaldo ya existente."""
+    infraestructura de proveedores/cadena de respaldo ya existente.
+
+    compromisos_anteriores: el plan de coaching guardado más reciente de este
+    asesor (ver coaching_service.obtener_plan_anterior) — si existe, la IA lo
+    usa para evaluar si los compromisos de la sesión pasada se cumplieron,
+    cerrando el ciclo real de seguimiento en vez de generar un reporte
+    aislado cada vez."""
     proveedor = proveedor or ("gemini" if config.gemini_api_key else None)
     if not proveedor:
         raise RuntimeError("No hay ningún proveedor de IA configurado.")
 
-    prompt = _construir_prompt_coaching(datos)
+    prompt = _construir_prompt_coaching(datos, compromisos_anteriores)
 
     if proveedor == "gemini":
         api_key = api_key or config.gemini_api_key
@@ -540,9 +599,22 @@ def generar_coaching(datos: dict, proveedor: str = None, api_key: str = None) ->
 
     texto_limpio = _limpiar_json(texto_respuesta)
     try:
-        return json.loads(texto_limpio)
+        plan = json.loads(texto_limpio)
     except json.JSONDecodeError as e:
         raise RuntimeError(f"La IA no devolvió un JSON válido para el plan de coaching: {e}")
+
+    if plan.get("alerta_tendencia") not in ("ninguna", "atencion", "critica"):
+        # Respaldo si la IA no trajo el campo, o lo trajo con un valor
+        # inesperado: se calcula directo de los números, sin depender de la IA.
+        cambio = round((datos.get("nota_segunda_mitad", 0) - datos.get("nota_primera_mitad", 0)) * 100, 1)
+        if datos.get("total_criticos", 0) > 0 or cambio <= -8:
+            plan["alerta_tendencia"] = "critica"
+        elif cambio <= -3:
+            plan["alerta_tendencia"] = "atencion"
+        else:
+            plan["alerta_tendencia"] = "ninguna"
+
+    return plan
 
 
 if __name__ == "__main__":

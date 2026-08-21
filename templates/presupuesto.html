@@ -35,10 +35,33 @@
   <div class="subt">Cuánto costaría evaluar tu volumen de conversaciones con cada modelo — se actualiza mientras mueves el control.</div>
 </div>
 
+<div class="card card-pad" style="margin-bottom:24px;" id="tarjeta-gasto-real">
+  <h2 style="margin:0 0 4px;">💳 Gasto real de este mes</h2>
+  <div class="hint" style="margin-bottom:16px;">No es una simulación — es lo que de verdad se ha gastado, calculado de cada evaluación real que hiciste.</div>
+  <div id="contenido-gasto-real">Cargando...</div>
+</div>
+
 <div id="fuente-datos" class="fuente-badge fuente-estimado">Cargando...</div>
 
 <div class="card card-pad" style="margin-bottom:18px;">
-  <div class="controles">
+  <div class="tabs" style="margin-bottom:18px;">
+    <label><input type="radio" name="modo" id="modo-asesor" value="por_asesor" checked onchange="actualizar()"> Por muestreo de asesores (recomendado)</label>
+    <label style="margin-left:20px;"><input type="radio" name="modo" id="modo-volumen" value="volumen_diario" onchange="actualizar()"> Por volumen diario</label>
+  </div>
+
+  <div id="controles-por-asesor" class="controles">
+    <div class="campo-control">
+      <label>Número de asesores: <span class="valor-grande" id="valor-asesores">{{ numero_asesores_real }}</span></label>
+      <input type="range" id="slider-asesores" min="1" max="150" step="1" value="{{ numero_asesores_real }}">
+      <div class="hint" style="margin-top:6px;">Basado en tu reporte real de conversaciones por asesor ({{ numero_asesores_real }} asesores activos)</div>
+    </div>
+    <div class="campo-control">
+      <label>Evaluaciones por asesor al mes: <span class="valor-grande" id="valor-eval-asesor">40</span></label>
+      <input type="range" id="slider-eval-asesor" min="5" max="200" step="5" value="40">
+    </div>
+  </div>
+
+  <div id="controles-volumen" class="controles" style="display:none;">
     <div class="campo-control">
       <label>Conversaciones a evaluar por día: <span class="valor-grande" id="valor-conversaciones">5,000</span></label>
       <input type="range" id="slider-conversaciones" min="100" max="20000" step="100" value="5000">
@@ -68,21 +91,39 @@ function formatoUSD(valor) {
 }
 
 async function actualizar() {
-  const conversaciones = document.getElementById("slider-conversaciones").value;
-  document.getElementById("valor-conversaciones").textContent = Number(conversaciones).toLocaleString("es-CO");
+  const modoAsesor = document.getElementById("modo-asesor").checked;
+  document.getElementById("controles-por-asesor").style.display = modoAsesor ? "" : "none";
+  document.getElementById("controles-volumen").style.display = modoAsesor ? "none" : "";
 
-  const resp = await fetch(`/api/presupuesto?conversaciones_dia=${conversaciones}`);
+  let url;
+  if (modoAsesor) {
+    const asesores = document.getElementById("slider-asesores").value;
+    const evalPorAsesor = document.getElementById("slider-eval-asesor").value;
+    document.getElementById("valor-asesores").textContent = asesores;
+    document.getElementById("valor-eval-asesor").textContent = evalPorAsesor;
+    url = `/api/presupuesto?modo=por_asesor&numero_asesores=${asesores}&evaluaciones_por_asesor=${evalPorAsesor}`;
+  } else {
+    const conversaciones = document.getElementById("slider-conversaciones").value;
+    document.getElementById("valor-conversaciones").textContent = Number(conversaciones).toLocaleString("es-CO");
+    url = `/api/presupuesto?modo=volumen_diario&conversaciones_dia=${conversaciones}`;
+  }
+
+  const resp = await fetch(url);
   const datos = await resp.json();
 
   const badge = document.getElementById("fuente-datos");
+  let mensajeFuente;
   if (datos.base.fuente === "real") {
-    badge.className = "fuente-badge fuente-real";
-    badge.textContent = `✅ Basado en datos reales de tu uso (${datos.base.total_muestras} evaluaciones medidas)`;
+    mensajeFuente = `✅ Basado en datos reales de tu uso (${datos.base.total_muestras} evaluaciones medidas)`;
   } else {
     const faltan = 10 - (datos.base.total_muestras || 0);
-    badge.className = "fuente-badge fuente-estimado";
-    badge.textContent = `⚠ Estimación de referencia — todavía faltan ${faltan > 0 ? faltan : 10} evaluaciones reales para calcular esto con tus datos`;
+    mensajeFuente = `⚠ Estimación de referencia — todavía faltan ${faltan > 0 ? faltan : 10} evaluaciones reales para calcular esto con tus datos`;
   }
+  if (datos.modo === "por_asesor") {
+    mensajeFuente += ` · ${datos.evaluaciones_mes.toLocaleString("es-CO")} evaluaciones/mes en total`;
+  }
+  badge.className = datos.base.fuente === "real" ? "fuente-badge fuente-real" : "fuente-badge fuente-estimado";
+  badge.textContent = mensajeFuente;
 
   const tbody = document.getElementById("tabla-modelos");
   tbody.innerHTML = datos.modelos.map(m => `
@@ -113,6 +154,52 @@ async function actualizar() {
 }
 
 document.getElementById("slider-conversaciones").addEventListener("input", actualizar);
+document.getElementById("slider-asesores").addEventListener("input", actualizar);
+document.getElementById("slider-eval-asesor").addEventListener("input", actualizar);
 actualizar();
+
+async function cargarGastoReal() {
+  const contenedor = document.getElementById("contenido-gasto-real");
+  try {
+    const resp = await fetch("/api/gasto-real");
+    const d = await resp.json();
+
+    if (d.total_evaluaciones === 0) {
+      contenedor.innerHTML = `<div class="hint">Todavía no hay evaluaciones registradas en ${d.mes} — apenas evalúes algo, este número va a empezar a moverse solo.</div>`;
+      return;
+    }
+
+    const nombresProveedor = { gemini: "Gemini", anthropic: "Claude", openai: "ChatGPT" };
+    let filasProveedor = "";
+    for (const [prov, gasto] of Object.entries(d.gasto_por_proveedor)) {
+      filasProveedor += `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;">
+        <span>${nombresProveedor[prov] || prov}</span><span style="font-family:'JetBrains Mono',monospace;">$${gasto.toFixed(4)}</span>
+      </div>`;
+    }
+
+    contenedor.innerHTML = `
+      <div style="display:flex;gap:32px;flex-wrap:wrap;margin-bottom:14px;">
+        <div>
+          <div style="font-size:11px;color:var(--ink-500);text-transform:uppercase;">Gastado en ${d.mes}</div>
+          <div style="font-size:28px;font-weight:800;font-family:'JetBrains Mono',monospace;">$${d.gasto_total.toFixed(4)}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--ink-500);text-transform:uppercase;">Evaluaciones reales</div>
+          <div style="font-size:28px;font-weight:800;font-family:'JetBrains Mono',monospace;">${d.total_evaluaciones}</div>
+        </div>
+        ${d.proyeccion_fin_mes !== null ? `
+        <div>
+          <div style="font-size:11px;color:var(--ink-500);text-transform:uppercase;">Proyección fin de mes</div>
+          <div style="font-size:28px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--naranja-500);">$${d.proyeccion_fin_mes.toFixed(2)}</div>
+        </div>` : ""}
+      </div>
+      <div style="font-size:12px;color:var(--ink-500);margin-bottom:4px;">Por proveedor:</div>
+      ${filasProveedor}
+    `;
+  } catch (e) {
+    contenedor.innerHTML = `<div class="hint">No se pudo cargar el gasto real todavía.</div>`;
+  }
+}
+cargarGastoReal();
 </script>
 {% endblock %}

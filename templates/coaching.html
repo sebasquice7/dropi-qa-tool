@@ -31,6 +31,20 @@
   .mini-tabla td { padding: 7px 4px; border-bottom: 1px solid var(--line); }
   .mini-tabla td:last-child { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
 
+  .categoria-desplegable { border-bottom: 1px solid var(--line); }
+  .categoria-desplegable summary {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 4px; cursor: pointer; list-style: none; font-size: 13px;
+  }
+  .categoria-desplegable summary::-webkit-details-marker { display: none; }
+  .categoria-desplegable summary::before {
+    content: "▸"; color: var(--ink-300); font-size: 11px; margin-right: 8px; transition: transform .15s;
+  }
+  .categoria-desplegable[open] summary::before { transform: rotate(90deg); }
+  .categoria-desplegable summary:hover { background: var(--naranja-50); }
+  .categoria-desplegable .valor-categoria { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .categoria-desplegable .mini-tabla { margin: 0 0 8px 19px; width: calc(100% - 19px); }
+
   .vacio-coach { text-align: center; padding: 60px 30px; color: var(--ink-500); }
   .vacio-coach .num { font-family: 'JetBrains Mono', monospace; font-size: 40px; font-weight: 700; color: var(--sello-tinta); }
 </style>
@@ -65,9 +79,23 @@
     {{ m.sello_puntaje(datos.nota_promedio * 100, tamano=80) }}
   </div>
 
+  {% if plan.seguimiento_compromisos and "no hay compromisos previos" not in plan.seguimiento_compromisos %}
+    <div class="card seccion card-pad" style="border-left:3px solid var(--naranja-500);">
+      <h2>🔁 Seguimiento del compromiso anterior</h2>
+      <p style="margin:0;font-size:13.5px;line-height:1.6;color:var(--ink);">{{ plan.seguimiento_compromisos }}</p>
+    </div>
+  {% endif %}
+
   <div class="card seccion card-pad">
     <h2>Resumen general</h2>
     <p style="margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--ink);">{{ plan.resumen_general }}</p>
+
+    {% if plan.alerta_tendencia == "critica" %}
+      <div class="badge badge-rojo" style="margin-bottom:8px;">🔴 Requiere atención — caída significativa en el periodo</div>
+    {% elif plan.alerta_tendencia == "atencion" %}
+      <div class="badge badge-ambar" style="margin-bottom:8px;">🟠 A vigilar — baja moderada en el periodo</div>
+    {% endif %}
+
     <p style="margin:0;font-size:13px;line-height:1.6;color:var(--ink-500);"><strong>Tendencia:</strong> {{ plan.tendencia }}</p>
   </div>
 
@@ -83,11 +111,24 @@
 
     <div class="card seccion card-pad" style="margin-bottom:0;">
       <h2>Desempeño por categoría</h2>
-      <table class="mini-tabla">
-        {% for cat, val in datos.categorias_ordenadas %}
-          <tr><td>{{ cat }}</td><td>{{ (val*100)|round(0)|int }}%</td></tr>
-        {% endfor %}
-      </table>
+      <div class="card-hint" style="margin-bottom:6px;">Haz clic en una categoría para ver (u ocultar) el desglose de sus ítems individuales</div>
+
+      {% for cat, val in datos.categorias_ordenadas %}
+        <details class="categoria-desplegable">
+          <summary>
+            <span style="display:flex;align-items:center;gap:8px;flex:1;">{{ cat }}</span>
+            <span class="valor-categoria">{{ (val*100)|round(0)|int }}%</span>
+          </summary>
+          <table class="mini-tabla">
+            {% for it in datos.items_ordenados if it.categoria == cat %}
+              <tr>
+                <td>{{ it.nombre }} <span style="color:var(--ink-300);font-size:10.5px;">— {{ it.peso }}% de esta categoría ({{ it.veces_evaluado }}x)</span></td>
+                <td>{{ (it.porcentaje*100)|round(0)|int }}%</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </details>
+      {% endfor %}
     </div>
   </div>
 

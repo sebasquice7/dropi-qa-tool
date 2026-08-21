@@ -5,6 +5,7 @@
 
 # --- Datos reales de clientes / historial de evaluaciones ---
 historial_evaluaciones.json
+historial_planes_coaching.json
 uso_ia_log.jsonl
 ultimo_lote.json
 uploads/

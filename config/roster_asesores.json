@@ -1,0 +1,1094 @@
+[
+  {
+    "pais": "Colombia",
+    "nombre": "Dennis Martinez",
+    "email": "dennis.martinez@dropi.co",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Catalina Orobio",
+    "email": "catalina.orobio@dropi.co",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Luisa Buitrago",
+    "email": "luisa.buitrago@dropi.co",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Jose Ramirez",
+    "email": "jose.ramirez@dropi.co",
+    "bandeja": "Otras consultas financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Jose Ramirez",
+    "email": "jose.ramirez@dropi.co",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Natalia Mosquera",
+    "email": "Natalia.mosquera@dropi.co",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Natalia Mosquera",
+    "email": "Natalia.mosquera@dropi.co",
+    "bandeja": "Exógena",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Michael Gomez",
+    "email": "asistente.admin3@dropi.co",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "John Sanchez",
+    "email": "john.sanchez@dropi.co",
+    "bandeja": "Compliance",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Melany Villalobos",
+    "email": "melany.villalobos@dropi.co",
+    "bandeja": "Garantías Dropshippers",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Sandra Villarraga",
+    "email": "sandra.villarraga@dropi.co",
+    "bandeja": "Garantías Proveedores / Garantías Emprendendor",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Danna Trujillo",
+    "email": "danna.trujillo@dropi.co",
+    "bandeja": "RECOLECCIONES",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Danna Trujillo",
+    "email": "danna.trujillo@dropi.co",
+    "bandeja": "INSUMOS",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Laura Renginfo",
+    "email": "laura.rengifo@dropi.co",
+    "bandeja": "CASOS ESPECIALES",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Laura Renginfo",
+    "email": "laura.rengifo@dropi.co",
+    "bandeja": "PRUEBA DE ENTREGA",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Isabel Rojas",
+    "email": "isabelle.rojas@dropi.co",
+    "bandeja": "PQR CAS",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Danna Trujillo",
+    "email": "danna.trujillo@dropi.co",
+    "bandeja": "ACTUALIZACIÓN DE ESTADO",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Lizeth Hernandez",
+    "email": "lizeth.hernandez@dropi.co",
+    "bandeja": "DEVOLUCIONES INJUSTIFICADAS",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Lizeth Hernandez",
+    "email": "lizeth.hernandez@dropi.co",
+    "bandeja": "DEVOLUCIONES INJUSTIFICADAS",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Lizeth Hernandez",
+    "email": "lizeth.hernandez@dropi.co",
+    "bandeja": "DUDAS DE TRANSPORTADORA",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Laura Renginfo",
+    "email": "laura.rengifo@dropi.co",
+    "bandeja": "GUIAS SIN MOVIMIENTO",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Laura Renginfo",
+    "email": "laura.rengifo@dropi.co",
+    "bandeja": "GUIAS SIN MOVIMIENTO",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Isabel Rojas",
+    "email": "Isabel Rojas",
+    "bandeja": "PQR CAS",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Andres Pino",
+    "email": "andres.pino@dropi.co",
+    "bandeja": "Órdenes sin despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Karen Parra",
+    "email": "karend.parra@dropi.co",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Sara Mejia",
+    "email": "sara.mejia@dropi.co",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Jhon Lucumi",
+    "email": "jhon.lucumi@dropi.co",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Colombia",
+    "nombre": "Camilo Martinez",
+    "email": "camilo.martinez@dropi.co",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Santiago Navia",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Valentina Buitrago Garcia",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Valentina Buitrago Garcia",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Santiago Navia",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Chile",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Santiago Navia",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Tatiana Lopez",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Tatiana Lopez",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Tatiana Lopez",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Tatiana Lopez",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Paraguay",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Santiago Navia",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Valentina Buitrago Garcia",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Valentina Buitrago Garcia",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Anthony Giret Silva",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Anthony Giret Silva",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Argentina",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "México",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "México",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "México",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "México",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "México",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "México",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "México",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "México",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "México",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "México",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "México",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "México",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "México",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Vivian Gabriela",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Vivian Gabriela",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Vivian Gabriela",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Vivian Gabriela",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Vivian Gabriela",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Guatemala",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Panamá",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Jose Ramirez",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Vivian Escobar",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Costa Rica",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Clara Ibarguen",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Valentina Buitrago Garcia",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Valentina Buitrago Garcia",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Clara Ibarguen",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Ecuador",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Clara Ibarguen",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Perú",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Clara Ibarguen",
+    "email": "",
+    "bandeja": "Triage",
+    "area": "TRIAGE"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Recargas",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Vivian Diaz",
+    "email": "",
+    "bandeja": "Retiros",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "José Ramirez",
+    "email": "",
+    "bandeja": "Otras Consultas Financieras",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Natalia Mosquera",
+    "email": "",
+    "bandeja": "Facturación",
+    "area": "ADMINISTRATIVO"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Órdenes sin Despacho",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Anulaciones",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Aprobación de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Nelson Jimenez",
+    "email": "",
+    "bandeja": "Busqueda de Producto",
+    "area": "COMERCIAL"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Angela Ramirez",
+    "email": "",
+    "bandeja": "Logística",
+    "area": "LOGISTICA"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Eliana Rebolledo",
+    "email": "",
+    "bandeja": "Garantías",
+    "area": "GARANTÍAS"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Jhon Lucumi",
+    "email": "",
+    "bandeja": "Integraciones",
+    "area": "SOPORTE TÉCNICO"
+  },
+  {
+    "pais": "Venezuela",
+    "nombre": "Camilo Martinez",
+    "email": "",
+    "bandeja": "Desarrollo",
+    "area": "SOPORTE TÉCNICO"
+  }
+]

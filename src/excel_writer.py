@@ -73,6 +73,15 @@ def generar_excel_matriz(evaluacion: dict, metadata: dict, ruta_salida: str) -> 
     for r in range(5, 9):
         ws[f"B{r}"].font = Font(bold=True)
 
+    if evaluacion.get("satisfaccion"):
+        emojis = {"muy_insatisfecho": "😠 Muy insatisfecho", "insatisfecho": "🙁 Insatisfecho", "neutral": "😐 Neutral", "satisfecho": "🙂 Satisfecho", "muy_satisfecho": "😄 Muy satisfecho"}
+        ws["B9"] = "Satisfacción"
+        ws["B9"].font = Font(bold=True)
+        ws["C9"] = emojis.get(evaluacion["satisfaccion"], evaluacion["satisfaccion"])
+        if evaluacion.get("satisfaccion_comentarios"):
+            ws["D9"] = evaluacion["satisfaccion_comentarios"]
+            ws["D9"].font = Font(italic=True, size=9)
+
     ws["E5"] = "NOTA"
     ws["E5"].font = Font(bold=True, size=11)
     ws["E5"].alignment = Alignment(horizontal="center", vertical="center")

@@ -1,0 +1,52 @@
+{% extends "_base.html" %}
+{% block titulo %}Coaching — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  table.lista-coaching { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.lista-coaching th { text-align: left; padding: 9px 12px; color: var(--ink-500); font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--line); }
+  table.lista-coaching td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  table.lista-coaching tr:hover { background: var(--naranja-50); }
+  .fila-coaching { text-decoration: none; color: inherit; display: table-row; cursor: pointer; }
+  .badge-listo { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 12px; background: #E3F1E8; color: #1D7A4C; }
+  .badge-pendiente { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 12px; background: var(--ambar-bg); color: var(--ambar); }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Desarrollo del equipo</div>
+  <h1>Coaching</h1>
+  <div class="subt">Elige un asesor para ver su plan de coaching — tendencia real, evolución mes a mes, y compromiso de mejora.</div>
+</div>
+
+{% if not asesores %}
+  <div class="card card-pad" style="text-align:center;padding:40px;">
+    <div class="hint">Todavía no hay evaluaciones registradas. Evalúa al menos {{ minimo }} conversaciones de un asesor para empezar a ver su plan de coaching aquí.</div>
+  </div>
+{% else %}
+  <div class="card" style="overflow-x:auto;">
+    <table class="lista-coaching">
+      <thead>
+        <tr><th>Asesor</th><th>Evaluaciones</th><th>Promedio</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        {% for a in asesores %}
+          <tr class="fila-coaching" onclick="window.location.href='/coaching/{{ a.nombre | urlencode }}'">
+            <td style="font-weight:600;">{{ a.nombre }}</td>
+            <td>{{ a.total }}</td>
+            <td>{{ a.promedio }}%</td>
+            <td>
+              {% if a.listo_para_coaching %}
+                <span class="badge-listo">✓ Listo</span>
+              {% else %}
+                <span class="badge-pendiente">Faltan {{ minimo - a.total }} para el plan</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+{% endblock %}

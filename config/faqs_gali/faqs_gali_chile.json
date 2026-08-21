@@ -1,0 +1,1122 @@
+[
+  {
+    "pregunta": "¿Cuáles son los tipos de novedades que se pueden presentar en el proceso de envío?",
+    "respuesta": "Novedades Operativas y de Servicio al Cliente.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Servicio al cliente, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Necesito saber cómo funciona el Historial de cartera en Dropi. Quiero revisar todas mis transacciones.",
+    "respuesta": "El Historial de Cartera está diseñado para ser tu herramienta de auditoría. Te permite revisar todas las transacciones financieras que se han ejecutado en tu wallet, facilitando así la gestión completa y el control total de todos tus movimientos de dinero.",
+    "categoria": "Dropshipper",
+    "tags": "Cartera, Recarga, Retiro, Wallet",
+    "variaciones": "No logro ver mis movimiento de mi wallet"
+  },
+  {
+    "pregunta": "¿Qué debo hacer para reportar una garantía?",
+    "respuesta": "Para reportar una garantía debes ingresar al panel de \"Mis pedidos\", ubicar la orden correspondiente, hacer clic en el ícono de garantía y completar el formulario con la información y la evidencia necesaria. Es importante que la guía del pedido esté en estado “entregado”, ya que de lo contrario no podrás generar la solicitud.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": "No puede reportar una garantía"
+  },
+  {
+    "pregunta": "¿Cuáles son los requisitos para reportar una garantía en Dropi?",
+    "respuesta": "Para reportar una garantía es necesario que el pedido tenga estado “entregado” y cuentes con una descripción del problema acompañada de evidencia fotográfica del daño o error, esto permite que el proveedor evalúe la solicitud correctamente.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": "Hola, buenas tardes...clienta me dice que no le gusto el producto y requiere la devolucion del dinero...que debo hacer ?"
+  },
+  {
+    "pregunta": "¿Cuánto tiempo tengo para reportar una garantía?",
+    "respuesta": "El tiempo para reportar una garantía depende del proveedor, pero el mínimo establecido es de 10 días calendario después de la entrega del pedido, por eso es importante que el cliente final revise los productos apenas sean recibidos.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": "Reporté una garantía en Dropi y aún no he recibido respuesta, ¿podrían indicarme el estado de mi solicitud?"
+  },
+  {
+    "pregunta": "¿Cómo se realiza el seguimiento de una garantía?",
+    "respuesta": "Puedes seguir el estado de tu garantía desde el panel de \"Mis garantías\", utilizando el filtro ya sea por fecha o ID de garantía, cuando la encuentren das clic en \"Ver detalles\" para consultar la respuesta del proveedor y cualquier actualización del caso.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuánto tiempo tarda el proveedor en responder una garantía?",
+    "respuesta": "El proveedor tiene un plazo máximo de 72 horas hábiles para responder una solicitud de garantía, y podrás ver la respuesta directamente en el módulo de garantías.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": "Subí una garantía y aún no tengo respuesta. ¿Cuánto se demoran en dar una respuesta?"
+  },
+  {
+    "pregunta": "¿Qué sucede si el proveedor rechaza una garantía?",
+    "respuesta": "Si el proveedor rechaza una garantía, en el módulo de garantías verás el estado “rechazado” junto con las razones del rechazo. Si no estás de acuerdo con la decisión, puedes contactar al servicio al cliente para apelar.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Quién cubre los costos de envío en caso de garantía?",
+    "respuesta": "En las garantías aprobadas, el proveedor asume los costos de envío relacionados, asegurando que no tengas que cubrir gastos adicionales por productos defectuosos o con errores.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué se considera una garantía por mal funcionamiento?",
+    "respuesta": "Una garantía por mal funcionamiento se aplica cuando un producto no funciona correctamente o no cumple con las especificaciones técnicas descritas.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo utilizar los filtros de búsqueda en Dropi?",
+    "respuesta": "Para usar los filtros de búsqueda, entra al panel de \"Productos / Catálogo\", selecciona los criterios que deseas aplicar como categoría, precio o tipo de proveedor, y haz clic en \"Aplicar filtros\" para ver los resultados específicos.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Favoritos, Filtro, Filtros, Imágen, Imágenes, Pedidos, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado, Prueba",
+    "variaciones": "Necesito encontrar un proveedor que haga contra entrega con ese producto; lo he tratado de buscar en Dropi."
+  },
+  {
+    "pregunta": "¿Puedo agregar productos en favoritos?",
+    "respuesta": "Sí, puedes guardar productos en favoritos haciendo clic en el ícono de corazón naranja que aparece dentro del producto. Así podrás acceder fácilmente a ellos más adelante.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Favoritos, Filtro, Filtros, Imágen, Imágenes, Pedidos, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado, Prueba",
+    "variaciones": "¿Cómo encontrar productos marcados como favoritos?"
+  },
+  {
+    "pregunta": "¿Qué estrategias puedo usar para seleccionar productos en Dropi?",
+    "respuesta": "Para elegir buenos productos en Dropi te recomiendo analizar la demanda del mercado, los márgenes de ganancia, las tendencias actuales y la calidad de los proveedores, eso te ayudará a identificar los artículos con mayor potencial de venta.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Favoritos, Filtro, Filtros, Imágen, Imágenes, Pedidos, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado, Prueba",
+    "variaciones": "¿Cómo encuentro el producto ganador?"
+  },
+  {
+    "pregunta": "¿Cómo puedo crear una orden en Dropi?",
+    "respuesta": "Para crear una orden, ve al panel de \"Productos / Catálogo\", selecciona el producto que deseas vender, haz clic en “Enviar”, completa los datos del cliente, elige el tipo de envío y presiona \"Procesar\". La orden se generará con el estado “pendiente”.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Favoritos, Filtro, Filtros, Imágen, Imágenes, Nuevo, Orden, Pedidos, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado, Prueba",
+    "variaciones": "Hice una venta por WhatsApp, pero no sé cómo generar la orden en Dropi."
+  },
+  {
+    "pregunta": "¿Qué es la validación de direcciones en Dropi?",
+    "respuesta": "La validación de direcciones es una herramienta que revisa la existencia y exactitud de las direcciones de tus clientes en bases de datos especializadas, asegurando que los pedidos se entreguen correctamente y sin errores.",
+    "categoria": "Dropshipper",
+    "tags": "Dato, Direcciones, Dirección, Orden, Pedidos, Validación",
+    "variaciones": "Realice una orden y me aparecio un icono rojo en la direccion"
+  },
+  {
+    "pregunta": "¿Cuáles son los tipos de garantía en Dropi?",
+    "respuesta": "Estan las garantías por mal funcionamiento, productos rotos, órdenes diferentes a las solicitadas y órdenes incompletas, cubriendo así los principales casos en los que se requiere soporte.",
+    "categoria": "Dropshipper",
+    "tags": "Aprobada, Cartera, Devolución, Garantías, Orden, Pendiente, Rechazada, Trazabilidad",
+    "variaciones": "¿Me puedes indicar cuáles son los tipos de garantías que hay?"
+  },
+  {
+    "pregunta": "¿Para qué sirve el Calendario en Dropi?",
+    "respuesta": "El calendario de Dropi te permite visualizar tus pedidos del mes según su estado, facilitando el seguimiento de la operación y ayudándote a organizar mejor tus tiempos de entrega y gestión.",
+    "categoria": "Dropshipper",
+    "tags": "Métricas, Plataforma",
+    "variaciones": "¿Me puedes explicar para qué sirve el calendario en Dropi?"
+  },
+  {
+    "pregunta": "¿Qué información proporciona el Dashboard de Dropi?",
+    "respuesta": "El Dashboard te brinda un resumen visual de tu operación, mostrando tus ventas, pedidos y métricas clave para que tengas una visión rápida y clara del rendimiento de tu negocio.",
+    "categoria": "Dropshipper",
+    "tags": "Dashboard, Métricas, Plataforma, Reportes",
+    "variaciones": "¿Qué tipo de información aparece en el dashboard?"
+  },
+  {
+    "pregunta": "¿Cómo puedo crear una cuenta para mi colaborador nuevo en Dropi?",
+    "respuesta": "Para crear una cuenta a un colaborador, ingresa a \"Mis usuarios\" desde el panel de control, haz clic en \"Agregar usuario\", completa los datos solicitados y guarda los cambios. Así le otorgas acceso según los permisos que necesite.",
+    "categoria": "Dropshipper",
+    "tags": "Empleado, Validación",
+    "variaciones": "Quiero añadir a una persona que trabaja como aliada en mi cuenta. ¿Cómo puedo hacerlo?"
+  },
+  {
+    "pregunta": "¿Qué puedo hacer en la sección \"Mis usuarios\"?",
+    "respuesta": "En la sección “Mis usuarios” puedes administrar las cuentas de las personas que tienen acceso a tu perfil, incluyendo agregar nuevos usuarios, editar información existente o eliminar cuentas si ya no las requieres.",
+    "categoria": "Dropshipper",
+    "tags": "Empleado, Validación",
+    "variaciones": "Quiero añadir a una persona que trabaja como aliada en mi cuenta. ¿Cómo puedo hacerlo?"
+  },
+  {
+    "pregunta": "¿Dónde puedo ver mi Historial de cartera?",
+    "respuesta": "Para consultar tu historial de cartera, ingresa al módulo \"Historial de cartera\". Allí podrás revisar todas tus transacciones y movimientos de saldo dentro de la plataforma, puedes descargar el reporte en un Excel.",
+    "categoria": "Dropshipper",
+    "tags": "Cartera, Recarga, Retiro, Wallet",
+    "variaciones": "Necesito validar mis ganancias y movientos de mi wallet"
+  },
+  {
+    "pregunta": "Estoy revisando la plataforma pero no me aparecen los pedidos, ¿por qué no se me están reflejando?",
+    "respuesta": "Es posible que los pedidos sí estén registrados, pero no se estén mostrando por un tema de filtros. Antes de buscar, te recomiendo hacer clic en el embudo verde y seleccionar la fecha desde el día en que se creó la orden hasta la fecha actual. Recuerda que el panel “Ordenes” muestran los pedidos que esten en los ultimos 7 días calendario.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Pedidos,Dudas de la plataforma",
+    "variaciones": "Tenía pedidos de la semana pasada, pero no los encuentro. ¿Qué puedo hacer?"
+  },
+  {
+    "pregunta": "Me aparece algo que dice “novedad operativa” ¿eso qué significa exactamente?",
+    "respuesta": "Una novedad operativa es un aviso automático que indica que la guía o el envío tuvo un retraso o un evento en la transportadora. En estos casos, la transportadora generará un nuevo movimiento y actualizar el estado. Lo ideal es monitorear, y si aún no hay cambios, nos avisas para ayudarte a escalarlo.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Novedad, Novedades",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuánto tiempo tengo para solucionar las novedades que aparecen en mis pedidos?",
+    "respuesta": "Tienes un tiempo máximo de 24 horas calendario para gestionar y solucionar cualquier novedad directamente desde la plataforma. Es importante hacerlo dentro de ese plazo para evitar retrasos, devoluciones o costos adicionales.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Novedad, Novedades, Tiempos, Trazabilidad",
+    "variaciones": "En cuanto puedo resolver una novedad"
+  },
+  {
+    "pregunta": "¿Dónde puedo ver qué cobertura tienen las transportadoras y qué ciudades manejan?",
+    "respuesta": "Puedes consultar la cobertura desde el archivo de cobertura, allí encontrarás las ciudades habilitadas para órdenes con recaudo y sin recaudo, el semáforo de ciudades para comparar tasas de devolución por transportadora y además una carpeta con las oficinas disponibles para reclamos.",
+    "categoria": "Dropshipper",
+    "tags": "Cobertura, Logística, Trazabilidad",
+    "variaciones": "¿Qué información sobre coberturas, novedades y estatus de la transportadora puedo consultar en Dropi?"
+  },
+  {
+    "pregunta": "¿Cuáles son las razones por las que una devolución se considera injustificada?",
+    "respuesta": "Se considera devolución injustificada cuando solucionaste la novedad dentro del tiempo establecido y la transportadora no ejecutó la solución, cuando la guía tiene solo un ofrecimiento, cuando la guía no presenta novedad pero aun así es devuelta, o cuando la transportadora no espera el plazo de 24 horas para la gestión de la novedad y devuelve la guía antes de tiempo.",
+    "categoria": "Dropshipper",
+    "tags": "Capacitaciones,Logistica",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo puedo saber qué significan las novedades que aparecen en mis guías?",
+    "respuesta": "En el archivo de cobertura encontrarás un diccionario de novedades que explica el significado de cada estatus y movimiento que puedan presentar las guías con cada transportadora, lo que te permitirá entender qué está pasando en cada etapa del envío.",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Capacitaciones, Dropi Academy, Novedad, Novedades",
+    "variaciones": "¿Qué información hay sobre las  novedades y estatus de la transportadora puedo consultar en Dropi?"
+  },
+  {
+    "pregunta": "Mis pedidos no están pasando automáticamente a Dropi desde WooCommerce, ¿cómo puedo revisar qué está pasando?",
+    "respuesta": "Primero debes verificar que la tienda esté correctamente integrada; para eso, asegúrate de haber creado la tienda en Dropi, copiar el Token de integración y pegarlo en Dropify dentro de las configuraciones de WooCommerce. Una vez guardado, las plataformas deberían quedar enlazadas y los pedidos empezar a sincronizarse.",
+    "categoria": "Dropshipper",
+    "tags": "Capacitaciones, Dropi Academy, Integración",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo puedo confirmar que mi integración con Dropi quedó bien hecha?",
+    "respuesta": "Para comprobarlo, ve a Dropify en la sección de Productos; si los productos de Dropi se cargan correctamente allí, significa que la integración fue exitosa. Si no aparecen, será necesario repetir el proceso de integración para asegurarse de que el enlace se realizó correctamente.",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Capacitaciones, Dropi Academy, Integración",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Por qué tengo que tener activada la opción de \"Sincronizar órdenes automáticamente\" en Woocommerce?",
+    "respuesta": "Es necesario activar la opción de “Sincronizar órdenes automáticamente” para que los pedidos que se generen en tu tienda de WooCommerce pasen directamente a Dropi sin necesidad de hacerlo manualmente. Esta configuración se realiza desde Dropify, en la sección de Configuraciones, y una vez habilitada y guardada, la plataforma hará el envío automático de las órdenes, asegurando que la operación sea más fluida y rápida.",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Academía, Capacitaciones, Dropi Academy, Integración",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué puedo hacer si los pedidos no se están pasando automáticamente a Dropi?",
+    "respuesta": "Si las plataformas ya están enlazadas y después de unos 5 minutos los pedidos no se sincronizan solos, puedes entrar al pedido desde WooCommerce, ir a la parte superior derecha, seleccionar “Más acciones” y darle en “Enviar a Dropi”. Esto puede hacer que el pedido pase correctamente o que muestre un error para identificar qué está fallando.",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Academía, Capacitaciones, Dropi Academy, Integración",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Y qué hago si el pedido no pasa a Dropi ni automático ni manual?",
+    "respuesta": "En ese caso, lo mejor es reiniciar la integración: elimina la tienda en Dropi y borra el Token que estaba configurado en WooCommerce. Luego, vuelve a crear la tienda en Dropi para generar un nuevo Token y realiza nuevamente la integración desde el paso inicial; eso suele corregir cualquier enlace incorrecto o caducado.",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Academía, Capacitaciones, Dropi Academy, Integración",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué hago si la aplicación Dropify no aparece en WooCommerce o no me deja instalarla?",
+    "respuesta": "Si Dropify no aparece disponible o no te permite descargarla, puede ser porque la tienda no está configurada en el país correcto. Debes revisar la configuración de ubicación en WooCommerce y asegurarte de que coincida con el país donde estás operando; al ajustar esto, normalmente la app queda disponible para instalar.",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Academía, Capacitaciones, Dropi Academy, Integración",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es Dropi y para qué sirve?",
+    "respuesta": "Dropi es una plataforma tecnológica 100% digital que conecta todo el ecosistema de e-commerce, permitiendo gestionar la operación logística de tiendas virtuales, dropshippers y proveedores de manera centralizada. Básicamente, te ayuda a administrar productos, pedidos, envíos y pagos de forma más ágil y automatizada.",
+    "categoria": "Dropshipper",
+    "tags": "Dropi, Dropi Academy",
+    "variaciones": "¿Como funciona Dropi?"
+  },
+  {
+    "pregunta": "¿Tengo que activar algo para usar la validación de direcciones?",
+    "respuesta": "No, la validación de direcciones ya viene activada por defecto en Dropi, así que no necesitas realizar ninguna configuración adicional. La plataforma verificará automáticamente la dirección del cliente al momento de crear la orden.",
+    "categoria": "Dropshipper",
+    "tags": "Configuraciones, Configuración, Dato, Direcciones, Dirección, Orden, Pedidos, Validación",
+    "variaciones": "¿Cómo activo la validación de dirección?"
+  },
+  {
+    "pregunta": "¿Qué es el dropshipping?",
+    "respuesta": "El dropshipping es un modelo donde puedes vender productos sin necesidad de tener inventario. Tú publicas los productos, el cliente compra y el proveedor se encarga de enviar el producto directamente al comprador, lo que te permite emprender sin comprar mercancía por adelantado.",
+    "categoria": "Dropshipper",
+    "tags": "Ayuda, Dropi, Dropi Academy, Dropshipping, Learning, Miembro",
+    "variaciones": "Me gustaria vender"
+  },
+  {
+    "pregunta": "¿Cuánto cuesta tener una cuenta en Dropi y puedo tener más de una?",
+    "respuesta": "Crear una cuenta en Dropi es totalmente gratuito, no hay costos de membresía. Puedes tener varias cuentas si lo necesitas, solo asegúrate de usar correos electrónicos diferentes para cada una.",
+    "categoria": "Dropshipper",
+    "tags": "Ayuda, Costo, Dropi, Dropi Academy, Dropshipping, Learning, Miembro",
+    "variaciones": "Cuanto tengo que pagar por Dropi"
+  },
+  {
+    "pregunta": "¿Cómo registro mi cuenta bancaria en Dropi?",
+    "respuesta": "Ingresa a la sección de “Configuraciones”, luego “Datos bancarios”, haz clic en “Agregar” y completa la información solicitada. Guarda los cambios y tu cuenta bancaria quedará registrada para retiros.",
+    "categoria": "Dropshipper",
+    "tags": "Bancos, Cartera, Configuraciones, Configuración, Nuevo, Pagos, Plataforma, Registro, Retiro, Wallet",
+    "variaciones": "Soy extranjero, ¿cómo puedo añadir mi cuenta si no veo bancos relacionados con mi nacionalidad?"
+  },
+  {
+    "pregunta": "¿Cómo hago para retirar el dinero de mi wallet?",
+    "respuesta": "Ve al módulo de “Configuraciones” y selecciona “Retiro de saldo”. Ingresa el monto que deseas retirar, elige el banco, y luego haz clic en “Procesar”. Con eso se iniciará el proceso de transferencia.",
+    "categoria": "Dropshipper",
+    "tags": "Bancos, Cartera, Configuraciones, Configuración, Nuevo, Pagos, Plataforma, Recarga, Registro, Retiro, Wallet",
+    "variaciones": "No se como puedo retirar mis ganancias"
+  },
+  {
+    "pregunta": "Mis pedidos no están pasando automáticamente a Dropi desde Shopify, ¿cómo verifico qué pasa?",
+    "respuesta": "Primero revisa si la integración está bien configurada. Debes haber creado tu tienda en Dropi, copiar el Token que te entrega la plataforma y pegarlo en Dropify dentro de las configuraciones de Shopify. Si el Token no está bien vinculado, los pedidos no se sincronizarán.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo puedo saber si la integración con Dropi quedó bien hecha en Shopify?",
+    "respuesta": "Para confirmarlo, ve a Dropify y entra en la sección de Productos. Si los productos de Dropi aparecen cargados allí correctamente, significa que la integración fue exitosa. Si no aparecen, te sugiero repetir el proceso de integración desde el inicio.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Por qué debo tener activada la opción de \"Sincronizar órdenes automáticamente\" en Shopify?",
+    "respuesta": "Esta opción debe estar habilitada para que los pedidos que lleguen a tu tienda en Shopify se envíen automáticamente a Dropi sin necesidad de hacerlo manualmente. La configuración se hace desde Dropify en la sección de Configuraciones y luego se guarda.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué puedo hacer si los pedidos no se están pasando automáticamente a Dropi?",
+    "respuesta": "Si las plataformas ya están enlazadas y después de unos minutos los pedidos no se sincronizan, abre el pedido en Shopify, haz clic en “Más acciones” y selecciona “Enviar a Dropi”. Esto ayudará a forzar la sincronización o mostrará un error que indique qué está fallando.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "No logro que el pedido pase a Dropi, ¿qué puedo hacer en este caso?",
+    "respuesta": "Si el pedido no se pasa de forma automática y tampoco cuando intentas enviarlo manualmente, lo mejor es restablecer la integración; elimina la tienda en Dropi y borra el Token que pegaste en Shopify, luego vuelve a crear la tienda en Dropi para generar un nuevo Token y con ese realizas nuevamente la integración, así aseguramos que la conexión entre plataformas quede limpia y funcional.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "La aplicación de Dropify no me aparece en la tienda de aplicaciones de Shopify o me dice que es incompatible, ¿qué debo hacer?",
+    "respuesta": "Cuando la App no aparece o marca incompatibilidad normalmente se debe a que la tienda está configurada en un país donde Dropify no está disponible, por eso debes ir a la configuración de tu tienda en Shopify y ajustar la ubicación al país donde realmente estás operando; una vez se corrige la región la aplicación debería permitir su descarga sin inconvenientes.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo puedo crear ofertas para mis productos si estoy usando Shopify?",
+    "respuesta": "Las ofertas no se crean desde el producto directamente en Shopify sino desde Dropify, así que debes entrar a Shopify → Dropify → Check Out → Ofertas, allí agregas la oferta, seleccionas el producto y defines el descuento o promoción por cantidad, esto permite un control más preciso sobre cómo se presentan las ofertas al cliente en el proceso de compra.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es la Torre Logística y para qué me sirve exactamente?",
+    "respuesta": "La Torre Logística es una herramienta que te muestra el comportamiento real de tus envíos en tiempo real, ayudándote a analizar efectividad, tiempos y costos para tomar mejores decisiones; básicamente te permite ver cómo está funcionando tu operación y ajustar lo necesario para lograr entregas más rápidas y con menos devoluciones.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": "En chile Torre logistica aun no esta activa ¡Torre de Control próximamente!\nPronto tendrás una visión completa de tu operación en Dropi. ¡Mantente atento!"
+  },
+  {
+    "pregunta": "¿Qué métricas importantes puedo ver dentro de la Torre Logística?",
+    "respuesta": "Dentro de la Torre Logística puedes ver métricas clave como el porcentaje de entregas efectivas, el costo promedio del flete por pedido y el tiempo promedio de entrega por cada transportadora, lo que te ayuda a evaluar rendimiento, costos y velocidad de tu operación.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": "En chile Torre logistica aun no esta activa ¡Torre de Control próximamente!\nPronto tendrás una visión completa de tu operación en Dropi. ¡Mantente atento!"
+  },
+  {
+    "pregunta": "¿Cómo puedo comparar los resultados de mi operación con los de Dropi?",
+    "respuesta": "En la Torre Logística puedes activar el filtro de Dropi para ver los indicadores generales de la operación en toda la plataforma y compararlos con los tuyos, esto te permite identificar si estás por encima, igual o por debajo del promedio y tomar decisiones estratégicas para mejorar.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": "En chile Torre logistica aun no esta activa ¡Torre de Control próximamente!\nPronto tendrás una visión completa de tu operación en Dropi. ¡Mantente atento!"
+  },
+  {
+    "pregunta": "¿Qué pasa si hago clic en una region dentro del mapa de la Torre Logística?",
+    "respuesta": "Cuando seleccionas un departamento, automáticamente se muestran todas las ciudades donde tienes operación dentro de esa zona y quedan ordenadas desde la ciudad con mejor efectividad hasta la que presenta mayor dificultad, facilitando la identificación de puntos específicos a mejorar.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo puedo ordenar los datos para tomar mejores decisiones en la Torre Logística?",
+    "respuesta": "Puedes ordenar la información por criterios como mayor o menor efectividad, tiempos de entrega más rápidos o más lentos, o variaciones de costo, lo que te permite priorizar según tu objetivo, ya sea mejorar la velocidad, reducir devoluciones o disminuir gastos.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Por dónde puedo ingresar a la Torre Logística en mi cuenta Dropi?",
+    "respuesta": "Puedes acceder directamente desde el botón de Torre Logística que aparece en la parte inferior derecha de la plataforma o también ingresando al módulo de Reportes donde encontrarás la misma opción.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Cuando entro por primera vez a la Torre Logística, ¿qué datos me muestra?",
+    "respuesta": "Por defecto, al ingresar a la herramienta, se cargarán automáticamente los datos de los últimos 7 días.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Cuando aplico filtros en la Torre Logística, no sé exactamente qué información debería aparecer en el mapa, ¿me puedes explicar qué muestra ahí?",
+    "respuesta": "Claro, cuando aplicas los filtros, la herramienta actualiza los resultados y en el mapa te mostrará los departamentos donde tienes operación junto con una tarjeta que indica la efectividad en cada zona, lo que te permite identificar rápidamente qué regiones están funcionando mejor y cuáles requieren atención.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Quiero entender mejor la parte geográfica de Torre Logística, ¿qué tipo de análisis ofrece sobre la ubicación de los envíos?",
+    "respuesta": "La Torre Logística te brinda un análisis geográfico muy útil, ya que te permite visualizar cómo está funcionando tu operación por región, comparando el rendimiento entre zonas para detectar dónde se están presentando mejores resultados y dónde podrían existir oportunidades de mejora.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Vi algo que dice “Comparativas personalizadas” en la Torre Logística, ¿para qué sirve esa función?",
+    "respuesta": "Las comparativas personalizadas están diseñadas para que puedas poner tu operación frente a la operación general de Dropi, lo que te ayuda a identificar diferencias en tiempos, efectividad y devoluciones, y así detectar oportunidades concretas para optimizar tu logística.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Dentro de Torre Logística veo algo llamado “Efectividad” en el filtro de Mi operación, ¿eso qué significa?",
+    "respuesta": "La efectividad representa el porcentaje de envíos que han sido entregados correctamente, y es una métrica clave porque te ayuda a medir qué tan exitosa está siendo tu operación logística y qué tanto necesitas ajustar para mejorar tus resultados.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si dejo solo activo el filtro de Dropi en la Torre Logística, ¿qué información voy a ver?",
+    "respuesta": "Si solo activas el filtro de Dropi, la herramienta te mostrará exclusivamente los datos generales de toda la operación en Dropi, sin incluir la información propia de tu tienda, lo que sirve para tener una referencia comparativa del rendimiento global.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Torre, Usuarios",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es exactamente Dropi Academy? Quiero saber si me sirve para aprender.",
+    "respuesta": "Dropi Academy es nuestra plataforma educativa creada para que aprendas de manera práctica cómo usar Dropi y cómo manejar mejor tu operación en e-commerce; allí encuentras cursos, guías y herramientas pensadas para que puedas crecer tu negocio desde cero hasta un nivel avanzado.",
+    "categoria": "Proveedor",
+    "tags": "Dropi, Dropi Academy, Dropshipping",
+    "variaciones": "Para que sirve Dropi academy"
+  },
+  {
+    "pregunta": "¿Qué es exactamente Dropi Academy? Quiero saber si me sirve para aprender.",
+    "respuesta": "Dropi Academy es nuestra plataforma educativa creada para que aprendas de manera práctica cómo usar Dropi y cómo manejar mejor tu operación en e-commerce; allí encuentras cursos, guías y herramientas pensadas para que puedas crecer tu negocio desde cero hasta un nivel avanzado.",
+    "categoria": "Marca Propia / Emprendedor",
+    "tags": "Dropi, Dropi Academy, Dropshipping",
+    "variaciones": "Dropi academy"
+  },
+  {
+    "pregunta": "¿Tengo que pagar algo para acceder a Dropi Academy?",
+    "respuesta": "No, Dropi Academy es totalmente gratuita para ti, la puedes usar sin costo y actualmente está disponible para usuarios en Chile, así que puedes empezar cuando quieras.",
+    "categoria": "Dropshipper",
+    "tags": "Dropi, Dropi Academy, Dropshipping",
+    "variaciones": "¿Cuánto cuestan los cursos de Dropi?"
+  },
+  {
+    "pregunta": "No me deja ver el siguiente video en Dropi Academy, ¿por qué no avanza?",
+    "respuesta": "Para desbloquear el siguiente video debes marcar el módulo actual como completado una vez lo termines; esto es muy importante porque la plataforma funciona por avance progresivo y si no se marca como completado, el sistema entiende que aún no terminaste y no te permitirá continuar.",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Academía, Dropi, Dropi Academy, Dropshipping, Error, Módulo, Video",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Por qué es obligatorio validar mi cuenta si solo soy dropshipper?",
+    "respuesta": "La validación de tu cuenta es necesaria porque es lo que permite habilitar funciones financieras como retirar tus ganancias desde la Wallet o realizar transferencias, por eso es indispensable validar tu identidad antes de manejar dinero dentro de la plataforma.",
+    "categoria": "Dropshipper",
+    "tags": "Dato, Validación, Validación de identidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si tengo una empresa y soy el representante legal, ¿quién debe subir los datos y validar la identidad?",
+    "respuesta": "En ese caso el representante legal es quien debe ingresar sus datos personales y completar el proceso de validación, ya que es la persona responsable legalmente por la cuenta de la empresa.",
+    "categoria": "Dropshipper",
+    "tags": "Dato, Validación, Validación de identidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Desde dónde puedo empezar el proceso de validación de mi cuenta en Dropi?",
+    "respuesta": "Puedes iniciar la validación desde “Configuraciones” en la sección de “Datos personales”, o también desde cualquier módulo financiero donde aparecerá el botón “Comenzar con la validación”; ambas rutas te llevan al mismo proceso.",
+    "categoria": "Dropshipper",
+    "tags": "Dato, Validación, Validación de identidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Ya validé mi cuenta, ¿qué datos puedo cambiar sin pedir ayuda al soporte?",
+    "respuesta": "Después de validar tu cuenta, solo podrás editar el número de celular y el correo electrónico desde la plataforma; si necesitas modificar cualquier otro dato, debes contactar al servicio al cliente para que puedan acompañarte en el proceso.",
+    "categoria": "Dropshipper",
+    "tags": "Dato, Validación, Validación de identidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué documento necesito para hacer la validación?",
+    "respuesta": "Debes tener tu cédula de ciudadanía a la mano; si eres extranjero puedes realizar la validación utilizando tu pasaporte.",
+    "categoria": "Dropshipper",
+    "tags": "Dato, Validación, Validación de identidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué documentos debo subir obligatoriamente en la parte de facturación electrónica?",
+    "respuesta": "Debes subir tu cédula de ciudadanía o el documento equivalente, ya que estos documentos permiten habilitar correctamente tu facturación.",
+    "categoria": "Dropshipper",
+    "tags": "Dato, Facturación, Facturas, Validación, Validación de identidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué métodos puedo usar para recargar mi Cartera en Dropi?",
+    "respuesta": "Puedes recargar tu Cartera usando los bancos locales y también métodos internacionales como PayPal, Global66, Payoneer y Tether (USDT), para que elijas el que se ajuste mejor a tu operación.",
+    "categoria": "Dropshipper",
+    "tags": "Bancos, Cartera, Costo, Cripto, Pagos, Payoneer, Paypal, Recarga, Transferencia, USDT, Wallet",
+    "variaciones": "Como recargar mi cuenta"
+  },
+  {
+    "pregunta": "Si quiero recargar con PayPal o Payoneer, no sé muy bien cómo hacerlo, ¿cuál es el proceso que debo seguir?",
+    "respuesta": "Para realizar una recarga internacional debes seleccionar la opción “Recarga por otro método” y luego hacer clic en “Ir al chat”; así puedes comunicarte directamente con nuestro equipo para que te indiquen los pasos y te acompañen durante el proceso.",
+    "categoria": "Dropshipper",
+    "tags": "Bancos, Cartera, Costo, Cripto, Pagos, Payoneer, Paypal, Recarga, Transferencia, USDT, Wallet",
+    "variaciones": "Como recargar mi cuenta"
+  },
+  {
+    "pregunta": "Ya entré al chat, pero no sé qué opciones seleccionar para que me ayuden con la recarga internacional, ¿me guías?",
+    "respuesta": "Claro, una vez estés en el chat debes ir al ícono de Soporte en la parte inferior derecha, enviar tu mensaje y luego seleccionar las opciones “Billetera y facturación” seguido de “Recargas”; así tu solicitud llegará al equipo correcto y podrán ayudarte más rápido.",
+    "categoria": "Dropshipper",
+    "tags": "Bancos, Cartera, Costo, Cripto, Pagos, Payoneer, Paypal, Recarga, Transferencia, USDT, Wallet",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Estoy viendo unos nuevos filtros en el panel “ordenes” y no entiendo bien cuáles son las características principales, ¿me lo puedes explicar?",
+    "respuesta": "Claro, estos filtros nuevos tienen dos características clave: el Filtro de Ciudad, que te permite elegir ciudades donde hay bodegas activas, y el Filtro de Órdenes, que te muestra productos que ya han tenido historial de pedidos, para ayudarte a tomar decisiones más estratégicas.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Filtro, Filtros, Orden, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Para qué sirve exactamente el Filtro de Ciudad?",
+    "respuesta": "Este filtro te permite visualizar únicamente los productos disponibles en ciudades donde los proveedores tienen bodegas activas, lo que es muy útil si buscas reducir tiempos de envío o manejar operaciones más locales.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Filtro, Filtros, Orden, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado",
+    "variaciones": "No esta activo en Chile"
+  },
+  {
+    "pregunta": "Vi que también hay algo llamado filtro “Con órdenes”, ¿eso para qué sirve?",
+    "respuesta": "El filtro “Con órdenes” te permite ver productos que ya han sido vendidos antes, sin importar en qué estado estén las órdenes, lo que te ayuda a identificar qué productos tienen movimiento real y cuáles podrían tener más potencial.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Filtro, Filtros, Orden, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado",
+    "variaciones": "No encuentro mis orden de la semana pasada"
+  },
+  {
+    "pregunta": "Si quiero buscar productos disponibles en Santiago y Concepción, ¿puedo hacerlo usando el Filtro de Ciudad?",
+    "respuesta": "Sí, puedes filtrar por varias ciudades al mismo tiempo; solo seleccionas Santiago y Concepción en el Filtro de Ciudad y luego haces clic en “Aplicar filtros” para ver los productos disponibles en esas ubicaciones específicas.",
+    "categoria": "Dropshipper",
+    "tags": "Catalogo, Filtro, Filtros, Orden, Privado, Producto, Proveedor, Proveedor Premium, Proveedor Verificado",
+    "variaciones": "No esta activo en Chile"
+  },
+  {
+    "pregunta": "¿Qué me muestra el gráfico de Top 5 Productos Más Vendidos y qué información resalta?",
+    "respuesta": "Este gráfico te muestra cuáles son tus cinco productos con más ventas en el período de tiempo que selecciones. También te destaca cuántos pedidos están en curso, cuántos se entregaron y el valor total de las ventas generadas.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuál es la diferencia entre la Cantidad de Pedidos en Curso y la Cantidad de Pedidos Entregados?",
+    "respuesta": "La Cantidad de Pedidos en Curso muestra los pedidos que aún están en proceso y no se han entregado. Por otro lado, la Cantidad de Pedidos Entregados refleja los que ya llegaron al cliente, ayudándote a medir qué tan efectiva ha sido la entrega.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué información me da el gráfico de Valor de las Ventas por Transportadora?",
+    "respuesta": "Allí puedes ver cuánto dinero generaste con cada transportadora. Esto es útil para analizar cuál te está dando mejores resultados en términos de rentabilidad.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuál es el propósito de la función de Huella Digital en la Orden Manual?",
+    "respuesta": "La Huella Digital te permite consultar el historial del cliente antes de generar el pedido. Así puedes tomar decisiones más acertadas, especialmente si el cliente tiene antecedentes de devoluciones o rechazos.",
+    "categoria": "Dropshipper",
+    "tags": "Digital, Dirección, Huella, Orden, Validación",
+    "variaciones": "¿Para qué se utiliza la opción de huella digital en la orden manual?"
+  },
+  {
+    "pregunta": "¿Qué es lo primero que debo hacer para habilitar la visualización del historial del cliente?",
+    "respuesta": "Debo introducir el número de teléfono del cliente en el campo indicado.",
+    "categoria": "Dropshipper",
+    "tags": "Digital, Dirección, Huella, Orden, Validación",
+    "variaciones": "He ingresado el número de mi cliente, pero no se activa la huella digital."
+  },
+  {
+    "pregunta": "Una vez ingreso el número de teléfono, ¿qué icono se habilita para acceder al historial?",
+    "respuesta": "Se habilita un botón con el ícono de una campanita, que al hacer clic te muestra el historial del cliente.",
+    "categoria": "Dropshipper",
+    "tags": "Digital, Dirección, Huella, Orden, Validación",
+    "variaciones": "¿Qué significa la campana que aparece al lado del campo de teléfono?"
+  },
+  {
+    "pregunta": "¿Cuáles son las cuatro clasificaciones que usa el sistema para categorizar a un cliente según sus órdenes?",
+    "respuesta": "El sistema clasifica al cliente como Sin registro cuando tiene 0 órdenes, Comprador esporádico entre 1 y 3 órdenes, Comprador ocasional entre 3 y 10 órdenes, y Comprador frecuente cuando supera las 10 órdenes.",
+    "categoria": "Dropshipper",
+    "tags": "Digital, Dirección, Huella, Orden, Validación",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si el historial de un cliente muestra un ícono rojo en la probabilidad de entrega, ¿qué significa?",
+    "respuesta": "Significa que la probabilidad de entrega está en estado de Alerta, lo que indica un alto riesgo de que el pedido no se complete correctamente.",
+    "categoria": "Dropshipper",
+    "tags": "Digital, Dirección, Huella, Orden, Validación",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué significa el color verde en el indicador de Probabilidad de entrega?",
+    "respuesta": "El color verde indica que la probabilidad de entrega es Segura, lo que sugiere que el cliente tiene un historial confiable de recepción.",
+    "categoria": "Dropshipper",
+    "tags": "Digital, Dirección, Huella, Orden, Validación",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué indica un ícono color naranja en la probabilidad de entrega?",
+    "respuesta": "El ícono naranja indica Precaución, lo cual sugiere que, aunque hay posibilidad de entrega, es recomendable revisar el historial antes de confirmar el envío.",
+    "categoria": "Dropshipper",
+    "tags": "Digital, Dirección, Huella, Orden, Validación",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuál es el objetivo principal de esta nueva funcionalidad de informes?",
+    "respuesta": "El objetivo principal es que puedas descargar informes completos y detallados tanto de productos como de logística, para que tengas una visión más clara y controlada de tus ventas, pedidos y desempeño operativo, permitiéndote tomar decisiones más estratégicas en tu negocio.",
+    "categoria": "Dropshipper",
+    "tags": "Estatus, Informes, Reportes, Tiempos, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuáles son los dos beneficios clave que obtengo al descargar estos informes detallados?",
+    "respuesta": "Los informes te permiten obtener una visión estratégica para analizar tendencias y optimizar tu negocio, y además te brindan una evaluación clara de la efectividad logística para identificar oportunidades de mejora en tu distribución.",
+    "categoria": "Dropshipper",
+    "tags": "Estatus, Informes, Reportes, Tiempos, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Para descargar un informe individual de un producto, ¿a qué sección debo ir primero?",
+    "respuesta": "Debes ingresar al módulo de Reportes, luego entrar a la sección de Informes de Productos, y desde allí seleccionar el ícono del ojo para ver el detalle y posteriormente usar la opción de descargar el informe.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Una vez en la tabla de informes de productos vendidos, ¿qué botón debo presionar para ver el informe detallado de un producto específico?",
+    "respuesta": "Debes hacer clic en el botón con el ícono del ojo, ya que este te permite abrir el informe detallado del producto seleccionado.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué opciones de formato me permite elegir al descargar el informe de un producto?",
+    "respuesta": "Puedes seleccionar si deseas el archivo en formato Excel o CSV, además de elegir la tienda de integración, el tipo de informe que deseas descargar y el rango de fechas, teniendo en cuenta que este rango puede ser de hasta 90 días.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Después de definir mis opciones de descarga de un informe de producto, ¿qué lugares guardarán la copia del informe?",
+    "respuesta": "El informe se descargará automáticamente en tu navegador como archivo local y también quedará guardado dentro del módulo de Reportes, en la sección de Descargas para que puedas consultarlo después cuando lo necesites.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué detalles específicos incluirá el informe logístico que descargo?",
+    "respuesta": "El informe logístico incluirá información sobre la efectividad de las transportadoras, así como el rendimiento de las entregas por departamento y por ciudad, permitiéndote identificar puntos fuertes y aspectos a mejorar en tus envíos.",
+    "categoria": "Dropshipper",
+    "tags": "Gráficas, Producto, Reportes, Vendidos",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Antes de crear una orden manual, ¿qué información me muestra el resumen de envío?",
+    "respuesta": "En el resumen de envío podrás ver el precio de venta del producto, el valor del flete que se cobrará por el envío, el total que se va a recaudar al momento de la entrega y la ganancia estimada que recibirás por esa orden.",
+    "categoria": "Dropshipper",
+    "tags": "Calculadora, Costo, Fletes, Orden, Pedidos, Precio, Prueba",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Para qué sirve exactamente la herramienta nueva de búsqueda de productos por imágenes?",
+    "respuesta": "Esta herramienta te permite buscar productos directamente subiendo una imagen, utilizando tecnología de reconocimiento visual para comparar esa imagen con el catálogo disponible en Dropi y así ayudarte a encontrar productos iguales o similares de manera rápida.",
+    "categoria": "Dropshipper",
+    "tags": "Filtro, IA, Imágen, Imágenes, Orden",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Dónde encuentro la opción para hacer la búsqueda con una imagen?",
+    "respuesta": "Debes entrar al módulo de Productos, luego ingresar a la sección Catálogo y allí en la parte superior derecha verás la opción “Buscar por Imagen”, solo debes hacer clic para iniciar el proceso.",
+    "categoria": "Dropshipper",
+    "tags": "Filtro, IA, Imágen, Imágenes, Orden",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué tipo de archivos puedo subir para buscar un producto y de qué tamaño máximo?",
+    "respuesta": "Puedes subir imágenes en formato JPG, JPEG o PNG, y el archivo debe tener un tamaño máximo de 10 MB para que el sistema pueda procesarlo correctamente.",
+    "categoria": "Dropshipper",
+    "tags": "Filtro, IA, Imágen, Imágenes, Orden",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Una vez subo la imagen, ¿cómo me muestra Dropi los resultados?",
+    "respuesta": "Dropi analiza la imagen automáticamente y te mostrará una lista de productos que visualmente coinciden con la imagen que subiste, permitiéndote explorar las opciones y escoger la que más se ajuste a lo que buscas.",
+    "categoria": "Dropshipper",
+    "tags": "Filtro, IA, Imágen, Imágenes, Orden",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si vi un producto que está funcionando en un video viral, ¿esta herramienta me ayuda a encontrarlo?",
+    "respuesta": "Sí, puedes simplemente tomar una captura del video y subirla en la herramienta; el sistema reconocerá los rasgos del producto y te mostrará opciones disponibles dentro del catálogo en cuestión de segundos.",
+    "categoria": "Dropshipper",
+    "tags": "Filtro, IA, Imágen, Imágenes, Orden",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué ventaja de tiempo ofrece esta búsqueda por imágenes?",
+    "respuesta": "Te ahorra tiempo al evitar búsquedas manuales largas, ya que el sistema identifica los productos de forma automática, permitiéndote encontrar lo que necesitas de manera ágil y sin esfuerzo.",
+    "categoria": "Dropshipper",
+    "tags": "Filtro, IA, Imágen, Imágenes, Orden",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué tipo de flexibilidad tengo ahora con la nueva opción de edición de órdenes y en qué estados debo tener el pedido para poder editarlo?",
+    "respuesta": "Ahora tienes flexibilidad para editar casi toda la información de un pedido, incluyendo los datos del cliente, ciudad, transportadora y productos; solo debes asegurarte de que la orden esté en estado “Pendiente” o “Pendiente de confirmación” para que la edición esté disponible.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si solo necesito corregir un dato pequeño como el número de teléfono, ¿cómo confirmo el cambio?",
+    "respuesta": "Solo debes ingresar a Órdenes → Mis pedidos, editar el dato en el campo correspondiente y dar clic en Actualizar; al hacerlo el sistema te mostrará un mensaje indicando que la modificación se realizó de manera correcta.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué pasa si cambio información importante como ciudad, departamento o transportadora en una orden?",
+    "respuesta": "Cuando modificas ese tipo de información, la orden original se cancela y se genera automáticamente una nueva con los datos actualizados para asegurar que todo el envío se procese correctamente.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si cambio la transportadora en una orden, ¿cómo se ajusta el valor del envío?",
+    "respuesta": "El sistema recalcula el valor del flete automáticamente utilizando la cotización dinámica en tiempo real, por lo que no tienes que hacerlo manualmente.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si cambio el tipo de recaudo (por ejemplo, de \"Sin recaudo\" a \"Con recaudo\"), ¿qué me muestra el sistema antes de aplicar el cambio?",
+    "respuesta": "El sistema te mostrará una alerta para que confirmes el cambio antes de aplicarlo, esto con el fin de evitar modificaciones involuntarias en la forma de cobro del pedido.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Si ya tengo un producto en el pedido, ¿puedo eliminarlo al editar?",
+    "respuesta": "No es posible eliminar el producto base de la orden una vez creada, pero sí puedes agregar más productos desde la opción “Agregar producto” y modificar variables como talla, color o cantidad si lo requiere el pedido.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Después de realizar cambios de datos de mi cliente en la orden y hacer clic en \"Actualizar orden\", ¿qué mensaje me obliga a confirmar?",
+    "respuesta": "El sistema te mostrará un mensaje informándote que la orden actual será cancelada y se generará una nueva con los datos actualizados, por lo que deberás confirmar para completar el proceso.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué tipo de información puedo editar del cliente en la orden?",
+    "respuesta": "Si la orden está en estado Pendiente, puedes editar nombre, apellido, número de teléfono y dirección de entrega del cliente sin inconvenientes.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué plugin o aplicación se debe instalar en Shopify para realizar la integración con Dropi?",
+    "respuesta": "Debes instalar la aplicación llamada Dropify, que es la encargada de conectar tu tienda con Dropi.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué dato generado en Dropi se debe copiar y pegar en Dropify para establecer la conexión con Shopify?",
+    "respuesta": "Debes copiar el Token generado en la sección “Mis Integraciones” de Dropi y pegarlo en la configuración de Dropify en Shopify.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo se automatiza la sincronización de pedidos desde Shopify o WooCommerce a Dropi, y cuánto tarda este proceso?",
+    "respuesta": "Solo debes activar la opción “Sincronizar órdenes automáticamente” en Dropify, y una vez activada, los pedidos pasarán a Dropi de forma automática en un lapso aproximado de 3 a 6 minutos.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuál es el paso inicial y fundamental que se debe realizar en Facebook Developers y Meta antes de integrar Dropi con Chatea?",
+    "respuesta": "Primero debes crear una aplicación de tipo “Negocios” en Facebook Developers y luego configurar el número de WhatsApp en Meta para obtener la línea que usará el Chat Center.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿En qué estados deben estar mis órdenes para poder usar la opción de editar o corregir la información del pedido?",
+    "respuesta": "Las órdenes deben encontrarse en estado “Pendiente” o “Pendiente de confirmación” para permitir cambios y correcciones.",
+    "categoria": "Dropshipper",
+    "tags": "Contacto, Contactos, Estado, Estatus, Filtro, Filtros, Orden, Pedidos, Pendiente, Status",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuáles son los tipos de novedades que se pueden presentar en el proceso de envío?",
+    "respuesta": "Se pueden presentar novedades Operativas y novedades SAC (Servicio al Cliente), cada una con causas y tiempos de gestión diferentes.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Servicio al cliente, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es una novedad operativa?",
+    "respuesta": "Es una novedad que ocurre cuando el pedido ya está en manos de la transportadora pero no ha podido entregarse por situaciones externas como clima, derrumbes o bloqueos, y la transportadora es quien gestiona la situación para hacer nuevos intentos de entrega.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Novedad, Novedades, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es una novedad SAC o de servicio al cliente?",
+    "respuesta": "Es una novedad que se presenta cuando el cliente no recibió el pedido, no estaba disponible o hubo algún inconveniente en la entrega; en este caso, como dropshipper debes gestionarla en máximo 24 horas para que la transportadora pueda realizar un nuevo intento y evitar que el pedido sea devuelto.",
+    "categoria": "Dropshipper",
+    "tags": "Logística, Novedad, Novedades, Trazabilidad",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué curso debería ver para empezar a vender?",
+    "respuesta": "Si estás iniciando y quieres aprender a vender te recomiendo ver el curso “Reto 7 Días: de Cero a Ventas” en él aprenderás sobre: ✅ Mitos del Dropshipping ✅ ¿Qué es Dropi y por qué lo necesitas? ✅ Productos ganadores  Y mucho más, además este curso cuenta con actividades e insignias al finalizar cada módulo  ¿Qué esperas para empezar el Reto?",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Dropi Academy",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "Qué cursos hay en dropi academy?",
+    "respuesta": "En Dropi Academy encontrarás una amplia variedad de cursos diseñados para cada etapa de tu negocio de dropshipping.  ✅ Reto 7 días: de Cero a Ventas ✅ Dropi desde cero dropshippers ✅ Mejora tus finanzas en cuatro pasos ✅ Innovación financiera para mujeres emprendedoras digitales ✅ Crea tu negocio online en 24h ✅ Logística Pro ✅ Creación de tienda ✅ Dropi desde cero Dropshipper",
+    "categoria": "Dropshipper",
+    "tags": "Academy, Dropi Academy",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es lo primero que debo hacer si ya estoy registrado en Dropi?",
+    "respuesta": "Configura tus datos personales, datos de autenticacion, datos de tienda y datos bancarios",
+    "categoria": "Dropshipper",
+    "tags": "Configuraciones, Configuración, Dropi, Nuevo, Plataforma",
+    "variaciones": "Recientemente me registré como dropshipper en la plataforma. ¿Podrían indicarme qué necesito para comenzar a operar en Dropi?"
+  },
+  {
+    "pregunta": "¿Como llenar mis datos personales?",
+    "respuesta": "Debes ingresar los nombres, apellidos, fecha de nacimiento,mail, numero de contacto, selecciona tu país, selecciona tu tipo de cocumento, y escribe el numero del documento de identificacion sin numeros ni guiones, por ultimo, sube una imagen de tu documento de identidad en formato jpeg",
+    "categoria": "Dropshipper",
+    "tags": "Configuraciones, Configuración, Dropi, Plataforma",
+    "variaciones": "No puedo llenar los datos personales tengo problemas con mi RUT"
+  },
+  {
+    "pregunta": "¿Cómo puedo hacer la integración de mi tienda?",
+    "respuesta": "Ya sea Shopify, tienda nube o woocommers la forma de integrar tu tienda es instalando la app dropify que se encuentra en cada plataforma",
+    "categoria": "Dropshipper",
+    "tags": "Integración, Shopify",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo puedo montar un pedido manualmente?",
+    "respuesta": "Primero ingresa al módulo “Productos/Catalogo”, búsca el produto que necesitas para el pedido y elige la opción “Envíar al cliente”, ingresa los datos de tu cliente, selecciona la transportadora que más te guste para el envío y finaliza dando clic en el botón de “Enviar al Cliente”",
+    "categoria": "Dropshipper",
+    "tags": "Dropi, Pedidos, Plataforma",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es Tiendanube?",
+    "respuesta": "Es una plataforma de comercio electrónico que te permite crear tu propia tienda virtual. Su función principal es servir como vitral para tus productos y automatizar la creación de órdenes, enviando la información directamente a Dropi para evitar procesos manuales.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿El servicio de Tiendanube es gratuito?",
+    "respuesta": "Al registrarte, la plataforma suele ofrecer un tiempo de prueba para configurar tu tienda. Una vez finalizado este periodo, debes seleccionar y pagar un plan mensual para mantener la tienda activa y operativa.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es un centro de distribución en Tiendanube?",
+    "respuesta": "Es la ubicación física que registras en la plataforma para indicar dónde está tus productos. Aunque hagas dropshipping y no tengas bodega propia, es un requisito obligatorio para habilitar las ventas.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué dirección debo poner si no tengo bodega física?",
+    "respuesta": "Puedes colocar la dirección de tu casa o de un lugar que concurras frecuentemente. Debes completar todos los campos de ubicación: país, departamento, ciudad y dirección exacta.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué opción debo marcar para que mis productos se puedan vender?",
+    "respuesta": "Al poner tu dirección, debes activar una casilla que dice: \"El stock de este centro estará disponible para todas las ventas\". Si no la marcas, a tus clientes les saldrá que no tienes productos disponibles.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo pongo la opción de Pago contraentrega para el envío?",
+    "respuesta": "3. ¿Cómo se crea el método de envío para el pago contraentrega? Debes dirigirte a Medios de envío y dar clic en Envío personalizado. Das clic  en “Agregar envío personalizado”. En el campo \"Nombre del envío\", debes colocar textualmente: Contraentrega. En las \"Zonas de envío\" puedes seleccionar todo el país o ciudades específicas, y en el \"Costo\" debes seleccionar que es Gratis.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cuáles son los pasos para configurar el Método de Pago Personalizado?",
+    "respuesta": "Primero, accede a la sección Métodos de Pago. Segundo, selecciona Personalizado y activa la opción A convenir. Tercero, en \"Nombre a mostrar en el checkout\", escribe: Pago Contraentrega. Cuarto, en \"Instrucciones para el cliente\", indica que el pago se hace al recibir el producto. Finalmente, Guarda y verifica que el estado sea Activo.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué debe decir el mensaje de instrucciones para el cliente en el pago?",
+    "respuesta": "Debes colocar una instrucción para que el cliente sepa que va a pagar el producto cuando lo tenga en sus manos y que el dinero se lo entregaría directamente al auxiliar de la transportadora. Esto asegura que el cliente entienda que es un pago con recaudo al momento de la entrega física.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Por qué es un REQUISITO OBLIGATORIO configurar las Opciones del Checkout?",
+    "respuesta": "Es indispensable para que la información del cliente se transfiera correctamente a Dropi. Si este paso se omite, los datos necesarios para generar la guía no viajarán al sistema, lo que resultará en la falla de la creación de la orden en la plataforma de Dropi.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué opción específica se debe activar en el Checkout?",
+    "respuesta": "Debes navegar a Checkout > Opciones del Checkout y realizar la Activación Requerida de la opción: Pedir teléfono de contacto. Al terminar, debes dar clic en Guardar. Sin el número de teléfono, la orden no podrá migrar correctamente de Tiendanube a Dropi.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿El registro en Tiendanube tiene algún costo?",
+    "respuesta": "Al registrarte, comúnmente te dan un tiempo para que conozcas la plataforma de forma gratuita. Sin embargo, deberás seleccionar un plan de pago según los beneficios y el costo que desees adquirir para tu tienda, cuando termine el tiempo gratuito que te ofrece.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué herramienta se necesita para conectar Dropi con Tiendanube?",
+    "respuesta": "Para realizar la conexión, se utiliza un aplicativo llamado Dropify. Este es el puente técnico que permite que ambas plataformas se comuniquen entre sí.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Dónde se consigue el aplicativo Dropify y tiene algún costo?",
+    "respuesta": "Se consigue directamente en la tienda de aplicaciones de la plataforma Tiendanube. Actualmente, Dropify es totalmente gratis para realizar todo el proceso de integración.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo descargo Dropify para integrar los productos de Dropi en Tiendanube?",
+    "respuesta": "Primero, en tu panel de Tiendanube, vas al apartado llamado Potenciar y das clic en Aplicaciones. Luego, entras a la Tienda de aplicaciones, buscas la palabra Dropify (la cual tiene el logo de Dropi) y realizas el proceso de instalación. Una vez descargada, aparecerá en tu panel de aplicaciones de Tiendanube.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo hago la integración de mi perfil de Dropi a Tiendanube?",
+    "respuesta": "Debes ingresar a tu perfil de Dropi, ir a la parte inferior y seleccionar el módulo llamado Mis integraciones. Allí das clic en Agregar, escribes el Nombre tu tienda (ejemplo: virtual shop) y en Tipo seleccionas Tiendanube. Al dar clic en Guardar, el sistema generará un Token.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es el Token y cuál es la recomendación al copiarlo?",
+    "respuesta": "El Token es un código alfanumérico que permite integrar ambas plataformas. La recomendación ideal es no subrayar el código manualmente, ya que podrías dejar por fuera alguna letra o número. Lo correcto es dar clic siempre en el botón que dice Copiar para asegurar que se tome el código completo.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo se vincula el Token de Dropi en el aplicativo Dropify?",
+    "respuesta": "Debes volver a Tiendanube y abrir el aplicativo Dropify. Te diriges a Configuración de tokens, das clic en Agregar token, colocas el nombre de tu tienda y pegas el token que copiaste en Dropi. Finalmente, das clic en Aceptar para que la integración se haga efectiva.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es la \"Sincronización de órdenes automáticas\" y por qué debe activarse?",
+    "respuesta": "Es una opción dentro de la Configuración general en Dropify. Es fundamental activarla porque permite que, cuando un cliente compre un producto en tu tienda, el pedido migre y se cree automáticamente en Dropi. Esto inicia de inmediato el proceso logístico y de despacho por parte del proveedor.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué puedo hacer si me pierdo durante el proceso de configuración en Dropify?",
+    "respuesta": "Al abrir el aplicativo Dropify en Tiendanube, encontrarás un pequeño video tutorial. Este recurso está ahí específicamente para que puedas repasar el ejercicio de integración cuantas veces sea necesario y asegurar que cada paso quede configurado sin ningún inconveniente.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué es el Catálogo Público en Dropi?",
+    "respuesta": "Es el lugar donde encuentras todos los productos disponibles de los proveedores. Aquí puedes navegar y elegir qué artículos quieres vender en tu tienda de Tiendanube sin necesidad de comprarlos por adelantado.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué diferencia hay entre un \"Producto simple\" y un \"Producto variable\"?",
+    "respuesta": "Un Producto simple es el que no tiene cambios, como una jarra de vidrio (siempre es igual). Un Producto variable es el que tiene diferentes características físicas, como el calzado o la ropa, donde el cliente debe elegir una talla, un tamaño o un color específico.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo selecciono un producto de Dropi para llevarlo a mi tienda?",
+    "respuesta": "Debes entrar al producto que te guste en el Catálogo de Dropi y buscar el ID del producto. Debes darle clic a ese número para que se copie automáticamente; este código es el que identifica ese artículo único que quieres ofrecer.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo paso el producto de Dropi a Tiendanube usando Dropify?",
+    "respuesta": "En tu panel de Tiendanube, abres el aplicativo Dropify y das clic en el icono llamado Importar productos. Seleccionas tu tienda, pegas el ID del producto que copiaste en Dropi en el buscador y presionas enter. Cuando aparezca el artículo, das clic al icono positivo (+) llamado Importar como producto nuevo.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Puedo cambiarle el nombre y la descripción al producto que traigo de Dropi?",
+    "respuesta": "Sí, puedes deseleccionar las opciones de nombre y descripción para colocar los tuyos. Cambiar el nombre a tu gusto en tu tienda virtual no afecta en nada la conexión con Dropi porque la integración se mantiene firme a través del ID del producto.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué recomendación hay para la descripción del producto?",
+    "respuesta": "Nunca dejes de ver la descripción que da el proveedor, pero puedes usarla como base para crear una nueva y más atractiva. Puedes apoyarte en herramientas de inteligencia artificial como Gemini o ChatGPT para mejorar esos textos y que se vean mejor en tu tienda.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo decido a qué precio vender el producto?",
+    "respuesta": "Al importar, verás el \"Precio del proveedor\" (lo que te cuesta a ti) y el \"Precio sugerido\" (lo que el proveedor recomienda cobrar). Tú puedes modificar el Precio de venta final según tu propio estudio y estrategia, escribiendo el valor manualmente antes de terminar la importación.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué hago si el sistema me dice que el producto no tiene variaciones?",
+    "respuesta": "Simplemente significa que es un producto sencillo (sin tallas ni colores). En ese caso, solo debes dar clic en Siguiente para continuar con el proceso de asignación de precio e importación final.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo confirmo que el producto se subió bien a mi tienda?",
+    "respuesta": "Dentro del aplicativo Dropify, debes ir al icono inferior donde dice Productos sincronizados. Allí aparecerá la lista de todos los artículos que se cargaron correctamente, mostrando su ID de Dropi y el nombre que le asignaste.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Necesito comprar los productos antes de subirlos a mi tienda?",
+    "respuesta": "No, como eres Dropshipper, no necesitas tener los productos físicamente. Los productos están en el catálogo del proveedor listos para cuando un cliente te compre, y el proveedor se encarga de despachar directamente al cliente final.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Dónde puedo ver la lista de los productos que ya pasé a mi tienda?",
+    "respuesta": "Para estar seguro de que un producto ya se pasó bien, solo tienes que entrar a Dropify y buscar abajo un botón que dice Productos sincronizados. Si el producto aparece en esa lista con su foto y su nombre, significa que ya está en tu tienda de Tiendanube y que ya lo puedes empezar a vender por internet.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo puedo ver cómo quedó mi tienda para empezar la prueba?",
+    "respuesta": "Para ver tu tienda como la vería un cliente, debes ir en Tiendanube a Canales de venta, luego a Tienda en línea y dar clic en el icono para que se abra tu página. Allí verás el producto que acabas de traer de Dropi y podrás hacer el ejercicio de compra tú mismo para confirmar que todo quedó perfecto.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Qué datos debe poner el cliente para que el envío no falle?",
+    "respuesta": "Es obligatorio que el cliente escriba sus datos de contacto y la dirección exacta de entrega. En la parte de envío, le aparecerá el método que creamos llamado Contraentrega; el cliente debe seleccionarlo para que el sistema sepa que no va a pagar nada por adelantado, sino cuando reciba el paquete.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo finaliza el cliente el pedido sin usar tarjeta de crédito?",
+    "respuesta": "Al llegar a la Opción de pago, el cliente debe seleccionar el botón de Pago Contraentrega. Una vez que revise que sus datos están bien, solo debe dar clic en Realizar pedido y listo; el sistema le mostrará un resumen con el precio total y la confirmación de que su compra fue exitosa.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Dónde puedo ver en Tiendanube la venta que me acaban de hacer?",
+    "respuesta": "Debes entrar a tu panel de Tiendanube y buscar la sección que dice Ventas. Allí aparecerá el nombre del cliente, la fecha, la hora y el total de dinero de la compra. Cada venta tiene un número único para que puedas llevar el control de tus pedidos.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": ""
+  },
+  {
+    "pregunta": "¿Cómo sé si el pedido de mi tienda sí pasó correctamente a Dropi?",
+    "respuesta": "En la sección de Ventas de Tiendanube, verás un icono como una nota al lado del número de venta. Si pones el cursor encima, debe salir un mensaje que dice: \"Nota Dropify: el registro ha sido creado con éxito\". Esto significa que la orden \"migró\" o viajó solita hacia Dropi sin ningún problema.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": "La orden no migro correctamente a Dropi o tengo pedidos en Shopify y no ha migrado"
+  },
+  {
+    "pregunta": "¿En qué parte de Dropi aparece el pedido de mi cliente?",
+    "respuesta": "Debes entrar a tu cuenta de Dropi y buscar el módulo llamado Mis pedidos. Allí verás la orden creada con toda la información del cliente. El pedido aparecerá en Estado pendiente, lo que significa que el proveedor ya tiene la información y va a empezar a alistar el paquete para entregárselo a la transportadora.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": "¿Dónde puedo ver el pedido de mi cliente en Dropi?"
+  },
+  {
+    "pregunta": "¿Qué pasa después de que el pedido queda en \"Estado pendiente\"?",
+    "respuesta": "A partir de ahí, el proveedor genera la guía y envía el producto. La transportadora lo lleva hasta la casa del cliente, cobra el dinero en efectivo y, una vez que el cliente paga, el estado del pedido cambia en el sistema. En ese momento es cuando tú recibes tus ganancias por la venta en tu cuenta de Dropi.",
+    "categoria": "Dropshipper",
+    "tags": "Dropify, Integración, Tiendanube, integracion",
+    "variaciones": "Tengo una orden en estatus pendiente confirmacion y una en pendiente"
+  },
+  {
+    "pregunta": "Hace poco me registré en Dropi como proveedor; sin embargo, actualmente mi cuenta se encuentra bloqueada. ¿Podrían ayudarme a validar qué sucedió?",
+    "respuesta": "Gracias por tu interés en operar como proveedor en Dropi. Para poder revisar y aprobar tu perfil, es necesario que completes y envíes la documentación requerida a través del formulario correspondiente.\n\n📄 Documentación obligatoria:\n\nCorreo registrado en Dropi\nRegistro de Empresas y Sociedades (Ministerio de Economía)\nInicio de Actividades ante el SII\nCarpeta Tributaria Electrónica\nFirma del documento de Condiciones Comerciales (enviado a tu correo)\nPlanilla de retiro y devolución Blue Express (enviada a tu correo)\n\n📝 Importante:\nAsegúrate de completar correctamente la planilla de retiro y el documento de condiciones comerciales, y subirlos al formulario.\n\n🔗 Formulario para completar el proceso:\nhttps://docs.google.com/forms/d/e/1FAIpQLSfXAgfPFwjF-4u1WS5fC_h4ReSOwCcig3Miq3x6ItU9q9RX2Q/viewform?pli=1\n\nUna vez envíes esta información, el equipo comercial podrá validar y aprobar tu perfil como proveedor.\n\n📢 Además, te invitamos a unirte a nuestro canal oficial de WhatsApp para mantenerte al día con novedades y actualizaciones:\nhttps://whatsapp.com/channel/0029VbASh0O3LdQMsvwyqW3N",
+    "categoria": "Proveedor",
+    "tags": "",
+    "variaciones": "Me registre en dropi , coloque los datos de facturacion pero ahora que intento entrar me dice que mi cuenta esta bloqueada temporalmente no se a que se debe"
+  },
+  {
+    "pregunta": "Por que me sale error 500?",
+    "respuesta": "Muchas gracias por contactarnos y por reportar el inconveniente presentado en el sistema. Valoramos mucho su apoyo, ya que nos ayuda a mantener el control y la eficiencia de nuestra herramienta.\n\nLe informo que su caso ya ha sido escalado al área técnica correspondiente para su revisión detallada. En este momento, quedo a la espera de noticias por parte del equipo de desarrollo para brindarle una solución lo antes posible.\n\nAgradecemos su paciencia mientras trabajamos para que pueda continuar con el registro de sus movimientos económicos con normalidad.",
+    "categoria": "Dropshipper/ Proveedor",
+    "tags": "Desarrollo, error 500",
+    "variaciones": "\"¿Por qué no cargan las fotos ni los precios de los productos y sale una página de error?\"\n\n\"Intenté entrar a la sección de calzado y me dice 'Error interno del servidor', ¿está caída la página?\"\n\n\"¿Por qué el buscador de productos se queda pensando y luego muestra un código 500?\"\n\n\"¿Es un problema de mi internet o el catálogo de la tienda no está funcionando hoy?\"\n\n\"¿Me pueden ayudar? Me sale 'HTTP Error 500' en diferentes partes de la plataforma.\"\n\n\"He intentado tres veces entrar a mi historial de pedidos y siempre sale el mismo error 500.\""
+  }
+]

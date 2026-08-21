@@ -158,7 +158,7 @@
 <div class="app-shell">
 
   <nav class="sidebar">
-    <div class="marca"><div class="punto"></div><span>dropi · qa</span></div>
+    <div class="marca"><div class="punto"></div><span>Dropi · Qa</span></div>
 
     <div class="sidebar-auditor">
       <label>Auditor</label>
@@ -170,16 +170,16 @@
 
     <div class="nav-titulo">Analítica</div>
     <a class="nav-link {% if activo == 'dashboard' %}activo{% endif %}" href="/dashboard"><span class="marca-caja"></span> Dashboard en vivo</a>
-    <a class="nav-link {% if activo == 'informes' %}activo{% endif %}" href="/informe?alcance=todo"><span class="marca-caja"></span> Informe de KPIs</a>
-    <a class="nav-link {% if activo == 'calibracion' %}activo{% endif %}" href="/calibracion"><span class="marca-caja"></span> Calibración IA</a>
+    <a class="nav-link {% if activo == 'coaching' %}activo{% endif %}" href="/coaching"><span class="marca-caja"></span> Coaching</a>
     <a class="nav-link {% if activo == 'buscar' %}activo{% endif %}" href="/buscar"><span class="marca-caja"></span> Buscar historial</a>
-    <a class="nav-link" href="/historial.csv"><span class="marca-caja"></span> Exportar CSV</a>
+    <a class="nav-link {% if activo == 'calibracion' %}activo{% endif %}" href="/calibracion"><span class="marca-caja"></span> Calibración IA</a>
 
     <div class="nav-titulo">Configuración</div>
     <a class="nav-link {% if activo == 'matriz' %}activo{% endif %}" href="/matriz"><span class="marca-caja"></span> Matriz de calidad</a>
+    <a class="nav-link {% if activo == 'roster' %}activo{% endif %}" href="/roster"><span class="marca-caja"></span> Roster de asesores</a>
     <a class="nav-link {% if activo == 'presupuesto' %}activo{% endif %}" href="/presupuesto"><span class="marca-caja"></span> Simulador de presupuesto</a>
 
-    <div class="sidebar-footer">dropi · qa interno</div>
+    <div class="sidebar-footer">Dropi · Qa interno</div>
   </nav>
 
   <main class="main">

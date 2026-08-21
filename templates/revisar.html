@@ -47,6 +47,20 @@
     <textarea class="bloque" name="resumen_caso" style="min-height:60px;">{{ evaluacion.resumen_caso }}</textarea>
   </div>
 
+  <div class="card" style="padding:18px 22px;">
+    <div class="cat-title" style="margin-bottom:10px;">Satisfacción del cliente</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      {% for nivel, emoji in [("muy_insatisfecho","😠"), ("insatisfecho","🙁"), ("neutral","😐"), ("satisfecho","🙂"), ("muy_satisfecho","😄")] %}
+        <label style="flex:1;text-align:center;padding:10px 6px;border:1.5px solid var(--line);border-radius:8px;cursor:pointer;font-size:20px;">
+          <input type="radio" name="satisfaccion" value="{{ nivel }}" style="display:block;margin:0 auto 4px;"
+                 {% if evaluacion.satisfaccion == nivel %}checked{% endif %}>
+          {{ emoji }}
+        </label>
+      {% endfor %}
+    </div>
+    <textarea class="bloque" name="satisfaccion_comentarios" placeholder="Comentarios sobre la satisfacción del cliente en esta conversación (opcional)...">{{ evaluacion.satisfaccion_comentarios }}</textarea>
+  </div>
+
   {% for cat in categorias %}
   <div class="card">
     <div class="cat-title">{{ cat.nombre }} ({{ (cat.peso_categoria*100) | round(0) | int }}%)</div>

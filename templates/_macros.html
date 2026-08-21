@@ -1,12 +1,16 @@
-{% macro sello_puntaje(porcentaje, tamano=88, etiqueta=None) %}
+{% macro sello_puntaje(porcentaje, tamano=88, etiqueta=None, mostrar_semaforo=False) %}
   {% set pct = porcentaje | round(0) | int %}
-  {% set color = '#24443E' if pct >= 90 else ('#9C6B12' if pct >= 70 else '#B8342A') %}
+  {% set color = '#24443E' if pct >= 90 else ('#9C6B12' if pct >= 75 else '#B8342A') %}
+  {% set semaforo = 'Cumplimiento' if pct >= 90 else ('A mejorar' if pct >= 75 else 'Riesgo') %}
   <div style="display:inline-flex;flex-direction:column;align-items:center;gap:8px;">
     <div class="sello" style="--tam:{{ tamano }}px;--color-sello:{{ color }};">
       <span class="valor">{{ pct }}</span>
     </div>
     {% if etiqueta %}
       <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;color:var(--ink-500);text-transform:uppercase;">{{ etiqueta }}</span>
+    {% endif %}
+    {% if mostrar_semaforo %}
+      <span class="badge" style="background:{{ color }}22;color:{{ color }};">{{ semaforo }}</span>
     {% endif %}
   </div>
 {% endmacro %}

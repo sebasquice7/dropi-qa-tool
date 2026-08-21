@@ -81,7 +81,7 @@ def iniciar_evaluacion(ruta_pdf: str, asesor: str, token: str, bandeja: str = ""
     """
     conv = cargar_conversacion_desde_pdf(str(ruta_pdf))
 
-    evaluacion = evaluar_conversacion(conv.texto_plano(), asesor, pais=pais, bandeja=bandeja)
+    evaluacion = evaluar_conversacion(conv.texto_plano(), asesor, pais=pais, bandeja=bandeja, texto_gali=conv.texto_de_gali(), texto_notas_internas=conv.texto_de_notas_internas())
     evaluacion = normalizar_evaluacion(evaluacion)
     nota = calcular_nota(evaluacion)
 
@@ -156,6 +156,8 @@ def aplicar_ajustes_y_confirmar(token: str, ajustes: dict) -> dict:
     evaluacion["lo_positivo"] = ajustes.get("lo_positivo", [])
     evaluacion["oportunidades_mejora"] = ajustes.get("oportunidades_mejora", [])
     evaluacion["resumen_caso"] = ajustes.get("resumen_caso", "")
+    evaluacion["satisfaccion"] = ajustes.get("satisfaccion", "")
+    evaluacion["satisfaccion_comentarios"] = ajustes.get("satisfaccion_comentarios", "")
 
     evaluacion = normalizar_evaluacion(evaluacion)
     nota = calcular_nota(evaluacion)

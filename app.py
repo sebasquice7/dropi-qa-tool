@@ -34,6 +34,7 @@ from blueprints.buscar_bp import buscar_bp
 from blueprints.matriz_bp import matriz_bp
 from blueprints.informes_bp import informes_bp
 from blueprints.presupuesto_bp import presupuesto_bp
+from blueprints.roster_bp import roster_bp
 
 log = obtener_logger("app")
 
@@ -49,7 +50,7 @@ def crear_app() -> Flask:
     app.secret_key = config.secret_key  # aleatoria si no se definió SECRET_KEY en el .env
 
     for bp in (evaluacion_bp, dashboard_bp, coaching_bp, calibracion_bp,
-               buscar_bp, matriz_bp, informes_bp, presupuesto_bp):
+               buscar_bp, matriz_bp, informes_bp, presupuesto_bp, roster_bp):
         app.register_blueprint(bp)
 
     @app.before_request

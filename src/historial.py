@@ -66,6 +66,8 @@ def registrar_evaluacion(metadata: dict, evaluacion: dict, nota: dict, calibraci
         "lo_positivo": evaluacion.get("lo_positivo", []),
         "calibracion": calibracion,
         "guia_utilizada": evaluacion.get("guia_utilizada"),
+        "satisfaccion": evaluacion.get("satisfaccion"),
+        "satisfaccion_comentarios": evaluacion.get("satisfaccion_comentarios"),
     }
 
     historial = []

@@ -16,11 +16,14 @@ def dashboard() -> ResponseReturnValue:
 
 @dashboard_bp.route("/api/dashboard")
 def api_dashboard() -> ResponseReturnValue:
-    """Datos del dashboard en JSON, filtrados por periodo/país/bandeja (query params)."""
+    """Datos del dashboard en JSON, filtrados por periodo/país/bandeja/área (query params)."""
     periodo = request.args.get("periodo", "todo")
     pais = request.args.get("pais", "").strip() or None
     bandeja = request.args.get("bandeja", "").strip() or None
-    return obtener_datos_dashboard(periodo=periodo, pais=pais, bandeja=bandeja)
+    area = request.args.get("area", "").strip() or None
+    fecha_desde = request.args.get("fecha_desde", "").strip() or None
+    fecha_hasta = request.args.get("fecha_hasta", "").strip() or None
+    return obtener_datos_dashboard(periodo=periodo, pais=pais, bandeja=bandeja, area=area, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta)
 
 
 @dashboard_bp.route("/api/dashboard/meta", methods=["POST"])

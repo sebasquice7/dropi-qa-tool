@@ -192,6 +192,8 @@ def generar() -> ResponseReturnValue:
         "lo_positivo": [l.strip() for l in request.form.get("lo_positivo", "").split("\n") if l.strip()],
         "oportunidades_mejora": [l.strip() for l in request.form.get("oportunidades_mejora", "").split("\n") if l.strip()],
         "resumen_caso": request.form.get("resumen_caso", ""),
+        "satisfaccion": request.form.get("satisfaccion", ""),
+        "satisfaccion_comentarios": request.form.get("satisfaccion_comentarios", ""),
     }
 
     try:

@@ -1,0 +1,80 @@
+{% extends "_base.html" %}
+{% block titulo %}Roster de asesores — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .filtros-roster { display: flex; gap: 10px; margin-bottom: 18px; }
+  .filtros-roster select { width: auto; }
+  table.roster { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.roster th { text-align: left; padding: 9px 12px; color: var(--ink-500); font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--line); }
+  table.roster td { padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  .badge-area { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 12px; background: var(--naranja-50); color: var(--sello-tinta); }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Manifiesto de responsables</div>
+  <h1>Roster de asesores</h1>
+  <div class="subt">{{ total }} registro(s) — qué asesor maneja cada bandeja, y a qué área y país pertenece</div>
+</div>
+
+<form class="filtros-roster" method="get">
+  <select name="area" onchange="this.form.submit()">
+    <option value="">🗂 Todas las áreas</option>
+    {% for a in areas %}
+      <option value="{{ a }}" {% if filtro_area == a %}selected{% endif %}>{{ a }}</option>
+    {% endfor %}
+  </select>
+  <select name="pais" onchange="this.form.submit()">
+    <option value="">🌎 Todos los países</option>
+    {% for p in paises %}
+      <option value="{{ p }}" {% if filtro_pais == p %}selected{% endif %}>{{ p }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+<div class="card" style="overflow-x:auto;">
+  <table class="roster">
+    <thead>
+      <tr><th>Área</th><th>País</th><th>Asesor</th><th>Bandeja / Proceso</th><th>Correo</th></tr>
+    </thead>
+    <tbody>
+      {% for r in registros %}
+        <tr>
+          <td><span class="badge-area">{{ r.area }}</span></td>
+          <td>{{ r.pais }}</td>
+          <td>{{ r.nombre }}</td>
+          <td>{{ r.bandeja }}</td>
+          <td style="color:var(--ink-500);font-size:12px;">{{ r.email or "—" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if detectados %}
+  <div class="card card-pad" style="margin-top:18px;border-color:var(--ambar);background:var(--ambar-bg);">
+    <h2 style="font-size:14px;margin:0 0 4px;">⚠ Detectados en evaluaciones reales, sin confirmar en el mapa operativo ({{ detectados|length }})</h2>
+    <div class="hint" style="margin-bottom:12px;">
+      Estas combinaciones de asesor/bandeja/país aparecieron en evaluaciones que ya hiciste, pero todavía no están en el
+      mapa operativo oficial — probablemente porque el Excel no se ha actualizado. Confírmalas cuando puedas.
+    </div>
+    <table class="roster">
+      <thead>
+        <tr><th>Área</th><th>País</th><th>Asesor</th><th>Bandeja / Proceso</th></tr>
+      </thead>
+      <tbody>
+        {% for d in detectados %}
+          <tr>
+            <td><span class="badge-area">{{ d.area }}</span></td>
+            <td>{{ d.pais }}</td>
+            <td>{{ d.nombre }}</td>
+            <td>{{ d.bandeja }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+{% endblock %}

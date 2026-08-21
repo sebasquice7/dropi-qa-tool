@@ -1,0 +1,9 @@
+{
+  "_comentario": "Cada entrada agrupa variantes con errores de tipeo reales (no solo tildes/mayúsculas, eso ya se maneja aparte). La clave 'canonico' es el nombre que se muestra; 'variantes' son todas las formas que deben contar como lo mismo.",
+  "grupos": [
+    {
+      "canonico": "Triage General",
+      "variantes": ["Traige general", "Traige General", "Triage", "Triage general"]
+    }
+  ]
+}

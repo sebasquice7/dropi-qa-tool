@@ -21,6 +21,24 @@ def _pesos_por_categoria() -> dict:
     return {cat["nombre"]: cat["peso_categoria"] for cat in matriz["categorias"]}
 
 
+def _pesos_maximos_por_item() -> dict:
+    with open(MATRIZ_PATH, encoding="utf-8") as f:
+        matriz = json.load(f)
+    return {it["id"]: it["peso"] for cat in matriz["categorias"] for it in cat["items"]}
+
+
+def _nombres_items() -> dict:
+    with open(MATRIZ_PATH, encoding="utf-8") as f:
+        matriz = json.load(f)
+    return {it["id"]: it["nombre"] for cat in matriz["categorias"] for it in cat["items"]}
+
+
+def _categoria_de_items() -> dict:
+    with open(MATRIZ_PATH, encoding="utf-8") as f:
+        matriz = json.load(f)
+    return {it["id"]: cat["nombre"] for cat in matriz["categorias"] for it in cat["items"]}
+
+
 def datos_para_coaching(asesor: str) -> dict:
     """Arma el paquete de datos de un asesor específico: estadísticas agregadas
     + evidencia textual real (sus últimas oportunidades de mejora y puntos
@@ -39,9 +57,70 @@ def datos_para_coaching(asesor: str) -> dict:
     for cat, peso_max in pesos.items():
         valores = [r.get("categorias", {}).get(cat) for r in registros if r.get("categorias", {}).get(cat) is not None]
         if valores and peso_max:
-            por_categoria[cat] = round(mean(valores) / peso_max, 4)
+            # min(..., 1.0): si la matriz cambió de pesos después de que esta
+            # evaluación se guardó, el puntaje viejo puede quedar por encima
+            # del máximo actual — nunca debe mostrarse más de 100%.
+            por_categoria[cat] = round(min(mean(valores) / peso_max, 1.0), 4)
 
     categorias_ordenadas = sorted(por_categoria.items(), key=lambda x: x[1])
+
+    # Mes actual vs. mes anterior (no "primera evaluación de siempre" vs.
+    # "la más reciente") — con ~40 evaluaciones/asesor/mes, comparar contra
+    # el inicio de todo el historial deja de ser útil apenas pasan unos
+    # meses. El ciclo mensual es la unidad real de coaching: cada mes se
+    # compara contra el mes inmediatamente anterior, siempre vigente.
+    def _mes_de(registro):
+        fecha = registro.get("fecha") or ""
+        return fecha[:7] if len(fecha) >= 7 else None  # "2026-08-15" -> "2026-08"
+
+    meses_presentes = sorted({m for m in (_mes_de(r) for r in registros) if m})
+    mes_actual = meses_presentes[-1] if meses_presentes else None
+    mes_anterior = meses_presentes[-2] if len(meses_presentes) >= 2 else None
+
+    registros_mes_actual = [r for r in registros if _mes_de(r) == mes_actual]
+    registros_mes_anterior = [r for r in registros if _mes_de(r) == mes_anterior] if mes_anterior else []
+
+    def _promedio_categorias_de(regs):
+        resultado = {}
+        for cat, peso_max in pesos.items():
+            valores = [r.get("categorias", {}).get(cat) for r in regs if r.get("categorias", {}).get(cat) is not None]
+            if valores and peso_max:
+                resultado[cat] = round(min(mean(valores) / peso_max, 1.0), 4)
+        return resultado
+
+    categorias_mes_actual = _promedio_categorias_de(registros_mes_actual)
+    categorias_mes_anterior = _promedio_categorias_de(registros_mes_anterior)
+
+    pesos_max_item = _pesos_maximos_por_item()
+    categoria_de_item = _categoria_de_items()
+    with open(MATRIZ_PATH, encoding="utf-8") as f:
+        pesos_categoria = {cat["nombre"]: cat["peso_categoria"] for cat in json.load(f)["categorias"]}
+    por_item = {}
+    for r in registros:
+        for item_id, detalle in (r.get("items_detalle") or {}).items():
+            puntaje = detalle.get("puntaje") if isinstance(detalle, dict) else detalle
+            if puntaje is not None:
+                por_item.setdefault(item_id, []).append(puntaje)
+
+    items_ordenados = []
+    for item_id, valores in por_item.items():
+        peso_max = pesos_max_item.get(item_id)
+        if valores and peso_max:
+            categoria = categoria_de_item.get(item_id, "OTROS")
+            peso_categoria = pesos_categoria.get(categoria)
+            # Peso RELATIVO a su categoría, no al total de la matriz — así, dentro
+            # de cada categoría desplegada, los pesos de sus ítems suman 100%,
+            # que es lo que cualquiera espera ver al mirar un grupo ya aislado.
+            peso_relativo = round((peso_max / peso_categoria) * 100, 1) if peso_categoria else 0
+            items_ordenados.append({
+                "id": item_id,
+                "nombre": _nombres_items().get(item_id, item_id),
+                "categoria": categoria,
+                "peso": peso_relativo,
+                "porcentaje": round(min(mean(valores) / peso_max, 1.0), 4),
+                "veces_evaluado": len(valores),
+            })
+    items_ordenados.sort(key=lambda x: x["porcentaje"])  # peor a mejor
 
     criticos = [r["critico_activado"] for r in registros if r.get("critico_activado")]
 
@@ -54,14 +133,15 @@ def datos_para_coaching(asesor: str) -> dict:
     for r in reversed(registros):
         for punto in r.get("oportunidades_mejora") or []:
             if len(oportunidades_recientes) < 10:
-                oportunidades_recientes.append({"fecha": r.get("fecha"), "texto": punto})
+                oportunidades_recientes.append({"fecha": r.get("fecha"), "id_caso": r.get("id_caso"), "texto": punto})
         for punto in r.get("lo_positivo") or []:
             if len(positivos_recientes) < 6:
-                positivos_recientes.append({"fecha": r.get("fecha"), "texto": punto})
+                positivos_recientes.append({"fecha": r.get("fecha"), "id_caso": r.get("id_caso"), "texto": punto})
 
     return {
         "suficientes_datos": True,
         "asesor": asesor,
+        "pais": registros[-1].get("pais", ""),  # el país de su evaluación más reciente
         "total": len(registros),
         "primera_fecha": registros[0].get("fecha"),
         "ultima_fecha": registros[-1].get("fecha"),
@@ -69,6 +149,13 @@ def datos_para_coaching(asesor: str) -> dict:
         "nota_primera_mitad": round(mean(notas[:len(notas)//2 or 1]), 4),
         "nota_segunda_mitad": round(mean(notas[len(notas)//2:]), 4),
         "categorias_ordenadas": categorias_ordenadas,  # peor a mejor
+        "items_ordenados": items_ordenados,  # desglose por ítem individual, peor a mejor
+        "mes_actual": mes_actual,
+        "mes_anterior": mes_anterior,
+        "cantidad_mes_actual": len(registros_mes_actual),
+        "cantidad_mes_anterior": len(registros_mes_anterior),
+        "categorias_mes_actual": categorias_mes_actual,
+        "categorias_mes_anterior": categorias_mes_anterior,
         "total_criticos": len(criticos),
         "criticos_detalle": criticos,
         "oportunidades_recientes": oportunidades_recientes,
