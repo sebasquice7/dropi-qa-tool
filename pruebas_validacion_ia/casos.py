@@ -55,8 +55,8 @@ CASOS.append({
 
 
 # ============================================================ Caso 2
-def _verificar_cierra_sin_resolver(evaluacion, nota):
-    ocurrio = _critico(evaluacion, "cierra_sin_resolver")
+def _verificar_cierre_prematuro(evaluacion, nota):
+    ocurrio = _critico(evaluacion, "cierre_prematuro_abandono")
     if ocurrio == "si":
         return True, "Detectó correctamente el cierre sin resolver (crítico activado)"
     return False, f"NO detectó el cierre sin resolver (crítico quedó en '{ocurrio}', esperaba 'Si')"
@@ -73,13 +73,13 @@ CASOS.append({
 10:02 AM [STAFF] Asesor Prueba: Hola, para eso debes subir la garantía al módulo correspondiente
 10:15 AM [STAFF] Asesor Prueba: Conversación cerrada
 """,
-    "verificar": _verificar_cierra_sin_resolver,
+    "verificar": _verificar_cierre_prematuro,
 })
 
 
 # ============================================================ Caso 3
-def _verificar_lenguaje_inadecuado(evaluacion, nota):
-    ocurrio = _critico(evaluacion, "lenguaje_inadecuado")
+def _verificar_maltrato(evaluacion, nota):
+    ocurrio = _critico(evaluacion, "maltrato_lenguaje_inadecuado")
     if ocurrio == "si":
         return True, "Detectó correctamente el lenguaje inadecuado (crítico activado)"
     return False, f"NO detectó el lenguaje inadecuado (crítico quedó en '{ocurrio}', esperaba 'Si')"
@@ -97,13 +97,13 @@ CASOS.append({
 10:03 AM [CLIENTE] Carlos Ruiz: ¿Perdón? Solo quiero una solución
 10:04 AM [STAFF] Asesor Prueba: Ya le dije, deje de molestar con lo mismo
 """,
-    "verificar": _verificar_lenguaje_inadecuado,
+    "verificar": _verificar_maltrato,
 })
 
 
 # ============================================================ Caso 4
-def _verificar_info_incorrecta(evaluacion, nota):
-    ocurrio = _critico(evaluacion, "info_incorrecta")
+def _verificar_info_falsa(evaluacion, nota):
+    ocurrio = _critico(evaluacion, "informacion_falsa_enganosa")
     if ocurrio == "si":
         return True, "Detectó correctamente la información incorrecta (crítico activado)"
     return False, f"NO detectó la información incorrecta (crítico quedó en '{ocurrio}', esperaba 'Si')"
@@ -120,31 +120,15 @@ CASOS.append({
 10:02 AM [STAFF] Asesor Prueba: Tienes 90 días desde la entrega para subir cualquier garantía, sin excepción
 10:03 AM [CLIENTE] Laura Gil: Perfecto, entonces tengo tiempo. Gracias
 """,
-    "verificar": _verificar_info_incorrecta,
+    "verificar": _verificar_info_falsa,
 })
 
 
 # ============================================================ Caso 5
-def _verificar_info_interna(evaluacion, nota):
-    ocurrio = _critico(evaluacion, "comparte_info_interna")
-    if ocurrio == "si":
-        return True, "Detectó correctamente que se compartió información interna (crítico activado)"
-    return False, f"NO detectó que se compartió información interna (crítico quedó en '{ocurrio}', esperaba 'Si')"
-
-
-CASOS.append({
-    "nombre": "Comparte información interna/confidencial",
-    "asesor": "Asesor Prueba",
-    "pais": "Colombia",
-    "bandeja": "Garantías",
-    "texto": """
---- 2026-08-10 ---
-10:00 AM [CLIENTE] Pedro Sanchez: ¿Por qué se demoran tanto en aprobar mi garantía?
-10:02 AM [STAFF] Asesor Prueba: Es que internamente tenemos un margen de ganancia muy bajo con este proveedor y por eso el equipo de compras siempre pone trabas a las garantías de esta marca
-10:03 AM [CLIENTE] Pedro Sanchez: Ah, entiendo
-""",
-    "verificar": _verificar_info_interna,
-})
+# NOTA (migración a Matriz V2, agosto 2026): el caso "Comparte información
+# interna/confidencial" se retiró de aquí porque la Matriz V2 ya no incluye
+# un ítem crítico equivalente a "comparte_info_interna" — su cobertura fue
+# una decisión explícita al reemplazar la matriz (ver ARQUITECTURA.md).
 
 
 # ============================================================ Caso 6 (control positivo)
@@ -180,7 +164,7 @@ CASOS.append({
 
 # ============================================================ Caso 7 (el caso de Marlon: cierre válido por inactividad)
 def _verificar_cierre_valido_por_inactividad(evaluacion, nota):
-    ocurrio = _critico(evaluacion, "cierra_sin_resolver")
+    ocurrio = _critico(evaluacion, "cierre_prematuro_abandono")
     if ocurrio == "no":
         return True, "NO penalizó el cierre por inactividad justificada (correcto — el asesor sí gestionó y avisó)"
     return False, f"Penalizó un cierre que SÍ estaba justificado (crítico quedó en '{ocurrio}', esperaba 'No') — revisar la regla de inactividad"
@@ -203,29 +187,9 @@ CASOS.append({
 })
 
 
-# ============================================================ Caso 8 (apego a guía operativa)
-def _verificar_apego_guia(evaluacion, nota):
-    puntaje = _item(evaluacion, "apego_guia_operativa")
-    if puntaje is None:
-        return False, "El ítem 'apego_guia_operativa' no aparece en la evaluación"
-    peso_max = 0.06  # ver config/matriz_calidad.json si cambia
-    if puntaje >= peso_max * 0.8:
-        return True, f"Reconoció que siguió bien el proceso documentado (puntaje {puntaje} de {peso_max})"
-    return False, f"Puntuó bajo un caso que sí siguió la guía (dio {puntaje} de {peso_max}, esperaba 80%+)"
-
-
-CASOS.append({
-    "nombre": "Apego a guía operativa (caso que SÍ sigue el proceso documentado)",
-    "asesor": "Asesor Prueba",
-    "pais": "Colombia",
-    "bandeja": "Anulaciones",  # bandeja con guía real cargada en config/guias/colombia/
-    "texto": """
---- 2026-08-10 ---
-10:00 AM [CLIENTE] Sofia Mendez: Quiero anular mi pedido 445566, todavía no ha sido despachado
-10:02 AM [STAFF] Asesor Prueba: Hola Sofia, permíteme validar el estado del pedido antes de proceder
-10:03 AM [STAFF] Asesor Prueba: Confirmado, el pedido sigue sin despacho, por lo que sí procede la anulación según nuestro proceso. La voy a gestionar ahora mismo
-10:05 AM [STAFF] Asesor Prueba: Listo Sofia, tu pedido ha sido anulado exitosamente y el reembolso se procesará según los tiempos establecidos
-10:06 AM [CLIENTE] Sofia Mendez: Muchas gracias por la ayuda
-""",
-    "verificar": _verificar_apego_guia,
-})
+# ============================================================ Caso 8
+# NOTA (migración a Matriz V2, agosto 2026): el caso "Apego a guía operativa"
+# se retiró de aquí porque la Matriz V2 no incluye un ítem de "apego_guia_
+# operativa" — la guía operativa sigue cargándose como contexto (ver
+# guias.py) pero ya no se evalúa como un ítem independiente, sino como
+# respaldo del ítem "precision_tecnica_fondo" (ver src/evaluator.py).

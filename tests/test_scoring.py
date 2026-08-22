@@ -45,12 +45,12 @@ class TestCalcularNota:
         crítico en 'Si' anula cualquier puntaje que se haya ganado."""
         evaluacion = {
             "items": {"a": {"puntaje": 0.05}, "b": {"puntaje": 0.03}},
-            "items_criticos": {"maltrato_cliente": {"ocurrio": "Si"}},
+            "items_criticos": {"critico_de_prueba": {"ocurrio": "Si"}},
         }
         resultado = calcular_nota(evaluacion)
         assert resultado["nota_bruta"] == 0.08  # la nota bruta NO cambia
         assert resultado["nota_final"] == 0.0   # pero la final sí queda en cero
-        assert resultado["critico_activado"] == "maltrato_cliente"
+        assert resultado["critico_activado"] == "critico_de_prueba"
 
     def test_no_distingue_mayusculas_en_ocurrio(self):
         """'Si', 'SI', 'si' deben tratarse igual — la IA no siempre es consistente

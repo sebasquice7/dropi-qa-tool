@@ -40,11 +40,11 @@ class TestCalcularCalibracion:
     def test_detecta_un_critico_que_el_auditor_corrigio(self):
         """Este es el caso real que motivó esta funcionalidad: la IA marca un
         crítico y el auditor lo corrige a 'No' (o viceversa)."""
-        ia = {"items": {}, "items_criticos": {"cierra_sin_resolver": {"ocurrio": "Si"}}}
-        final = {"items": {}, "items_criticos": {"cierra_sin_resolver": {"ocurrio": "No"}}}
+        ia = {"items": {}, "items_criticos": {"critico_de_prueba": {"ocurrio": "Si"}}}
+        final = {"items": {}, "items_criticos": {"critico_de_prueba": {"ocurrio": "No"}}}
         resultado = calcular_calibracion(ia, final, MATRIZ_PRUEBA)
         assert len(resultado["criticos_cambiados"]) == 1
-        assert resultado["criticos_cambiados"][0]["item_id"] == "cierra_sin_resolver"
+        assert resultado["criticos_cambiados"][0]["item_id"] == "critico_de_prueba"
         assert resultado["criticos_cambiados"][0]["ia"] == "si"
         assert resultado["criticos_cambiados"][0]["final"] == "no"
 
@@ -80,8 +80,8 @@ class TestResumenCalibracion:
 
     def test_cuenta_la_frecuencia_de_criticos_corregidos(self):
         registros = [
-            {"calibracion": {"porcentaje_acuerdo": 1.0, "delta_por_categoria": {}, "criticos_cambiados": [{"item_id": "maltrato_cliente"}]}},
-            {"calibracion": {"porcentaje_acuerdo": 1.0, "delta_por_categoria": {}, "criticos_cambiados": [{"item_id": "maltrato_cliente"}]}},
+            {"calibracion": {"porcentaje_acuerdo": 1.0, "delta_por_categoria": {}, "criticos_cambiados": [{"item_id": "critico_de_prueba"}]}},
+            {"calibracion": {"porcentaje_acuerdo": 1.0, "delta_por_categoria": {}, "criticos_cambiados": [{"item_id": "critico_de_prueba"}]}},
         ]
         resultado = resumen_calibracion(registros)
-        assert resultado["criticos_cambiados_frecuencia"]["maltrato_cliente"] == 2
+        assert resultado["criticos_cambiados_frecuencia"]["critico_de_prueba"] == 2

@@ -12,11 +12,11 @@ MATRIZ_PATH = BASE_DIR / "config" / "matriz_calidad.json"
 
 # Ítems que nunca deben poder desaparecer ni quedar en 0% desde el editor web
 # (aunque alguien intente ponerlos en 0 por error) — id -> peso mínimo permitido.
-# "apego_guia_operativa" es crítico para el auditor: si se pudiera apagar sin
-# querer, se perdería la validación de que el asesor sigue las guías reales.
-ITEMS_PROTEGIDOS = {
-    "apego_guia_operativa": 0.01,  # mínimo 1%, nunca 0% ni removido
-}
+# Vacío desde la migración a la Matriz V2 (agosto 2026): la V2 no tiene un ítem
+# de "apego a guía operativa", así que ya no hay ningún ítem protegido por
+# defecto. Si en el futuro se agrega un ítem crítico que nunca deba poder
+# desactivarse, se registra aquí de la misma forma.
+ITEMS_PROTEGIDOS = {}
 
 
 def cargar_matriz_editable() -> dict:

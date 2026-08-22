@@ -156,8 +156,9 @@ cada servicio, pero no son necesarios si se integra directamente.
 ## Guías operativas
 
 El programa detecta automáticamente si existe una guía documentada que aplique al
-caso (por país + bandeja) y se la da a la IA como referencia real. Si no existe
-ninguna guía para ese tipo de caso, el ítem de "apego a la guía" se califica con
-el puntaje máximo automáticamente — nunca penaliza por no seguir un proceso que
-no estaba documentado. Las guías viven en `config/guias/<país>/` y
-`config/guias/logistica_general/` (estas últimas aplican a todos los países).
+caso (por país + bandeja) y se la da a la IA como contexto de referencia para
+evaluar la precisión técnica del asesor. Si no existe ninguna guía para ese tipo
+de caso, simplemente no se agrega contexto adicional — nunca penaliza por no
+seguir un proceso que no estaba documentado. Las guías viven en
+`config/guias/<país>/` y `config/guias/logistica_general/` (estas últimas aplican
+a todos los países).

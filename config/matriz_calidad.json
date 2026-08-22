@@ -1,264 +1,166 @@
 {
-  "titulo": "MATRIZ DE CALIDAD DROPI - SOPORTE INTERCOM",
+  "titulo": "MATRIZ DE EVALUACIÓN DE CALIDAD EN ATENCIÓN Y EXPERIENCIA DEL CLIENTE (CX) - DROPI V2",
   "categorias": [
     {
-      "nombre": "DIAGNOSTICO Y COMPRENSION",
-      "peso_categoria": 0.2,
-      "items": [
-        {
-          "id": "verifica_datos",
-          "nombre": "Verifica datos del usuario antes de responder",
-          "peso": 0.05,
-          "que_evalua": "Que el asesor no responda a ciegas. Debe validar activamente el panel derecho de Intercom antes de enviar su primer mensaje de soporte.",
-          "que_tener_en_cuenta": "El auditor debe revisar si el agente identificó el Rol (Dropshipper o Proveedor) y el ID de la tienda."
-        },
-        {
-          "id": "motivo_correcto",
-          "nombre": "Identifica motivo principal y submotivo correcto",
-          "peso": 0.07,
-          "que_evalua": "Comprensión de lectura. El asesor debe interpretar correctamente cuál es el dolor real del usuario en el primer mensaje.",
-          "que_tener_en_cuenta": "Clasificar correctamente si es un problema de Logística, Wallet o Tecnología."
-        },
-        {
-          "id": "preguntas_clarificacion",
-          "nombre": "Realiza preguntas de clarificación cuando aplica",
-          "peso": 0.04,
-          "que_evalua": "Evitar suposiciones. Si el usuario es ambiguo, el agente debe investigar antes de dar una solución errónea.",
-          "que_tener_en_cuenta": "Si el caso era claro desde el inicio, este ítem se cumple por defecto (no se penaliza no preguntar cuando no hacía falta)."
-        },
-        {
-          "id": "tono_empatico_diagnostico",
-          "nombre": "Mantiene tono empático y adecuado al contexto",
-          "peso": 0.04,
-          "que_evalua": "Inteligencia emocional escrita. El agente debe acoplarse al estado de ánimo del cliente.",
-          "que_tener_en_cuenta": "Empatía genuina ante frustración del cliente, evitando respuestas frías o robóticas."
-        }
-      ]
-    },
-    {
-      "nombre": "PROCEDIMIENTO Y SOLUCION",
-      "peso_categoria": 0.24,
-      "items": [
-        {
-          "id": "precision_tecnica",
-          "nombre": "Precisión técnica y efectividad de la solución brindada",
-          "peso": 0.048,
-          "que_evalua": "Que la solución dada sea la correcta y resuelva el problema de raíz.",
-          "que_tener_en_cuenta": "Instrucciones técnicas exactas. Dar información inventada o errónea castiga este punto."
-        },
-        {
-          "id": "expectativas_reales",
-          "nombre": "Gestiona expectativas reales y evita falsas promesas (tiempos de entrega y liberación de saldos)",
-          "peso": 0.04,
-          "que_evalua": "Honestidad operativa. Prohibido prometer cosas fuera de las políticas para cerrar el chat rápido.",
-          "que_tener_en_cuenta": "Debe apegarse a los tiempos reales de Dropi, no inventar plazos."
-        },
-        {
-          "id": "primer_contacto",
-          "nombre": "Resuelve en primer contacto o gestiona escalamiento correcto",
-          "peso": 0.064,
-          "que_evalua": "Capacidad resolutiva y fin del 'paseo al cliente'.",
-          "que_tener_en_cuenta": "Si requiere traslado, moverlo de inmediato al equipo correcto, sin rebotes injustificados."
-        },
-        {
-          "id": "acuerdos_tiempos",
-          "nombre": "Establece acuerdos, tiempos de espera claros y maneja el estado correcto en Intercom (Snooze)",
-          "peso": 0.04,
-          "que_evalua": "Organización y claridad en los pasos a seguir.",
-          "que_tener_en_cuenta": "Debe indicar qué pasará después y usar Snooze por el tiempo pactado."
-        },
-        {
-          "id": "apego_guia_operativa",
-          "nombre": "Sigue el procedimiento documentado en la guía operativa correspondiente (cuando aplica)",
-          "peso": 0.048,
-          "que_evalua": "Que el asesor haya seguido los pasos del procedimiento documentado en la guía operativa oficial correspondiente a ese tipo de caso (si existe una guía aplicable).",
-          "que_tener_en_cuenta": "MUY IMPORTANTE: si en este prompt no se incluyó ninguna guía operativa de referencia para este caso, significa que no hay una guía documentada que aplique — en ese caso, califica este ítem con el puntaje máximo automáticamente (no es una falla del asesor, simplemente no había un procedimiento específico que seguir). Solo baja el puntaje si SÍ se incluyó una guía abajo y el asesor se desvió de sus pasos sin justificación."
-        }
-      ]
-    },
-    {
-      "nombre": "INTERACCIÓN CON GALI",
-      "peso_categoria": 0.06,
-      "items": [
-        {
-          "id": "gali_ticket_completo",
-          "nombre": "Gali creó el ticket con información completa",
-          "peso": 0.03,
-          "que_evalua": "Si Gali (el bot de Intercom) creó correctamente el ticket antes de escalar al asesor humano, con la información del cliente completa y correcta (no un ticket vacío o a medias).",
-          "que_tener_en_cuenta": "Compara lo que Gali reportó contra la base de conocimiento oficial si hay referencia disponible en el prompt. Si Gali no participó en esta conversación (fue directo a un asesor humano), califica con el puntaje máximo — no aplica, no es una falla."
-        },
-        {
-          "id": "asesor_valida_info_gali",
-          "nombre": "El asesor validó la información que generó Gali",
-          "peso": 0.03,
-          "que_evalua": "Si el asesor humano revisó y validó (no asumió ciegamente) la información que Gali ya había recopilado, antes de continuar con el caso.",
-          "que_tener_en_cuenta": "Un asesor que repite o corrige algo que Gali dijo mal demuestra que sí validó. Uno que repite un error de Gali sin cuestionarlo, no validó. Si Gali no participó en esta conversación, califica con el puntaje máximo — no aplica."
-        }
-      ]
-    },
-    {
-      "nombre": "COMUNICACION ESCRITA",
+      "nombre": "SINCRONIZACIÓN E INTERACCIÓN CON GALI (IA)",
       "peso_categoria": 0.15,
       "items": [
         {
-          "id": "saludo_corporativo",
-          "nombre": "Aplica bienvenida/saludo corporativo oficial (macro aprobada)",
-          "peso": 0.03,
-          "que_evalua": "Identidad de marca al iniciar y finalizar la interacción.",
-          "que_tener_en_cuenta": "Uso obligatorio de Saved Replies oficiales para saludo y cierre. El asesor debe identificarse con nombre y área."
+          "id": "gali_lectura_validacion_datos",
+          "nombre": "Lectura y Validación de Datos Recopilados por Gali",
+          "peso": 0.075,
+          "que_evalua": "El asesor lee activamente los datos estructurados por Gali (guía, motivo, antecedentes) y retoma la conversación directamente.",
+          "que_tener_en_cuenta": "Falla si vuelve a pedir información que el cliente ya le proporcionó al bot. Si Gali no participó en esta conversación (fue directo a un asesor humano), califica con el puntaje máximo — no aplica, no es una falla."
         },
+        {
+          "id": "gali_continuidad_hilo",
+          "nombre": "Continuidad en el Hilo de Conversación",
+          "peso": 0.075,
+          "que_evalua": "El asesor da un saludo de empalme natural que demuestra que conoce el caso (ej. \"Hola [Nombre], estando al tanto de lo que le comentaste a Gali sobre la guía X...\"), evitando saludos genéricos desconectados del flujo previo.",
+          "que_tener_en_cuenta": "Si Gali no participó en esta conversación, califica con el puntaje máximo — no aplica, no es una falla."
+        }
+      ]
+    },
+    {
+      "nombre": "CONEXIÓN EMPÁTICA Y ESCUCHA ACTIVA",
+      "peso_categoria": 0.20,
+      "items": [
+        {
+          "id": "escucha_cobertura_multiconsulta",
+          "nombre": "Lectura Integral y Cobertura Multi-Consulta",
+          "peso": 0.10,
+          "que_evalua": "Responde a todas y cada una de las inquietudes planteadas en el mensaje inicial (ej. entrega + falla de alertas en la plataforma).",
+          "que_tener_en_cuenta": "Si el usuario consulta por 2 cosas y el asesor solo responde 1, pierde la totalidad del puntaje de este ítem."
+        },
+        {
+          "id": "empatia_contextualizada",
+          "nombre": "Empatía Contextualizada y Validación Emocional",
+          "peso": 0.05,
+          "que_evalua": "Reconoce la afectación real del negocio del dropshipper de forma personalizada.",
+          "que_tener_en_cuenta": "Evita frases vacías como \"comprendo tu molestia\" sin conectar con la situación específica del caso."
+        },
+        {
+          "id": "tono_cercania_tuteo",
+          "nombre": "Tono, Cercanía y Tuteo Profesional",
+          "peso": 0.05,
+          "que_evalua": "Mantiene un lenguaje claro, accesible y profesional, adaptado al canal de chat de soporte.",
+          "que_tener_en_cuenta": "El tuteo debe ser respetuoso y ágil, sin caer en excesos de confianza informales."
+        }
+      ]
+    },
+    {
+      "nombre": "RESOLUCIÓN DE VALOR Y ESFUERZO DEL CLIENTE (CES)",
+      "peso_categoria": 0.35,
+      "items": [
+        {
+          "id": "precision_tecnica_fondo",
+          "nombre": "Efectividad y Precisión Técnica de Fondo",
+          "peso": 0.10,
+          "que_evalua": "Aporta la solución o soporte oficial correcto (prueba de entrega, guía de reemplazo, estado real con la transportadora).",
+          "que_tener_en_cuenta": "Dar información inventada o errónea castiga fuertemente este punto. Si en este prompt se incluyó una guía operativa de referencia para este caso, úsala como respaldo adicional para validar que los pasos técnicos dados fueron correctos."
+        },
+        {
+          "id": "gestion_proactiva_fallas_sistema",
+          "nombre": "Gestión Proactiva de Fallas del Sistema",
+          "peso": 0.10,
+          "que_evalua": "Ante problemas de sincronización o alertas no enviadas por la plataforma, asume la responsabilidad del sistema, genera ticket/reporte a IT y proporciona el ID de escalamiento al usuario.",
+          "que_tener_en_cuenta": "Prohibido responder solo con evasivas genéricas (ej. \"a veces hay desfases\") sin asumir la falla ni dar un canal de seguimiento concreto."
+        },
+        {
+          "id": "minimizacion_esfuerzo_cliente",
+          "nombre": "Minimización del Esfuerzo del Cliente (CES)",
+          "peso": 0.10,
+          "que_evalua": "Le facilita el proceso al usuario evitando que deba hacer gestiones adicionales.",
+          "que_tener_en_cuenta": "Penaliza si el usuario tiene que reiterar solicitudes por falta de claridad del asesor."
+        },
+        {
+          "id": "resolucion_primer_contacto_fcr",
+          "nombre": "Resolución en Primer Contacto (FCR)",
+          "peso": 0.05,
+          "que_evalua": "Entrega una solución completa e integral desde la primera intervención del asesor.",
+          "que_tener_en_cuenta": "Penaliza réplicas del cliente causadas por omisiones evitables del asesor."
+        }
+      ]
+    },
+    {
+      "nombre": "PROTOCOLO DE CIERRE Y VERIFICACIÓN DE SATISFACCIÓN",
+      "peso_categoria": 0.15,
+      "items": [
+        {
+          "id": "cierre_verificado_no_apresurado",
+          "nombre": "Cierre Verificado y No Apresurado",
+          "peso": 0.10,
+          "que_evalua": "Valida que el cliente haya revisado la solución y confirma si tiene alguna duda adicional antes de enviar despedidas automáticas o posponer/cerrar la conversación.",
+          "que_tener_en_cuenta": "Penaliza si el asesor da la explicación y anuncia el cierre en el mismo mensaje, sin esperar confirmación del cliente."
+        },
+        {
+          "id": "despedida_corporativa",
+          "nombre": "Despedida Corporativa y Disposición de Servicio",
+          "peso": 0.05,
+          "que_evalua": "Aplica el mensaje de despedida institucional en el momento adecuado de la conversación.",
+          "que_tener_en_cuenta": "La despedida debe llegar después de confirmar que el cliente no tiene más dudas, no antes."
+        }
+      ]
+    },
+    {
+      "nombre": "COMUNICACIÓN ESCRITA, SLA Y TRAZABILIDAD OPERATIVA",
+      "peso_categoria": 0.15,
+      "items": [
         {
           "id": "ortografia",
-          "nombre": "Ortografía, gramática y sintaxis correctas (sin errores)",
+          "nombre": "Ortografía, Gramática y Sintaxis Correctas (Sin Errores)",
           "peso": 0.04,
-          "que_evalua": "Profesionalismo de la escritura.",
-          "que_tener_en_cuenta": "Sin errores de digitación, tildes o confusión de letras, especialmente en cifras y nombres de transportadoras."
+          "que_evalua": "Mantiene una redacción impecable sin errores ortográficos, mecanográficos, de tildación, ni fallas de puntuación o coherencia sintáctica en los mensajes transmitidos.",
+          "que_tener_en_cuenta": "Revisa especialmente cifras de dinero, nombres propios y nombres de transportadoras."
         },
         {
-          "id": "mensajes_claros",
-          "nombre": "Mensajes claros, estructurados y breves",
-          "peso": 0.03,
-          "que_evalua": "Legibilidad en canales digitales de chat.",
-          "que_tener_en_cuenta": "Sin párrafos de más de 4 líneas. Usar saltos de línea, negritas para IDs/guías, viñetas para procesos."
-        },
-        {
-          "id": "personaliza",
-          "nombre": "Personaliza y no abusa de plantillas",
-          "peso": 0.02,
-          "que_evalua": "Trato humano.",
-          "que_tener_en_cuenta": "Debe adaptar las macros al caso y llamar al usuario por su nombre."
-        },
-        {
-          "id": "tono_profesional",
-          "nombre": "Tono profesional, cercano y empático (tuteo profesional)",
-          "peso": 0.03,
-          "que_evalua": "Cercanía sin perder el respeto.",
-          "que_tener_en_cuenta": "Tuteo respetuoso y ágil. Penalizar excesos de confianza informales (amigo, parce, corazón, rey, jefe)."
-        }
-      ]
-    },
-    {
-      "nombre": "TRAZABILIDAD",
-      "peso_categoria": 0.15,
-      "items": [
-        {
-          "id": "notas_internas",
-          "nombre": "Claridad y argumentación en Notas Internas",
+          "id": "sla_tiempo_respuesta_concentracion",
+          "nombre": "Tiempo de Respuesta (SLA) y Concentración",
           "peso": 0.04,
-          "que_evalua": "El historial del caso para el equipo interno.",
-          "que_tener_en_cuenta": "Antes de transferir o cerrar, dejar nota interna explicando qué se revisó y por qué se traslada."
+          "que_evalua": "Atiende la transferencia de Gali dentro del tiempo límite de primera respuesta y mantiene interacción fluida sin demoras.",
+          "que_tener_en_cuenta": "Incluye tanto la velocidad de la primera respuesta como el seguimiento dentro del tiempo comprometido durante el resto de la conversación."
         },
         {
-          "id": "enlaces_oficiales",
-          "nombre": "Uso correcto de enlaces oficiales y herramientas de soporte",
-          "peso": 0.04,
-          "que_evalua": "Calidad del material que se comparte con el usuario.",
-          "que_tener_en_cuenta": "Los links deben corresponder al Centro de Ayuda oficial, rastreo oficial de transportadoras o formularios autorizados."
+          "id": "evidencias_soporte_visual",
+          "nombre": "Carga de Evidencias y Soporte Visual",
+          "peso": 0.035,
+          "que_evalua": "Adjunta soportes legibles y correctos en la bandeja de Intercom.",
+          "que_tener_en_cuenta": "Las capturas o adjuntos deben ser legibles y corresponder efectivamente al caso tratado."
         },
         {
-          "id": "evidencias_visuales",
-          "nombre": "Registro de evidencias visuales y soportes",
-          "peso": 0.04,
-          "que_evalua": "Respaldo legal y operativo de las transacciones.",
-          "que_tener_en_cuenta": "Adjuntar pantallazos o evidencia que valide la solución otorgada."
-        },
-        {
-          "id": "atributos_conversacion",
-          "nombre": "Uso correcto de Atributos de Conversación (Tipificación)",
-          "peso": 0.03,
-          "que_evalua": "Integridad de la data estadística para la gerencia.",
-          "que_tener_en_cuenta": "Campos del panel derecho de Intercom correctamente seleccionados antes de cerrar/mover el caso."
-        }
-      ]
-    },
-    {
-      "nombre": "SLA Y TIEMPO",
-      "peso_categoria": 0.1,
-      "items": [
-        {
-          "id": "sla_primera_respuesta",
-          "nombre": "Tiempo de Primera Respuesta dentro del SLA",
-          "peso": 0.04,
-          "que_evalua": "Velocidad de recepción.",
-          "que_tener_en_cuenta": "El primer saludo se envió dentro del rango de minutos establecido en los objetivos del canal."
-        },
-        {
-          "id": "seguimiento_tiempo",
-          "nombre": "Seguimiento dentro del tiempo comprometido",
-          "peso": 0.03,
-          "que_evalua": "Cumplimiento de promesas de tiempo en vivo.",
-          "que_tener_en_cuenta": "Si promete 'dame 2 minutos', no debe dejar al cliente esperando 15-20 minutos sin reportar novedades."
-        },
-        {
-          "id": "concentracion_gestion",
-          "nombre": "Está concentrado en la gestión y evidencia lectura activa (mensaje leído y respuesta oportuna)",
-          "peso": 0.03,
-          "que_evalua": "Gestión eficiente de las bandejas de Intercom.",
-          "que_tener_en_cuenta": "Cumple el protocolo de abandono y cierre asincrónico."
-        }
-      ]
-    },
-    {
-      "nombre": "CUMPLIMIENTO Y RIESGOS",
-      "peso_categoria": 0.1,
-      "items": [
-        {
-          "id": "gestion_estados",
-          "nombre": "Gestión de Estados y Reaberturas en Intercom",
-          "peso": 0.05,
-          "que_evalua": "Honestidad métrica.",
-          "que_tener_en_cuenta": "Penaliza drásticamente si cierra chats sin responder (Done) o reabre conversaciones para alterar indicadores."
-        },
-        {
-          "id": "protocolo_cierre",
-          "nombre": "Protocolo de Cierre por Solución o por Ausencia (Regla de las 1h y 4h)",
-          "peso": 0.05,
-          "que_evalua": "Respeto al ciclo de vida del chat asincrónico.",
-          "que_tener_en_cuenta": "Solucionado: espera 1h tras pregunta de salida antes de Done. Ausencia: espera 4h exactas antes de cierre por ausencia."
+          "id": "notas_internas_tipificacion",
+          "nombre": "Documentación de Notas Internas y Tipificación",
+          "peso": 0.035,
+          "que_evalua": "Registra la tipificación correcta y deja notas internas explicativas sobre antecedentes técnicos o acuerdos para otros asesores.",
+          "que_tener_en_cuenta": "Si traslada o cierra sin dejar nota interna explicativa, pierde el puntaje de este ítem."
         }
       ]
     }
   ],
   "items_criticos": [
     {
-      "id": "cierra_sin_resolver",
-      "nombre": "Cierra sin resolver / abandona el chat"
+      "id": "redundancia_con_gali",
+      "nombre": "Redundancia con Gali"
     },
     {
-      "id": "transferencia_incorrecta",
-      "nombre": "Transferencia incorrecta o injustificada (\"Pasear al cliente\")"
+      "id": "cierre_prematuro_abandono",
+      "nombre": "Cierre prematuro / Abandono"
     },
     {
-      "id": "no_escala_riesgo",
-      "nombre": "No escala un caso de riesgo"
+      "id": "omision_respuesta_ignora_inquietudes",
+      "nombre": "Omisión de respuesta / Ignorar inquietudes"
     },
     {
-      "id": "lenguaje_inadecuado",
-      "nombre": "Lenguaje inadecuado hacia el cliente"
+      "id": "maltrato_lenguaje_inadecuado",
+      "nombre": "Maltrato o falta de respeto"
     },
     {
-      "id": "comparte_info_interna",
-      "nombre": "Comparte información interna o confidencial"
+      "id": "informacion_falsa_enganosa",
+      "nombre": "Información falsa o engañosa"
     },
     {
-      "id": "manipula_evidencias",
-      "nombre": "Manipula o borra evidencias"
-    },
-    {
-      "id": "deriva_canales_no_autorizados",
-      "nombre": "Deriva a canales no autorizados"
-    },
-    {
-      "id": "no_responde_solicitud",
-      "nombre": "No responde la solicitud del cliente"
-    },
-    {
-      "id": "info_incorrecta",
-      "nombre": "Da información incorrecta"
-    },
-    {
-      "id": "maltrato_cliente",
-      "nombre": "Maltrato al cliente"
+      "id": "transferencia_injustificada",
+      "nombre": "Transferencia injustificada (\"Pasear al cliente\")"
     }
   ],
   "nota": "Si CUALQUIER item critico ocurre ('Si'), la nota final de la evaluacion es 0%, sin importar el puntaje acumulado en las categorias normales."

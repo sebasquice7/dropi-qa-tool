@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 
 from pdf_parser import cargar_conversacion_desde_pdf
-from evaluator import evaluar_conversacion
+from evaluator import evaluar_conversacion, PROVEEDORES_INFO
 from scoring import calcular_nota, normalizar_evaluacion
 from matriz_editor import cargar_matriz_editable
 from excel_writer import generar_excel_matriz
@@ -86,6 +86,18 @@ def iniciar_evaluacion(ruta_pdf: str, asesor: str, token: str, bandeja: str = ""
     nota = calcular_nota(evaluacion)
 
     metadata = construir_metadata(asesor, bandeja, id_caso, pais, auditor)
+    # Nombre visible del proveedor + el modelo específico que respondió esta
+    # vez (ej. "Gemini (Google) · gemini-2.5-flash-lite") — antes este campo
+    # existía en el template pero nunca se llenaba en el flujo normal, así
+    # que dos evaluaciones de la MISMA conversación podían caer en modelos
+    # distintos de la cadena de respaldo (por cupo agotado a mitad de una
+    # sesión) sin ninguna forma de notarlo. Ahora queda visible en pantalla
+    # y guardado en el historial.
+    proveedor_usado = evaluacion.get("proveedor_usado")
+    modelo_usado = evaluacion.get("modelo_usado")
+    if proveedor_usado:
+        nombre_proveedor = PROVEEDORES_INFO.get(proveedor_usado, {}).get("nombre", proveedor_usado)
+        metadata["evaluado_con_ia"] = f"{nombre_proveedor} · {modelo_usado}" if modelo_usado else nombre_proveedor
     guardar_borrador(token, metadata, evaluacion, nota)
 
     return {"token": token, "metadata": metadata, "evaluacion": evaluacion, "nota": nota}
@@ -180,6 +192,12 @@ def aplicar_ajustes_y_confirmar(token: str, ajustes: dict) -> dict:
 
     registrar_evaluacion(metadata, evaluacion, nota, calibracion=calibracion)
     respaldar_historial_en_drive(str(HISTORIAL_PATH))
+
+    # Guardar la evaluación COMPLETA (con justificaciones) para poder
+    # reutilizarla si alguien vuelve a subir el mismo caso — evita llamar a
+    # la IA de nuevo y garantiza consistencia 100% para el mismo ticket.
+    from historial import guardar_evaluacion_completa
+    guardar_evaluacion_completa(metadata.get("id_caso", ""), metadata, evaluacion, nota)
 
     alerta_resultado = None
     if nota.get("critico_activado"):

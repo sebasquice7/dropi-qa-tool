@@ -158,6 +158,32 @@
       }
       if (info.duplicado) {
         mensaje += `⚠ Este ID ya se evaluó antes (${info.duplicado.fecha}, ${info.duplicado.agente}, ${Math.round(info.duplicado.nota_final*100)}%).`;
+        if (info.reutilizable) {
+          mensaje += ' Puedes usar la evaluación anterior o evaluar de nuevo.';
+          // Mostrar botón de reutilizar
+          let btnReutilizar = document.getElementById('btn-reutilizar');
+          if (!btnReutilizar) {
+            btnReutilizar = document.createElement('button');
+            btnReutilizar.id = 'btn-reutilizar';
+            btnReutilizar.type = 'button';
+            btnReutilizar.className = 'btn btn-secundario';
+            btnReutilizar.style.marginTop = '10px';
+            btnReutilizar.textContent = `♻ Usar evaluación anterior (${Math.round(info.duplicado.nota_final*100)}%)`;
+            btnReutilizar.addEventListener('click', function() {
+              const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = '/reutilizar';
+              const input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = 'id_caso';
+              input.value = info.id_caso;
+              form.appendChild(input);
+              document.body.appendChild(form);
+              form.submit();
+            });
+            document.querySelector('.acciones-bloque').appendChild(btnReutilizar);
+          }
+        }
       }
       statusEl.textContent = mensaje;
     } catch (e) {

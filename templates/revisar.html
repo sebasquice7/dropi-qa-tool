@@ -66,17 +66,6 @@
     <div class="cat-title">{{ cat.nombre }} ({{ (cat.peso_categoria*100) | round(0) | int }}%)</div>
     {% for it in cat['items'] %}
       {% set ev = evaluacion['items'][it.id] %}
-      {% if it.id == 'apego_guia_operativa' and evaluacion.guia_utilizada %}
-        <div class="item" style="border-bottom:none;padding-bottom:0;">
-          <div style="grid-column: 1 / -1;">
-            {% if evaluacion.guia_utilizada.encontrada %}
-              <span class="badge badge-verde">📘 Guía usada: {{ evaluacion.guia_utilizada.titulo }}</span>
-            {% else %}
-              <span class="badge badge-ambar">⬜ Sin guía operativa aplicable a este caso</span>
-            {% endif %}
-          </div>
-        </div>
-      {% endif %}
       <div class="item">
         <div>
           <div class="item-nombre">{{ it.nombre }} <span class="item-peso">(máx {{ (it.peso*100)|round(0)|int }}%)</span></div>

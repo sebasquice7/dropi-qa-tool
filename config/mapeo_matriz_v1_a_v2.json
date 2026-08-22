@@ -1,0 +1,38 @@
+{
+  "_descripcion": "Mapa de equivalencias entre la Matriz V1 (vigente hasta 2026-08-21) y la Matriz V2. Se usa una sola vez por migrar_historial_v2.py para poder leer las evaluaciones históricas con la matriz nueva en el dashboard en vivo. No se usa en el flujo normal de evaluación (evaluator.py/scoring.py ya trabajan 100% con la V2).",
+
+  "grupos_items_nuevos": {
+    "gali_lectura_validacion_datos": ["verifica_datos", "asesor_valida_info_gali"],
+    "gali_continuidad_hilo": ["gali_ticket_completo", "saludo_corporativo"],
+    "escucha_cobertura_multiconsulta": ["motivo_correcto", "preguntas_clarificacion"],
+    "empatia_contextualizada": ["tono_empatico_diagnostico"],
+    "tono_cercania_tuteo": ["tono_profesional", "personaliza", "mensajes_claros"],
+    "precision_tecnica_fondo": ["precision_tecnica", "apego_guia_operativa"],
+    "gestion_proactiva_fallas_sistema": ["expectativas_reales"],
+    "minimizacion_esfuerzo_cliente": ["acuerdos_tiempos"],
+    "resolucion_primer_contacto_fcr": ["primer_contacto"],
+    "cierre_verificado_no_apresurado": ["protocolo_cierre", "gestion_estados"],
+    "despedida_corporativa": [],
+    "ortografia": ["ortografia"],
+    "sla_tiempo_respuesta_concentracion": ["sla_primera_respuesta", "seguimiento_tiempo", "concentracion_gestion"],
+    "evidencias_soporte_visual": ["evidencias_visuales", "enlaces_oficiales"],
+    "notas_internas_tipificacion": ["notas_internas", "atributos_conversacion"]
+  },
+
+  "_nota_grupos": "Cada ítem nuevo lista los ítems viejos que lo componen. Cuando hay más de uno, el puntaje se recalcula como el PROMEDIO del % de cumplimiento (puntaje/peso) de cada ítem viejo mapeado, aplicado al peso del ítem nuevo — así una evaluación con 90% de cumplimiento en dos ítems viejos que se fusionan en uno nuevo, queda con ~90% de cumplimiento en el ítem nuevo (no una suma que se saldría de rango). 'despedida_corporativa' no tiene ítem viejo equivalente (la V1 no medía la despedida por separado) — en los registros migrados se le da el puntaje máximo por defecto, ya que no hay evidencia histórica de que fuera un problema.",
+
+  "items_criticos": {
+    "cierra_sin_resolver": "cierre_prematuro_abandono",
+    "transferencia_incorrecta": "transferencia_injustificada",
+    "no_escala_riesgo": null,
+    "lenguaje_inadecuado": "maltrato_lenguaje_inadecuado",
+    "comparte_info_interna": null,
+    "manipula_evidencias": null,
+    "deriva_canales_no_autorizados": null,
+    "no_responde_solicitud": "omision_respuesta_ignora_inquietudes",
+    "info_incorrecta": "informacion_falsa_enganosa",
+    "maltrato_cliente": "maltrato_lenguaje_inadecuado"
+  },
+
+  "_nota_criticos": "4 críticos de la V1 (no_escala_riesgo, comparte_info_interna, manipula_evidencias, deriva_canales_no_autorizados) no tienen equivalente en la V2 y se dejan con su id original (null en este mapa) — son conceptos que la empresa decidió retirar de la matriz, no un error de mapeo. Sus registros históricos conservan el id viejo tal cual, visibles en 'critico_activado' pero no se fuerza una equivalencia inexistente."
+}

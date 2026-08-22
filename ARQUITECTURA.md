@@ -102,10 +102,10 @@ Lo que sí se hizo, se hizo pensando en el escenario real:
 
 ## 7. Sobre las guías operativas — por qué "no penalizar sin evidencia"
 
-**Decisión:** Si no existe una guía documentada para un tipo de caso, el ítem de "apego a la guía" se califica automáticamente con el puntaje máximo — nunca como una falla.
+**Decisión:** Si no existe una guía documentada para un tipo de caso, el programa simplemente no inyecta contexto de guía en el prompt de la IA — no penaliza al asesor por no seguir un proceso que no estaba documentado.
 
 **Por qué:**
-Esta fue una corrección directa a un problema real que Diego señaló en la reunión: la IA no debe inventar un criterio de evaluación sobre algo que no tiene forma de verificar. Es la misma lógica que aplicaría un auditor humano responsable: si no hay un procedimiento escrito para un caso, no se puede penalizar a alguien por "no seguirlo".
+Esta fue una corrección directa a un problema real: la IA no debe inventar un criterio de evaluación sobre algo que no tiene forma de verificar. Es la misma lógica que aplicaría un analista de calidad responsable: si no hay un procedimiento escrito para un caso, no se puede penalizar a alguien por "no seguirlo". Cuando SÍ existe una guía relevante (ver `guias.py`), se inyecta como contexto de referencia para el ítem `precision_tecnica_fondo`, donde la IA compara los pasos técnicos del asesor contra los documentados.
 
 Este es un ejemplo de una decisión de **diseño responsable de IA**, no solo de código — reconocer los límites de lo que el sistema puede evaluar con evidencia real, en vez de dejar que "invente" un juicio.
 

@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 
 from pdf_parser import cargar_conversacion_desde_pdf, extraer_texto_pdf, parsear_conversacion, detectar_metadata
 from evaluator import proveedores_configurados, PROVEEDORES_INFO
-from historial import buscar_duplicado
+from historial import buscar_duplicado, buscar_evaluacion_completa
 from logging_config import obtener_logger
 
 from services import evaluacion_service as ev_srv
@@ -71,6 +71,7 @@ def detectar() -> ResponseReturnValue:
         meta = detectar_metadata(conv, texto_crudo, nombre_archivo=nombre_seguro)
         asesores = list(conv.remitentes_staff().keys())
         duplicado = buscar_duplicado(meta.get("id_caso"))
+        tiene_evaluacion_reutilizable = buscar_evaluacion_completa(meta.get("id_caso")) is not None
 
         return {
             "bandeja": meta.get("bandeja") or "",
@@ -84,6 +85,7 @@ def detectar() -> ResponseReturnValue:
                 "agente": duplicado.get("agente"),
                 "nota_final": duplicado.get("nota_final"),
             } if duplicado else None,
+            "reutilizable": tiene_evaluacion_reutilizable,
         }
     except Exception as e:
         log.error("Error al detectar metadata del PDF: %s", e)
@@ -131,6 +133,34 @@ def evaluar() -> ResponseReturnValue:
         return redirect(url_for("evaluacion.index"))
 
     return _renderizar_revision(resultado)
+
+
+@evaluacion_bp.route("/reutilizar", methods=["POST"])
+def reutilizar() -> ResponseReturnValue:
+    """Carga la evaluación completa guardada de una evaluación anterior del
+    mismo caso, en vez de volver a llamar a la IA. Garantiza consistencia
+    100% para el mismo ticket: misma nota, mismas justificaciones, mismos
+    positivos y oportunidades de mejora."""
+    id_caso = request.form.get("id_caso", "").strip()
+    if not id_caso:
+        flash("No se puede reutilizar sin un ID de caso.")
+        return redirect(url_for("evaluacion.index"))
+
+    datos_anteriores = buscar_evaluacion_completa(id_caso)
+    if not datos_anteriores:
+        flash("No se encontró una evaluación completa guardada para este caso. Evalúa de nuevo.")
+        return redirect(url_for("evaluacion.index"))
+
+    metadata = datos_anteriores["metadata"]
+    evaluacion = datos_anteriores["evaluacion"]
+    nota = datos_anteriores["nota"]
+
+    # Crear un borrador con los datos reutilizados para que la pantalla de
+    # revisión funcione igual (el auditor puede ajustar si quiere).
+    token = uuid.uuid4().hex[:8]
+    ev_srv.guardar_borrador(token, metadata, evaluacion, nota)
+
+    return _renderizar_revision({"token": token, "metadata": metadata, "evaluacion": evaluacion, "nota": nota})
 
 
 @evaluacion_bp.route("/evaluar-con-asesor", methods=["POST"])

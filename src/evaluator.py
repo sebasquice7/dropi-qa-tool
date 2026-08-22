@@ -84,33 +84,40 @@ def _construir_prompt(conversacion_texto: str, asesor: str, matriz: dict, politi
     criticos_ids = [c["id"] for c in matriz["items_criticos"]]
 
     formato_json = {
-        "resumen_caso": "1-2 frases describiendo el caso (bandeja, motivo, resultado)",
+        "resumen_caso": "2-3 frases que describan el caso desde la perspectiva de calidad: tipo de solicitud, complejidad del caso, expectativa del cliente, y resultado final de la gestión (resuelto, parcial, no resuelto). No solo 'qué pasó', sino 'qué tan bien se manejó y por qué'.",
         "items": {
-            iid: {"puntaje": "número entre 0 y el peso máximo del ítem", "justificacion": "1-2 frases con evidencia concreta de la conversación"}
+            iid: {"puntaje": "número entre 0 y el peso máximo del ítem", "justificacion": "2-3 frases con análisis de calidad: qué hizo o dejó de hacer el asesor, qué evidencia lo respalda (cita textual breve o timestamp), y qué impacto tuvo eso en la experiencia del cliente. No describas el criterio del ítem — analiza la gestión real."}
             for iid in items_json_ids
         },
         "items_criticos": {
-            cid: {"ocurrio": "Si o No", "justificacion": "SIEMPRE explica en 1 frase por qué sí ocurrió o por qué no ocurrió, con referencia concreta a la conversación"}
+            cid: {"ocurrio": "Si o No", "justificacion": "SIEMPRE explica en 1-2 frases citando la evidencia exacta de la conversación. Si marcas 'Si', cita el mensaje o acción específica. Si marcas 'No', explica qué evidencia te permite descartarlo con confianza."}
             for cid in criticos_ids
         },
-        "lo_positivo": ["lista de 3 a 6 puntos fuertes; cada uno con el formato 'Concepto breve. Explicación con evidencia concreta.' (el concepto breve termina en PUNTO, no en dos puntos ':'; el sistema resalta esa primera parte en negrita automáticamente, NO uses asteriscos ni markdown)"],
-        "oportunidades_mejora": ["lista de 1 a 5 puntos de mejora; mismo formato 'Concepto breve. Explicación con evidencia concreta.' (NO uses asteriscos ni markdown)"],
+        "lo_positivo": ["3 a 6 puntos. Formato: 'Comportamiento replicable. Evidencia concreta y por qué es valioso para el cliente/operación.' Enfócate en COMPORTAMIENTOS que vale la pena reforzar en coaching, no en cumplimiento básico que se da por sentado (saludar, despedirse). El concepto breve termina en PUNTO, no en dos puntos ':'. NO uses asteriscos ni markdown."],
+        "oportunidades_mejora": ["1 a 5 puntos. Formato: 'Brecha detectada. Qué pasó exactamente (con evidencia), qué debió pasar según la documentación, y qué efecto tuvo en el cliente.' Piensa como coach: cada punto debe ser accionable — algo que el asesor pueda practicar o cambiar en su siguiente interacción. NO uses asteriscos ni markdown."],
     }
 
-    prompt = f"""Eres un auditor senior de calidad de soporte al cliente para Dropi (plataforma de dropshipping), evaluando conversaciones de Intercom.
+    prompt = f"""Eres un analista senior de calidad y experiencia del cliente (CX) para Dropi, plataforma de dropshipping. Tu rol NO es el de un auditor que marca casillas — eres un profesional de calidad que diagnostica la gestión del asesor con profundidad analítica, detecta patrones de comportamiento, identifica causa raíz de los problemas, y produce hallazgos que sirvan directamente para coaching.
 
-Tu tarea es evaluar la gestión del asesor **{asesor}** en la siguiente conversación, aplicando ESTRICTAMENTE la matriz de calidad y la política de comunicación de la empresa.
+Tu mentalidad al evaluar:
+- Pregúntate siempre "¿por qué pasó esto?" antes de calificar. Un error puede ser falta de conocimiento, falta de proceso, descuido, o una limitación del sistema — cada uno requiere una acción de mejora distinta.
+- Evalúa el IMPACTO en el cliente, no solo si se siguió el paso. Un asesor puede seguir todos los pasos del proceso y aun así dejar al cliente insatisfecho (ej. responder correctamente pero sin empatía ante una queja legítima). También puede saltarse un paso menor sin impacto real.
+- Distingue entre errores de HABILIDAD (el asesor no sabe cómo hacerlo) y errores de EJECUCIÓN (sabe pero no lo hizo en este caso). Esto cambia completamente la recomendación de coaching.
+- "Lo positivo" no es una lista de cosas que no salieron mal — son comportamientos que demuestran competencia real y que vale la pena reforzar. Si el asesor solo hizo lo mínimo esperado, di eso con respeto, no lo infles.
+- "Oportunidades de mejora" no es una lista de fallas — son brechas entre lo que se hizo y lo que la documentación/política exige, con una línea clara hacia qué practicar. Si no hay brechas significativas, di eso honestamente.
+
+Tu tarea: evaluar la gestión del asesor **{asesor}** en la conversación de abajo, aplicando ESTRICTAMENTE la matriz de calidad, las políticas y la documentación operativa de la empresa.
 
 === POLÍTICA DE COMUNICACIÓN Y REDACCIÓN ===
 {politica}
 
 {"=== POLÍTICA DE TIEMPOS DE RESPUESTA (SLA) ===" + chr(10) + politica_sla if politica_sla else ""}
 
-{("=== GUÍA OPERATIVA DE REFERENCIA PARA ESTE CASO (\"" + guia_relevante["titulo"] + "\") ===" + chr(10) + "Esta es la guía oficial del proceso que aplica a este caso específico. Úsala como referencia real para el ítem \"apego_guia_operativa\" — compara los pasos que dio el asesor contra los pasos documentados aquí." + chr(10) + chr(10) + guia_relevante["texto"]) if guia_relevante else "=== GUÍA OPERATIVA: no se encontró ninguna guía documentada que aplique específicamente a este caso. El ítem \"apego_guia_operativa\" debe calificarse con el puntaje máximo (no aplica, no es una falla). ==="}
+{("=== GUÍA OPERATIVA DE REFERENCIA PARA ESTE CASO (\"" + guia_relevante["titulo"] + "\") ===" + chr(10) + "Esta es la guía oficial del proceso que aplica a este caso específico. Úsala como referencia real para el ítem \"precision_tecnica_fondo\" — compara los pasos técnicos que dio el asesor contra los pasos documentados aquí. Si el asesor se desvió de la guía, analiza si fue un error o una adaptación razonable al contexto del caso." + chr(10) + chr(10) + guia_relevante["texto"]) if guia_relevante else ""}
 
 {("=== BASE DE CONOCIMIENTO DE GALI (referencia oficial) ===" + chr(10) + contexto_gali) if contexto_gali else "=== BASE DE CONOCIMIENTO DE GALI: no se encontró ninguna pregunta/respuesta oficial que aplique a lo que Gali dijo en este caso. Los ítems sobre Gali deben calificarse según el criterio general (no penalizar por falta de una referencia específica). ==="}
 
-{("=== NOTAS INTERNAS DEL EQUIPO (fuente confirmada, aisladas del resto de la conversación) ===" + chr(10) + "Estas líneas SÍ están confirmadas como notas internas (no visibles al cliente) — evalúa el ítem \"Claridad y argumentación en Notas Internas\" con confianza total, usando SOLO este texto como evidencia." + chr(10) + chr(10) + texto_notas_internas) if texto_notas_internas else "=== NOTAS INTERNAS DEL EQUIPO: no se pudo aislar con certeza cuáles líneas de la conversación son notas internas y cuáles son mensajes al cliente (limitación del formato PDF exportado, no de este caso en particular). Para el ítem \"Claridad y argumentación en Notas Internas\", sé CONSERVADOR: solo penaliza si encuentras evidencia muy clara e inequívoca dentro de la conversación completa (por ejemplo, un comentario que menciona explícitamente ser una nota interna o de seguimiento). Ante la duda genuina, no penalices — es preferible no calificar con certeza baja que penalizar por una mala interpretación del formato. ==="}
+{("=== NOTAS INTERNAS DEL EQUIPO (fuente confirmada, aisladas del resto de la conversación) ===" + chr(10) + "Estas líneas SÍ están confirmadas como notas internas (no visibles al cliente) — evalúa el ítem \"notas_internas_tipificacion\" con confianza total, usando SOLO este texto como evidencia." + chr(10) + chr(10) + texto_notas_internas) if texto_notas_internas else "=== NOTAS INTERNAS DEL EQUIPO: no se pudo aislar con certeza cuáles líneas de la conversación son notas internas y cuáles son mensajes al cliente (limitación del formato PDF exportado, no de este caso en particular). Para el ítem \"notas_internas_tipificacion\", sé CONSERVADOR: solo penaliza si encuentras evidencia muy clara e inequívoca dentro de la conversación completa (por ejemplo, un comentario que menciona explícitamente ser una nota interna o de seguimiento). Ante la duda genuina, no penalices — es preferible no calificar con certeza baja que penalizar por una mala interpretación del formato. ==="}
 
 === MATRIZ DE CALIDAD (ítems y pesos) ===
 {"".join(items_desc)}
@@ -129,15 +136,17 @@ Responde ÚNICAMENTE con un JSON válido (sin texto adicional, sin markdown, sin
 
 {json.dumps(formato_json, ensure_ascii=False, indent=2)}
 
-Reglas importantes:
-1. El "puntaje" de cada ítem debe ser un número entre 0 y su peso máximo (puedes usar decimales, ej: si el peso máximo es 0.05, puedes dar 0.05, 0.03, 0.025, 0, etc. según el nivel de cumplimiento).
-2. Sé estricto pero justo: si un ítem no aplica al caso (ej. no hubo necesidad de preguntas de clarificación porque el caso era claro desde el inicio), otorga el puntaje máximo de ese ítem.
-3. En "lo_positivo" y "oportunidades_mejora", basa cada punto en evidencia concreta de la conversación (cita datos, tiempos, decisiones), en el mismo estilo de un informe de auditoría de calidad: profesional, específico, sin relleno genérico.
-4. Para CADA ítem crítico, sin excepción, escribe una justificación de 1 frase explicando tu análisis: si marcas "Si", sé muy conservador y cita la evidencia exacta; si marcas "No", explica brevemente por qué consideras que no ocurrió (ej. "El asesor resolvió el caso sin necesidad de escalar" o "No se detectó lenguaje inadecuado en ningún mensaje"). Esta justificación ayuda al auditor humano a confirmar tu criterio, así que nunca la dejes vacía.
-5. No inventes información que no esté en la conversación.
-6. IMPORTANTE - formato de texto: en NINGÚN campo de texto (justificaciones, lo_positivo, oportunidades_mejora) uses asteriscos (**) ni ningún otro marcado tipo Markdown. Escribe texto plano; el sistema ya se encarga de aplicar la negrita a la primera frase de cada punto de "lo_positivo" y "oportunidades_mejora" automáticamente.
-7. TIEMPOS Y HORARIO LABORAL: al evaluar "sla_primera_respuesta" y "seguimiento_tiempo", compara los tiempos reales de la conversación (usa los timestamps de cada mensaje) contra los tiempos máximos de la política de SLA para el proceso/bandeja correspondiente. Los huecos de tiempo que caen FUERA del horario laboral (lunes a viernes 8am-5pm, sábados/lunes festivos 8am-12m) NO cuentan como demora del asesor — un mensaje del cliente a las 6pm que se responde a las 8am del siguiente día hábil está DENTRO del SLA, no es una falla.
-8. CIERRE VÁLIDO vs. ABANDONO ("cierra_sin_resolver"): usa la regla fija de "Cierre por inactividad del cliente" de la política de SLA (arriba): el asesor puede cerrar válidamente tras 4 horas de tiempo LABORAL de silencio del cliente después de una gestión clara, siempre que haya avisado antes de cerrar. Marca este ítem crítico como "Si" ÚNICAMENTE si el asesor cierra sin haber dado una gestión clara, sin avisar antes de cerrar, o cierra con MENOS de esas 4 horas de inactividad sin justificación. NO lo marques como "Si" si el asesor gestionó el caso apropiadamente, esperó el tiempo debido, y avisó antes de cerrar — eso es un cierre válido por inactividad del cliente, marca "No". Si el cierre fue algo prematuro pero no un abandono claro, refléjalo bajando el puntaje de "seguimiento_tiempo" en vez de activar el crítico.
+Reglas de análisis:
+1. PUNTAJE GRANULAR: el "puntaje" de cada ítem debe ser un número entre 0 y su peso máximo. Usa TODO el rango disponible (ej. si el peso máximo es 0.10, puedes dar 0.10, 0.08, 0.06, 0.04, 0.02, 0 según el nivel de cumplimiento real). Evita calificar solo en 0%, 50% o 100% del peso — la granularidad intermedia refleja mejor la realidad de un caso (ej. "hizo la gestión técnica correcta pero no adjuntó la evidencia" merece más que 50% pero menos que 100%).
+2. ÍTEMS QUE NO APLICAN: si un ítem no aplica al caso por contexto (ej. no hubo interacción con Gali porque el cliente llegó directo, o no hubo necesidad de escalar a IT porque no hubo falla de sistema), otorga el puntaje máximo — la ausencia de una situación no es una falla del asesor.
+3. JUSTIFICACIONES CON PROFUNDIDAD ANALÍTICA: cada justificación debe responder tres preguntas: (a) ¿qué hizo o dejó de hacer el asesor? (cita el mensaje o timestamp exacto), (b) ¿qué dice la documentación/política que debió pasar?, (c) ¿qué impacto tuvo esto en la experiencia del cliente? Una justificación que no menciona ningún dato concreto de la conversación (solo una opinión general como "buena gestión" o "podría mejorar") NO es aceptable — si no hay evidencia que citar, dilo explícitamente.
+4. ÍTEMS CRÍTICOS — UMBRAL ALTO: marcar "Si" un ítem crítico lleva la nota a 0%, así que exige evidencia INEQUÍVOCA antes de activarlo. Si hay una zona gris (ej. el cierre fue un poco apresurado pero sí hubo gestión previa), refleja eso bajando el puntaje del ítem regular correspondiente, no activando el crítico. Pero si la evidencia es clara, no dudes en activarlo — ser conservador no es ser permisivo.
+5. LO POSITIVO — ENFOQUE EN COACHING: identifica comportamientos que demuestran competencia profesional genuina (no lo mínimo esperado). Pregúntate: "¿qué hizo este asesor que yo quisiera que todos los asesores replicaran?" Si no hay nada destacable más allá del cumplimiento básico, sé honesto — di que cumplió lo esperado sin inventar puntos fuertes artificiales.
+6. OPORTUNIDADES DE MEJORA — CAUSA RAÍZ Y ACCIÓN: cada punto debe ir más allá de "no hizo X". Analiza la CAUSA PROBABLE (¿no sabía?, ¿se le pasó?, ¿el sistema no le dio la información?) y sugiere una ACCIÓN CONCRETA que el asesor pueda practicar. Ej. malo: "No confirmó satisfacción antes de cerrar." Ej. bueno: "Cierre sin verificación. El asesor anunció el cierre del caso en el mismo mensaje donde daba la explicación (02:41 PM), sin esperar confirmación del cliente. Según el protocolo de cierre (ítem 4.1), debió validar primero que el cliente revisara la solución. Esto sugiere un hábito de cierre automático que se puede corregir practicando la secuencia: solución → pausa → pregunta de conformidad → despedida."
+7. No inventes información que no esté en la conversación. Si un dato no se puede verificar desde el chat (ej. si dejó nota interna o no), dilo.
+8. FORMATO DE TEXTO: en NINGÚN campo uses asteriscos (**) ni ningún otro marcado tipo Markdown. Escribe texto plano; el sistema ya aplica formato visual automáticamente.
+9. TIEMPOS Y HORARIO LABORAL: al evaluar "sla_tiempo_respuesta_concentracion", compara los tiempos reales de la conversación (usa los timestamps de cada mensaje) contra los tiempos máximos de la política de SLA para el proceso/bandeja correspondiente. Los huecos de tiempo que caen FUERA del horario laboral (lunes a viernes 8am-5pm, sábados/lunes festivos 8am-12m) NO cuentan como demora del asesor — un mensaje del cliente a las 6pm que se responde a las 8am del siguiente día hábil está DENTRO del SLA, no es una falla.
+10. CIERRE VÁLIDO vs. ABANDONO ("cierre_prematuro_abandono"): usa la regla fija de "Cierre por inactividad del cliente" de la política de SLA (arriba): el asesor puede cerrar válidamente tras 4 horas de tiempo LABORAL de silencio del cliente después de una gestión clara, siempre que haya avisado antes de cerrar. Marca este ítem crítico como "Si" ÚNICAMENTE si el asesor cierra sin haber dado una gestión clara, sin avisar antes de cerrar, o cierra con MENOS de esas 4 horas de inactividad sin justificación. NO lo marques como "Si" si el asesor gestionó el caso apropiadamente, esperó el tiempo debido, y avisó antes de cerrar — eso es un cierre válido por inactividad del cliente, marca "No". Si el cierre fue algo prematuro pero no un abandono claro, refléjalo bajando el puntaje de "sla_tiempo_respuesta_concentracion" en vez de activar el crítico.
 """
     return prompt
 
@@ -152,7 +161,7 @@ def _limpiar_json(texto_respuesta: str) -> str:
     return texto_respuesta
 
 
-def _llamar_gemini(prompt: str, api_key: str, modelo_preferido: str = None) -> str:
+def _llamar_gemini(prompt: str, api_key: str, modelo_preferido: str = None) -> tuple:
     try:
         from google import genai
         from google.genai import types
@@ -162,13 +171,18 @@ def _llamar_gemini(prompt: str, api_key: str, modelo_preferido: str = None) -> s
         )
 
     client = genai.Client(api_key=api_key)
-    # Temperatura baja = respuestas más consistentes entre llamadas repetidas
-    # con el mismo texto (no elimina 100% la variabilidad propia de la IA,
-    # pero la reduce bastante para uso de auditoría).
+    # Temperatura en 0 (no 0.1): para una herramienta de AUDITORÍA, el
+    # objetivo es que la misma conversación dé el mismo resultado cada vez
+    # que se reevalúe — no que "suene natural" o creativo. 0 empuja al
+    # modelo a la respuesta de mayor probabilidad (decodificación greedy) en
+    # vez de muestrear entre varias, lo que reduce la variabilidad al mínimo
+    # que la API permite (no elimina el 100% — Google no garantiza
+    # determinismo absoluto incluso en temperature=0 por cómo procesa las
+    # solicitudes en paralelo — pero es sensiblemente más estable que 0.1).
     # max_output_tokens alto: el JSON completo (22 ítems + justificaciones +
     # lo_positivo + oportunidades) puede ser largo; sin este límite explícito,
     # algunos modelos lo cortan a la mitad y el JSON queda inválido.
-    config = types.GenerateContentConfig(temperature=0.1, max_output_tokens=8192)
+    config = types.GenerateContentConfig(temperature=0.0, max_output_tokens=8192)
 
     # Si el .env fija un modelo específico (GEMINI_MODEL), se prueba primero;
     # después la cadena de respaldo normal.
@@ -191,7 +205,14 @@ def _llamar_gemini(prompt: str, api_key: str, modelo_preferido: str = None) -> s
                 except json.JSONDecodeError:
                     raise RuntimeError("La respuesta llegó incompleta/cortada (JSON inválido)")
 
-                return texto
+                # Se devuelve también qué modelo respondió DE VERDAD — si por cupo
+                # agotado el programa saltó de "gemini-2.5-flash-lite" a otro modelo
+                # de la cadena a mitad de una sesión de evaluaciones, dos corridas
+                # de la MISMA conversación pueden quedar procesadas por modelos
+                # distintos (y por lo tanto con resultados distintos) sin que se
+                # note — con este dato visible en el resultado, eso deja de ser
+                # invisible.
+                return texto, modelo
             except Exception as e:
                 ultimo_error = e
                 texto_error = str(e)
@@ -219,7 +240,7 @@ def _llamar_gemini(prompt: str, api_key: str, modelo_preferido: str = None) -> s
     )
 
 
-def _llamar_anthropic(prompt: str, api_key: str, modelo: str) -> str:
+def _llamar_anthropic(prompt: str, api_key: str, modelo: str) -> tuple:
     try:
         import anthropic
     except ImportError:
@@ -230,14 +251,20 @@ def _llamar_anthropic(prompt: str, api_key: str, modelo: str) -> str:
     response = client.messages.create(
         model=modelo,
         max_tokens=4000,
+        # BUG corregido (agosto 2026): esta llamada no traía 'temperature', así
+        # que usaba el valor por defecto de la API (1.0 — bastante variable).
+        # Se fija en 0 por la misma razón que en Gemini/OpenAI: en auditoría,
+        # la misma conversación debe dar el mismo resultado al reevaluarla.
+        temperature=0.0,
         messages=[{"role": "user", "content": prompt}],
     )
-    return "".join(
+    texto = "".join(
         block.text for block in response.content if getattr(block, "type", None) == "text"
     )
+    return texto, modelo
 
 
-def _llamar_openai(prompt: str, api_key: str, modelo_preferido: str = None) -> str:
+def _llamar_openai(prompt: str, api_key: str, modelo_preferido: str = None) -> tuple:
     try:
         import openai
     except ImportError:
@@ -258,7 +285,7 @@ def _llamar_openai(prompt: str, api_key: str, modelo_preferido: str = None) -> s
                 response = client.chat.completions.create(
                     model=modelo,
                     messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
+                    temperature=0.0,
                     max_tokens=8192,
                     response_format={"type": "json_object"},
                 )
@@ -269,7 +296,7 @@ def _llamar_openai(prompt: str, api_key: str, modelo_preferido: str = None) -> s
                 except json.JSONDecodeError:
                     raise RuntimeError("La respuesta llegó incompleta/cortada (JSON inválido)")
 
-                return texto
+                return texto, modelo
             except Exception as e:
                 ultimo_error = e
                 texto_error = str(e)
@@ -305,10 +332,9 @@ def evaluar_conversacion(
 
     pais/bandeja: si se pasan, el programa busca automáticamente la guía
     operativa correspondiente (ver guias.py) y se la da a la IA como
-    referencia real para evaluar el ítem "apego_guia_operativa". Si no hay
-    ninguna guía que coincida con esa bandeja, el ítem se evalúa como "no
-    aplica" (puntaje máximo), no como una falla — así se evita el problema de
-    penalizar por no seguir un paso que ni siquiera correspondía a ese caso.
+    contexto adicional para evaluar el ítem "precision_tecnica_fondo". Si no
+    hay ninguna guía que coincida con esa bandeja, simplemente no se agrega
+    contexto adicional — no penaliza al asesor.
 
     texto_gali: si se pasa (los mensajes que envió Gali en esta conversación),
     el programa busca en la base de conocimiento de Gali las preguntas/
@@ -367,21 +393,21 @@ def evaluar_conversacion(
                 "y agrégala a tu archivo .env"
             )
         modelo_preferido = config.gemini_model or None  # si no está, usa la cadena de respaldo
-        texto_respuesta = _llamar_gemini(prompt, api_key, modelo_preferido)
+        texto_respuesta, modelo_usado = _llamar_gemini(prompt, api_key, modelo_preferido)
 
     elif proveedor == "anthropic":
         api_key = api_key or config.anthropic_api_key
         if not _es_key_valida(api_key or ""):
             raise RuntimeError("No se encontró una ANTHROPIC_API_KEY real (todavía tiene el valor de ejemplo).")
         modelo = config.anthropic_model or ANTHROPIC_MODEL_DEFAULT
-        texto_respuesta = _llamar_anthropic(prompt, api_key, modelo)
+        texto_respuesta, modelo_usado = _llamar_anthropic(prompt, api_key, modelo)
 
     elif proveedor == "openai":
         api_key = api_key or config.openai_api_key
         if not _es_key_valida(api_key or ""):
             raise RuntimeError("No se encontró una OPENAI_API_KEY real (todavía tiene el valor de ejemplo).")
         modelo_preferido = config.openai_model or None
-        texto_respuesta = _llamar_openai(prompt, api_key, modelo_preferido)
+        texto_respuesta, modelo_usado = _llamar_openai(prompt, api_key, modelo_preferido)
 
     else:
         raise RuntimeError(f"Proveedor desconocido: {proveedor}. Usa 'gemini', 'anthropic' u 'openai'.")
@@ -397,18 +423,26 @@ def evaluar_conversacion(
 
     try:
         from uso_ia import registrar_uso
-        registrar_uso(proveedor, len(prompt), len(texto_limpio), bool(guia_relevante))
+        registrar_uso(proveedor, len(prompt), len(texto_limpio), bool(guia_relevante), modelo=modelo_usado)
     except Exception:
         pass  # nunca romper la evaluación real por esto
 
     # Se deja visible qué guía se usó (o que no había ninguna aplicable) para
     # que el auditor lo vea directamente en la pantalla de revisión, sin tener
-    # que inferirlo leyendo la justificación del ítem "apego_guia_operativa".
+    # que inferirlo leyendo la justificación del ítem "precision_tecnica_fondo".
     resultado["guia_utilizada"] = (
         {"encontrada": True, "titulo": guia_relevante["titulo"]}
         if guia_relevante
         else {"encontrada": False, "titulo": None}
     )
+
+    # Se deja visible con qué proveedor/modelo se generó esta evaluación —
+    # antes esto no se registraba en ningún lado, así que si dos corridas de
+    # la MISMA conversación caían en modelos distintos de la cadena de
+    # respaldo (ej. por cupo agotado a mitad de una sesión de evaluaciones),
+    # no había forma de saber por qué daban resultados distintos.
+    resultado["proveedor_usado"] = proveedor
+    resultado["modelo_usado"] = modelo_usado
 
     return resultado
 
@@ -581,19 +615,19 @@ def generar_coaching(datos: dict, proveedor: str = None, api_key: str = None, co
         if not _es_key_valida(api_key or ""):
             raise RuntimeError("No se encontró una GEMINI_API_KEY real.")
         modelo_preferido = config.gemini_model or None
-        texto_respuesta = _llamar_gemini(prompt, api_key, modelo_preferido)
+        texto_respuesta, _modelo_usado = _llamar_gemini(prompt, api_key, modelo_preferido)
     elif proveedor == "anthropic":
         api_key = api_key or config.anthropic_api_key
         if not _es_key_valida(api_key or ""):
             raise RuntimeError("No se encontró una ANTHROPIC_API_KEY real.")
         modelo = config.anthropic_model or ANTHROPIC_MODEL_DEFAULT
-        texto_respuesta = _llamar_anthropic(prompt, api_key, modelo)
+        texto_respuesta, _modelo_usado = _llamar_anthropic(prompt, api_key, modelo)
     elif proveedor == "openai":
         api_key = api_key or config.openai_api_key
         if not _es_key_valida(api_key or ""):
             raise RuntimeError("No se encontró una OPENAI_API_KEY real.")
         modelo_preferido = config.openai_model or None
-        texto_respuesta = _llamar_openai(prompt, api_key, modelo_preferido)
+        texto_respuesta, _modelo_usado = _llamar_openai(prompt, api_key, modelo_preferido)
     else:
         raise RuntimeError(f"Proveedor desconocido: {proveedor}")
 
