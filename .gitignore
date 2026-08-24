@@ -26,3 +26,12 @@ __pycache__/
 
 # --- PDFs sueltos que se hayan usado para pruebas manuales ---
 *.pdf
+
+# Backups locales
+backup_fase*/
+*.backup
+
+# Datos locales / operativos
+aprendizaje_ia.jsonl
+config/criticos_estado.json
+config/metas_auditoria.json
