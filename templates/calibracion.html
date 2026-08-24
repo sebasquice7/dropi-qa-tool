@@ -1,69 +1,105 @@
 {% extends "_base.html" %}
-{% block titulo %}Calibración IA vs. Humano — Dropi QA{% endblock %}
+{% block titulo %}Calibración IA — Dropi QA{% endblock %}
 
 {% block estilos_extra %}
 <style>
-  .barra-delta { position: relative; height: 24px; background: var(--paper); border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
-  .barra-delta .centro { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-fuerte); }
-  .barra-delta .relleno { position: absolute; top: 0; bottom: 0; }
-  .fila-delta { display: grid; grid-template-columns: 200px 1fr 70px; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
-  .fila-delta:last-child { border-bottom: none; }
-  .fila-delta .valor { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
-  .vacio-cal { text-align: center; padding: 70px 30px; color: var(--ink-500); }
+  .grid-kpi { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px; }
+  .kpi { padding:18px; }
+  .kpi .v { font:700 28px 'JetBrains Mono',monospace; margin-top:5px; }
+  .kpi .l { font-size:11px;color:var(--ink-500);text-transform:uppercase;letter-spacing:.06em; }
+  .tabs-cal {display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 14px}
+  .tabs-cal button{border:1px solid var(--line);background:var(--card);padding:7px 11px;border-radius:7px;cursor:pointer;font-size:12px}
+  .tabs-cal button.activo{background:var(--ink);color:#fff}
+  .tabla-cal{width:100%;border-collapse:collapse;font-size:12.5px}
+  .tabla-cal th,.tabla-cal td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+  .tabla-cal th{font-size:10.5px;color:var(--ink-500);text-transform:uppercase;letter-spacing:.04em}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase}
+  .alta{background:#e6f3ef;color:#24443E}.media{background:#fff3d9;color:#8b6519}.baja{background:#fde8e6;color:#a63d34}
+  .panel-tab{display:none}.panel-tab.activo{display:block}
+  .error-card{border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:9px}
+  .error-card summary{cursor:pointer;font-weight:700;font-size:12.5px}
+  .hint2{font-size:11px;color:var(--ink-500);line-height:1.45}
+  @media(max-width:850px){.grid-kpi{grid-template-columns:1fr 1fr}}
 </style>
 {% endblock %}
 
 {% block contenido %}
 <div class="page-header">
-  <div class="eyebrow">Control de exactitud</div>
-  <h1>Calibración IA vs. Humano</h1>
-  <div class="subt">Qué tanto corriges a la IA cuando revisas una evaluación, y en qué categorías tiende a equivocarse.</div>
+  <div class="eyebrow">Fase 3 · Aprendizaje de la IA</div>
+  <h1>Calibración avanzada</h1>
+  <div class="subt">Mide dónde acierta la IA, dónde la corrige el auditor y qué patrones se reutilizan para mejorar futuras evaluaciones.</div>
+</div>
+
+{% set cg = avanzado['confianza_global'] %}
+<div class="grid-kpi">
+  <div class="card kpi"><div class="l">Evaluaciones calibradas</div><div class="v">{{ resumen.total_con_calibracion if resumen.hay_datos else 0 }}</div></div>
+  <div class="card kpi"><div class="l">Acuerdo global histórico</div><div class="v">{{ ((resumen.porcentaje_acuerdo_promedio or 0)*100)|round(1) if resumen.hay_datos else 0 }}%</div></div>
+  <div class="card kpi"><div class="l">Confianza actual IA</div><div class="v">{{ ((cg['confianza'] or 0)*100)|round(0)|int }}%</div><span class="badge {{ cg['nivel'] if cg['nivel'] in ['alta','media','baja'] else 'baja' }}">{{ cg['nivel']|replace('_',' ') }}</span></div>
+  <div class="card kpi"><div class="l">Correcciones aprendidas</div><div class="v">{{ avanzado['biblioteca']|sum(attribute='correcciones') if avanzado['biblioteca'] else 0 }}</div></div>
 </div>
 
 {% if not resumen.hay_datos %}
-  <div class="card vacio-cal">
-    Todavía no hay suficientes evaluaciones con datos de calibración. Esto se calcula automáticamente cada vez que revisas y ajustas una evaluación individual — evalúa algunas conversaciones más y vuelve aquí.
-  </div>
+<div class="card card-pad">Todavía no hay suficientes revisiones humanas para calibrar. Cada vez que el auditor confirma una evaluación, la Fase 3 empieza a construir esta base.</div>
 {% else %}
-  <div class="card card-pad" style="text-align:center;margin-bottom:18px;">
-    <div class="hint" style="margin-bottom:14px;">Basado en {{ resumen.total_con_calibracion }} evaluación(es) revisadas manualmente</div>
-    {% set pct = (resumen.porcentaje_acuerdo_promedio * 100) | round(0) | int %}
-    {% set color_pct = '#24443E' if pct >= 90 else ('#9C6B12' if pct >= 75 else '#B8342A') %}
-    <div class="sello" style="--tam:100px;--color-sello:{{ color_pct }};margin:0 auto;"><span class="valor">{{ pct }}</span></div>
-    <div class="hint" style="margin-top:14px;">de acuerdo entre la IA y el auditor, ítem por ítem</div>
-  </div>
-
-  <div class="card card-pad" style="margin-bottom:18px;">
-    <h2 style="font-size:14px;margin:0 0 4px;">Sesgo por categoría</h2>
-    <div class="hint" style="margin-bottom:16px;">Positivo (naranja) = el auditor SUBE el puntaje seguido (la IA es muy dura ahí). Negativo (azul) = el auditor BAJA el puntaje seguido (la IA es muy blanda ahí).</div>
-    {% for cat, delta in resumen.delta_por_categoria.items() %}
-      {% set pct_ancho = ([delta * 400, 50] | min) if delta > 0 else ([delta * 400, -50] | max) %}
-      <div class="fila-delta">
-        <div>{{ cat }}</div>
-        <div class="barra-delta">
-          <div class="centro"></div>
-          {% if delta >= 0 %}
-            <div class="relleno" style="left:50%;width:{{ pct_ancho }}%;background:var(--naranja-500);"></div>
-          {% else %}
-            <div class="relleno" style="right:50%;width:{{ -pct_ancho }}%;background:var(--verde-postal);"></div>
-          {% endif %}
-        </div>
-        <div class="valor">{{ "+" if delta > 0 }}{{ (delta*100)|round(1) }}%</div>
-      </div>
+<div class="card card-pad" style="margin-bottom:18px;">
+  <h2 style="font-size:14px;margin:0 0 5px;">Confianza por subítem</h2>
+  <div class="hint2" style="margin-bottom:12px;">La confianza combina acuerdo IA-humano, tamaño de muestra y magnitud del error. Con pocas revisiones, el sistema evita mostrar “alta confianza” aunque haya coincidido.</div>
+  <table class="tabla-cal">
+    <thead><tr><th>Subítem</th><th>Categoría</th><th>Muestra</th><th>Acuerdo</th><th>Confianza</th><th>Nivel</th></tr></thead>
+    <tbody>
+    {% for f in avanzado['confianza_items'][:15] %}
+      <tr>
+        <td>{{ f['nombre'] }}</td><td>{{ f['categoria'] }}</td><td class="mono">{{ f['muestra'] }}</td>
+        <td class="mono">{{ (f['acuerdo']*100)|round(0)|int }}%</td>
+        <td class="mono">{{ (f['confianza']*100)|round(0)|int }}%</td>
+        <td><span class="badge {{ f['nivel'] }}">{{ f['nivel'] }}</span></td>
+      </tr>
     {% endfor %}
-  </div>
+    </tbody>
+  </table>
+</div>
 
-  {% if resumen.criticos_cambiados_frecuencia %}
-  <div class="card card-pad">
-    <h2 style="font-size:14px;margin:0 0 4px;">Ítems críticos que el auditor corrigió más</h2>
-    <div class="hint" style="margin-bottom:14px;">Casos donde la IA marcó Sí/No y el auditor lo cambió al confirmar.</div>
-    {% for item_id, conteo in resumen.criticos_cambiados_frecuencia.items() %}
-      <div class="fila-delta" style="grid-template-columns:1fr 70px;">
-        <div>{{ item_id }}</div>
-        <div class="valor">{{ conteo }}×</div>
-      </div>
-    {% endfor %}
+<div class="card card-pad" style="margin-bottom:18px;">
+  <h2 style="font-size:14px;margin:0;">Dónde se desvía la IA</h2>
+  <div class="tabs-cal">
+    <button class="activo" data-tab="item">Por subítem</button><button data-tab="cat">Por categoría</button><button data-tab="band">Por bandeja</button><button data-tab="asesor">Por asesor</button>
   </div>
+  {% for key, filas in [('item', avanzado['por_item']), ('cat', avanzado['por_categoria']), ('band', avanzado['por_bandeja']), ('asesor', avanzado['por_asesor'])] %}
+  <div class="panel-tab {{ 'activo' if key=='item' else '' }}" id="tab-{{ key }}">
+    <table class="tabla-cal"><thead><tr><th>Dimensión</th><th>Muestra</th><th>Correcciones</th><th>Acuerdo</th><th>Sesgo promedio</th><th>Error medio</th></tr></thead><tbody>
+    {% for x in filas[:15] %}
+      <tr><td>{{ x['nombre'] }}</td><td class="mono">{{ x['muestra'] }}</td><td class="mono">{{ x['correcciones'] }}</td><td class="mono">{{ (x['acuerdo']*100)|round(0)|int }}%</td><td class="mono">{{ '+' if x['sesgo'] > 0 else '' }}{{ (x['sesgo']*100)|round(1) }} pts</td><td class="mono">{{ (x['error_medio']*100)|round(1) }} pts</td></tr>
+    {% endfor %}
+    </tbody></table>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card card-pad">
+  <h2 style="font-size:14px;margin:0 0 5px;">Biblioteca de errores aprendidos</h2>
+  <div class="hint2" style="margin-bottom:12px;">Se alimenta únicamente de correcciones reales del auditor. Cuando un patrón se repite, el evaluador recibe ese antecedente como alerta de criterio en futuras evaluaciones.</div>
+  {% if avanzado['biblioteca'] %}
+    {% for e in avanzado['biblioteca'] %}
+      <details class="error-card">
+        <summary>{{ e['nombre'] }} · {{ e['correcciones'] }} corrección(es) · {{ e['direccion_principal']|replace('_',' ') }}</summary>
+        <div class="hint2" style="margin-top:8px;">{{ e['categoria'] }}{% if e['error_medio'] is not none %} · error medio {{ (e['error_medio']*100)|round(1) }} pts{% endif %}</div>
+        {% for ej in e['ejemplos'] %}<div style="margin-top:8px;font-size:12px;"><strong>ID {{ ej['id_caso'] or 'N/A' }}</strong> · {{ ej['fecha'] }} · {{ ej['bandeja'] }}<br>{{ ej['motivo'] }}</div>{% endfor %}
+      </details>
+    {% endfor %}
+  {% else %}
+    <div class="hint2">Aún no hay correcciones suficientes para formar patrones. La biblioteca se llena automáticamente a partir de ahora.</div>
   {% endif %}
+</div>
 {% endif %}
+
+<script>
+for (const b of document.querySelectorAll('.tabs-cal button')) {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.tabs-cal button').forEach(x => x.classList.remove('activo'));
+    document.querySelectorAll('.panel-tab').forEach(x => x.classList.remove('activo'));
+    b.classList.add('activo'); document.getElementById('tab-'+b.dataset.tab).classList.add('activo');
+  });
+}
+</script>
 {% endblock %}

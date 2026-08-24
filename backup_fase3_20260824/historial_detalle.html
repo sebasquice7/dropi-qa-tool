@@ -155,13 +155,6 @@
   {% endif %}
 {% endif %}
 
-{% if r.riesgo or r.confianza_ia %}
-<div class="card card-pad" style="margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:18px;">
-  <div><div class="hint">Riesgo registrado del caso</div><strong>{% if r.riesgo %}{{ r.riesgo.nivel|upper }} · {{ r.riesgo.score }}/100{% else %}N/D{% endif %}</strong>{% if r.riesgo and r.riesgo.senales %}<div class="hint" style="margin-top:4px;">{{ r.riesgo.senales[:3]|join(' · ') }}</div>{% endif %}</div>
-  <div><div class="hint">Confianza histórica de la IA al evaluarlo</div><strong>{% if r.confianza_ia and r.confianza_ia.hay_datos %}{{ (r.confianza_ia.confianza*100)|round(0)|int }}% · {{ r.confianza_ia.nivel|upper }}{% else %}SIN DATOS SUFICIENTES{% endif %}</strong></div>
-</div>
-{% endif %}
-
 {% if r.satisfaccion %}
   {% set emojis = {"muy_insatisfecho": "😠 Muy insatisfecho", "insatisfecho": "🙁 Insatisfecho", "neutral": "😐 Neutral", "satisfecho": "🙂 Satisfecho", "muy_satisfecho": "😄 Muy satisfecho"} %}
   <div class="card card-pad" style="margin-bottom:16px;">

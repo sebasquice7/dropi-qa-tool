@@ -47,18 +47,6 @@
 
   .vacio-coach { text-align: center; padding: 60px 30px; color: var(--ink-500); }
   .vacio-coach .num { font-family: 'JetBrains Mono', monospace; font-size: 40px; font-weight: 700; color: var(--sello-tinta); }
-
-  .fase2-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
-  .fase2-tabla { width:100%; border-collapse:collapse; font-size:12px; }
-  .fase2-tabla th { text-align:left; color:var(--ink-500); font-size:10.5px; text-transform:uppercase; padding:6px 7px; border-bottom:2px solid var(--line); }
-  .fase2-tabla td { padding:8px 7px; border-bottom:1px solid var(--line); vertical-align:top; }
-  .fase2-num { text-align:right; font-family:'JetBrains Mono', monospace; font-weight:700; white-space:nowrap; }
-  .reincidencia-alta { color:var(--rojo); font-weight:700; }
-  .trend-list { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
-  .trend-chip { border:1px solid var(--line); border-radius:8px; padding:7px 9px; font-size:11px; background:var(--paper-50); }
-  .trend-chip strong { font-family:'JetBrains Mono', monospace; }
-  @media (max-width:900px) { .fase2-grid { grid-template-columns:1fr; } }
-
 </style>
 {% endblock %}
 
@@ -162,61 +150,6 @@
       <div class="coach-total-general">
         <span>Promedio total del asesor</span>
         <strong>{{ (datos.nota_promedio * 100)|round(1) }}%</strong>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="fase2-grid">
-    <div class="card seccion card-pad" style="margin-bottom:0;">
-      <h2>🔁 Reincidencias detectadas</h2>
-      <div class="card-hint">Subítems con incumplimiento repetido por debajo del 80%. Un error aislado no aparece aquí.</div>
-      {% if datos.reincidencias %}
-        <table class="fase2-tabla">
-          <thead><tr><th>Subítem</th><th>Veces</th><th>Tasa</th><th>Última</th></tr></thead>
-          <tbody>
-          {% for rec in datos.reincidencias[:8] %}
-            <tr>
-              <td><strong>{{ rec.nombre }}</strong><div style="color:var(--ink-500);font-size:10.5px;margin-top:2px;">{{ rec.categoria }}</div></td>
-              <td class="fase2-num">{{ rec.reincidencias }}/{{ rec.veces_evaluado }}</td>
-              <td class="fase2-num {% if rec.tasa_reincidencia >= 0.5 %}reincidencia-alta{% endif %}">{{ (rec.tasa_reincidencia*100)|round(0)|int }}%</td>
-              <td class="fase2-num">{{ rec.ultima_falla or '—' }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
-        <div class="hint">No hay reincidencias suficientes todavía. El sistema requiere al menos 2 fallas repetidas en el mismo subítem.</div>
-      {% endif %}
-    </div>
-
-    <div class="card seccion card-pad" style="margin-bottom:0;">
-      <h2>📈 Evolución del asesor</h2>
-      <div class="card-hint">Promedio por semana y por mes para distinguir una caída puntual de una tendencia sostenida.</div>
-      {% set tp = datos.tendencia_periodica %}
-      <div style="font-size:12.5px;margin:8px 0;"><strong>Semanal:</strong>
-        {% if tp.delta_semanal is not none %}
-          <span class="badge {% if tp.delta_semanal < -0.03 %}badge-rojo{% elif tp.delta_semanal < 0 %}badge-ambar{% else %}badge-verde{% endif %}">
-            {{ '+' if tp.delta_semanal >= 0 else '' }}{{ (tp.delta_semanal*100)|round(1) }} pts vs. semana anterior
-          </span>
-        {% else %}<span class="hint">sin comparación suficiente</span>{% endif %}
-      </div>
-      <div class="trend-list">
-        {% for punto in tp.semanal[-8:] %}
-          <div class="trend-chip">{{ punto.periodo }}<br><strong>{{ (punto.promedio*100)|round(1) }}%</strong> · {{ punto.evaluaciones }} eval.</div>
-        {% endfor %}
-      </div>
-      <div style="font-size:12.5px;margin:14px 0 6px;"><strong>Mensual:</strong>
-        {% if tp.delta_mensual is not none %}
-          <span class="badge {% if tp.delta_mensual < -0.03 %}badge-rojo{% elif tp.delta_mensual < 0 %}badge-ambar{% else %}badge-verde{% endif %}">
-            {{ '+' if tp.delta_mensual >= 0 else '' }}{{ (tp.delta_mensual*100)|round(1) }} pts vs. mes anterior
-          </span>
-        {% else %}<span class="hint">sin comparación suficiente</span>{% endif %}
-      </div>
-      <div class="trend-list">
-        {% for punto in tp.mensual[-6:] %}
-          <div class="trend-chip">{{ punto.periodo }}<br><strong>{{ (punto.promedio*100)|round(1) }}%</strong> · {{ punto.evaluaciones }} eval.</div>
-        {% endfor %}
       </div>
     </div>
   </div>

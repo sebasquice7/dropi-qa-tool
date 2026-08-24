@@ -4,7 +4,6 @@ from flask import Blueprint, render_template, request
 from flask.typing import ResponseReturnValue
 
 from dashboard_data import obtener_datos_dashboard, guardar_meta
-from fase2 import guardar_meta_auditorias_por_asesor, marcar_critico_revisado
 
 dashboard_bp = Blueprint("dashboard", __name__)
 
@@ -37,28 +36,3 @@ def api_dashboard_guardar_meta() -> ResponseReturnValue:
         return {"ok": False, "error": "Valor inválido"}, 400
     guardar_meta(valor)
     return {"ok": True, "meta": valor}
-
-
-@dashboard_bp.route("/api/dashboard/meta-auditorias", methods=["POST"])
-def api_dashboard_guardar_meta_auditorias() -> ResponseReturnValue:
-    """Guarda la meta mensual de auditorías por asesor."""
-    try:
-        valor = int(request.json.get("meta"))
-    except (TypeError, ValueError, AttributeError):
-        return {"ok": False, "error": "Valor inválido"}, 400
-    metas = guardar_meta_auditorias_por_asesor(valor)
-    return {"ok": True, **metas}
-
-
-@dashboard_bp.route("/api/dashboard/criticos/revisado", methods=["POST"])
-def api_dashboard_critico_revisado() -> ResponseReturnValue:
-    """Marca/desmarca un caso crítico como revisado por QA."""
-    try:
-        clave = str(request.json.get("clave") or "").strip()
-        revisado = bool(request.json.get("revisado", True))
-    except AttributeError:
-        return {"ok": False, "error": "Solicitud inválida"}, 400
-    if not clave:
-        return {"ok": False, "error": "Falta la clave del caso"}, 400
-    estado = marcar_critico_revisado(clave, revisado)
-    return {"ok": True, **estado}

@@ -8,7 +8,6 @@ from pathlib import Path
 from statistics import mean
 
 from historial import cargar_historial
-from fase2 import reincidencias_asesor, tendencia_periodica_asesor
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 MATRIZ_PATH = BASE_DIR / "config" / "matriz_calidad.json"
@@ -123,63 +122,6 @@ def datos_para_coaching(asesor: str) -> dict:
             })
     items_ordenados.sort(key=lambda x: x["porcentaje"])  # peor a mejor
 
-    # Detalle para la UI de Coaching en la misma escala de la matriz de calidad:
-    # peso máximo real de cada ítem/categoría y puntaje promedio obtenido.
-    # Se mantiene ``categorias_ordenadas`` arriba porque la IA usa el porcentaje
-    # de cumplimiento normalizado (0-100%) para detectar patrones. Esta estructura
-    # adicional es exclusivamente para mostrar los puntos reales al auditor.
-    with open(MATRIZ_PATH, encoding="utf-8") as f:
-        matriz_ui = json.load(f)
-
-    categorias_detalle = []
-    for categoria in matriz_ui.get("categorias", []):
-        nombre_categoria = categoria.get("nombre", "")
-        peso_categoria = float(categoria.get("peso_categoria", 0) or 0)
-
-        valores_categoria = [
-            r.get("categorias", {}).get(nombre_categoria)
-            for r in registros
-            if r.get("categorias", {}).get(nombre_categoria) is not None
-        ]
-        puntaje_categoria_promedio = (
-            round(mean(valores_categoria), 4) if valores_categoria else 0.0
-        )
-
-        items_ui = []
-        for item in categoria.get("items", []):
-            item_id = item.get("id", "")
-            peso_max = float(item.get("peso", 0) or 0)
-            valores_item = []
-            for r in registros:
-                detalle = (r.get("items_detalle") or {}).get(item_id)
-                if detalle is None:
-                    continue
-                puntaje = detalle.get("puntaje") if isinstance(detalle, dict) else detalle
-                if puntaje is not None:
-                    valores_item.append(puntaje)
-
-            puntaje_promedio = round(mean(valores_item), 4) if valores_item else 0.0
-            items_ui.append({
-                "id": item_id,
-                "nombre": item.get("nombre", item_id),
-                "peso_max": peso_max,
-                "puntaje_promedio": min(puntaje_promedio, peso_max) if peso_max else puntaje_promedio,
-                "veces_evaluado": len(valores_item),
-            })
-
-        categorias_detalle.append({
-            "nombre": nombre_categoria,
-            "peso_categoria": peso_categoria,
-            "puntaje_promedio": min(puntaje_categoria_promedio, peso_categoria) if peso_categoria else puntaje_categoria_promedio,
-            "items": items_ui,
-        })
-
-    # Mantiene el mismo orden visual de peor a mejor desempeño que ya tenía
-    # Coaching, pero mostrando ahora puntos reales sobre el peso máximo.
-    categorias_detalle.sort(
-        key=lambda c: (c["puntaje_promedio"] / c["peso_categoria"]) if c["peso_categoria"] else 1.0
-    )
-
     criticos = [r["critico_activado"] for r in registros if r.get("critico_activado")]
 
     # Evidencia textual real: hasta 10 oportunidades de mejora y 6 puntos
@@ -207,8 +149,7 @@ def datos_para_coaching(asesor: str) -> dict:
         "nota_primera_mitad": round(mean(notas[:len(notas)//2 or 1]), 4),
         "nota_segunda_mitad": round(mean(notas[len(notas)//2:]), 4),
         "categorias_ordenadas": categorias_ordenadas,  # peor a mejor
-        "items_ordenados": items_ordenados,  # desglose normalizado usado por IA, peor a mejor
-        "categorias_detalle": categorias_detalle,  # puntos reales/promedio para el acordeón de la UI
+        "items_ordenados": items_ordenados,  # desglose por ítem individual, peor a mejor
         "mes_actual": mes_actual,
         "mes_anterior": mes_anterior,
         "cantidad_mes_actual": len(registros_mes_actual),
@@ -220,6 +161,4 @@ def datos_para_coaching(asesor: str) -> dict:
         "oportunidades_recientes": oportunidades_recientes,
         "positivos_recientes": positivos_recientes,
         "hay_evidencia_textual": bool(oportunidades_recientes or positivos_recientes),
-        "reincidencias": reincidencias_asesor(asesor),
-        "tendencia_periodica": tendencia_periodica_asesor(asesor),
     }

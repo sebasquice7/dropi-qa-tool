@@ -80,14 +80,6 @@
     .c-span-3, .c-span-4, .c-span-6 { grid-column: span 2; }
     .meta-box { margin-left: 0; }
   }
-
-  .fase2-progress { height:8px; background:var(--paper-100); border-radius:10px; overflow:hidden; min-width:100px; }
-  .fase2-progress > span { display:block; height:100%; background:var(--naranja-500); }
-  .fase2-scroll { max-height:330px; overflow:auto; }
-  .critico-pendiente { background:var(--rojo-bg); }
-  .btn-mini { border:1px solid var(--line); background:var(--card); border-radius:6px; padding:5px 8px; font-size:10.5px; cursor:pointer; font-family:inherit; }
-  .btn-mini.revisado { color:var(--verde-postal); border-color:var(--verde-postal); }
-
 </style>
 {% endblock %}
 
@@ -131,12 +123,6 @@
     <span>%</span>
     <button onclick="guardarMeta()">Guardar</button>
     <span class="meta-guardado" id="meta-guardado-msg">✓ Guardada</span>
-  </div>
-  <div class="meta-box">
-    📋 Meta auditorías/asesor/mes:
-    <input type="number" id="input-meta-auditorias" min="1" max="1000" step="1">
-    <button onclick="guardarMetaAuditorias()">Guardar</button>
-    <span class="meta-guardado" id="meta-auditorias-msg">✓ Guardada</span>
   </div>
 </div>
 
@@ -222,25 +208,6 @@
     </div>
   </div>
 
-  <div class="card c-span-3 card-pad">
-    <h2>🎯 Cobertura de auditorías</h2>
-    <div class="card-hint">Mes actual contra la meta mensual configurable por asesor.</div>
-    <div style="font-size:13px;margin-bottom:10px;">Cobertura global: <strong id="cobertura-global">—</strong> <span id="cobertura-total" class="card-hint"></span></div>
-    <div class="fase2-scroll"><table><thead><tr><th>Asesor</th><th>Realizadas</th><th>Pend.</th><th>Cobertura</th></tr></thead><tbody id="tabla-cobertura"></tbody></table></div>
-  </div>
-
-  <div class="card c-span-3 card-pad">
-    <h2>📉 Ranking de pérdida de puntos</h2>
-    <div class="card-hint">Subítems que más puntos reales están restando a la calidad en la muestra filtrada.</div>
-    <div class="fase2-scroll"><table><thead><tr><th>Subítem</th><th>Casos</th><th>Puntos perdidos</th></tr></thead><tbody id="tabla-perdida-puntos"></tbody></table></div>
-  </div>
-
-  <div class="card c-span-6 card-pad">
-    <h2>🚨 Casos críticos</h2>
-    <div class="card-hint">Bandeja operativa de ítems críticos. Puedes marcarlos como revisados sin alterar la evaluación original.</div>
-    <div class="fase2-scroll"><table><thead><tr><th>Fecha</th><th>Asesor</th><th>ID caso</th><th>Bandeja</th><th>Motivo</th><th>Estado</th></tr></thead><tbody id="tabla-criticos-fase2"></tbody></table></div>
-  </div>
-
   <div class="card c-span-6 card-pad">
     <h2>🌍 Comparativa por país</h2>
     <div class="card-hint">Comparación justa: usa la misma cantidad de evaluaciones (las más recientes) para cada país — el número entre paréntesis es esa muestra pareja. Los países marcados con ⚠ todavía no tienen el mínimo de 5 evaluaciones para entrar a la comparación justa (se muestran en gris, con su propio promedio real)</div>
@@ -300,7 +267,6 @@ function renderizar(datos) {
   if (!document.activeElement || document.activeElement.id !== "input-meta") {
     document.getElementById("input-meta").value = Math.round(datos.meta * 100);
   }
-  document.getElementById("input-meta-auditorias").value = datos.metas_auditoria?.auditorias_por_asesor_mes ?? 50;
 
   const vacio = document.getElementById("contenido-vacio");
   const contenido = document.getElementById("contenido-dashboard");
@@ -470,37 +436,7 @@ function dibujarComparativaPaises(datos) {
     },
     options: { indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 100, ticks: { callback: v => v + "%" } } } },
   });
-  renderizarFase2(datos);
-
 }
-
-function renderizarFase2(datos) {
-  const cob = datos.cobertura_auditorias || {};
-  document.getElementById("cobertura-global").textContent = Math.round((cob.cobertura_global || 0) * 100) + "%";
-  document.getElementById("cobertura-total").textContent = `(${cob.total_realizadas || 0}/${cob.total_meta || 0})`;
-  document.getElementById("tabla-cobertura").innerHTML = (cob.asesores || []).map(a => `
-    <tr><td>${a.asesor}</td><td>${a.realizadas}/${a.meta}</td><td>${a.pendientes}</td><td><div style="display:flex;align-items:center;gap:7px;"><div class="fase2-progress"><span style="width:${Math.round(a.cobertura*100)}%"></span></div><strong>${Math.round(a.cobertura*100)}%</strong></div></td></tr>`).join("") || '<tr><td colspan="4" style="color:#999;">Sin asesores para esta selección.</td></tr>';
-
-  document.getElementById("tabla-perdida-puntos").innerHTML = (datos.ranking_perdida_puntos || []).map(x => `
-    <tr><td><strong>${x.nombre}</strong><div style="font-size:10px;color:var(--ink-500);">${x.categoria}</div></td><td>${x.casos_con_perdida}/${x.veces_evaluado}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:700;">-${x.puntos_perdidos_pct.toFixed(1)} pts</td></tr>`).join("") || '<tr><td colspan="3" style="color:#999;">Las evaluaciones antiguas no tienen detalle por subítem. Se llenará con nuevas auditorías.</td></tr>';
-
-  document.getElementById("tabla-criticos-fase2").innerHTML = (datos.casos_criticos_fase2 || []).map(c => `
-    <tr class="${c.revisado ? '' : 'critico-pendiente'}"><td>${c.fecha || '—'}</td><td>${c.asesor || '—'}</td><td>${c.id_caso || '—'}</td><td>${c.bandeja || '—'}</td><td>${c.motivo || 'Ítem crítico'}</td><td><button class="btn-mini ${c.revisado ? 'revisado' : ''}" onclick='marcarCritico(${JSON.stringify(c.clave)}, ${!c.revisado})'>${c.revisado ? '✓ Revisado' : 'Marcar revisado'}</button></td></tr>`).join("") || '<tr><td colspan="6" style="color:#999;">No hay casos críticos en esta muestra.</td></tr>';
-}
-
-async function guardarMetaAuditorias() {
-  const meta = parseInt(document.getElementById("input-meta-auditorias").value || "0", 10);
-  const resp = await fetch("/api/dashboard/meta-auditorias", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({meta})});
-  if (resp.ok) {
-    const msg = document.getElementById("meta-auditorias-msg"); msg.style.opacity = 1; setTimeout(() => msg.style.opacity = 0, 1800); cargarDatos();
-  }
-}
-
-async function marcarCritico(clave, revisado) {
-  const resp = await fetch("/api/dashboard/criticos/revisado", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({clave, revisado})});
-  if (resp.ok) cargarDatos();
-}
-
 
 function renderizarDelta(comparacion) {
   const elTotal = document.getElementById("kpi-total-delta");

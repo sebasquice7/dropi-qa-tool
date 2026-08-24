@@ -11,6 +11,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 HISTORIAL_PATH = BASE_DIR / "historial_evaluaciones.json"
 MATRIZ_PATH = BASE_DIR / "config" / "matriz_calidad.json"
+_SALIDAS_DIR = BASE_DIR / "salidas"
 
 
 def _cargar_matriz() -> dict:
@@ -44,7 +45,7 @@ def _detalle_por_item(evaluacion: dict) -> dict:
     }
 
 
-def registrar_evaluacion(metadata: dict, evaluacion: dict, nota: dict, calibracion: dict = None, riesgo: dict = None, confianza_ia: dict = None) -> dict:
+def registrar_evaluacion(metadata: dict, evaluacion: dict, nota: dict, calibracion: dict = None) -> dict:
     """Agrega un renglón al historial local. Se llama justo después de generar
     el Excel y el Word finales de una evaluación (no en el borrador)."""
     ahora = datetime.now()
@@ -65,11 +66,19 @@ def registrar_evaluacion(metadata: dict, evaluacion: dict, nota: dict, calibraci
         "oportunidades_mejora": evaluacion.get("oportunidades_mejora", []),
         "lo_positivo": evaluacion.get("lo_positivo", []),
         "calibracion": calibracion,
-        "riesgo": riesgo,
-        "confianza_ia": confianza_ia,
         "guia_utilizada": evaluacion.get("guia_utilizada"),
         "satisfaccion": evaluacion.get("satisfaccion"),
         "satisfaccion_comentarios": evaluacion.get("satisfaccion_comentarios"),
+        # Con qué proveedor/modelo de IA se generó la evaluación — visible en
+        # el historial para poder explicar diferencias entre corridas de la
+        # misma conversación (ver nota en evaluator.py:_llamar_gemini).
+        "proveedor_usado": evaluacion.get("proveedor_usado"),
+        "modelo_usado": evaluacion.get("modelo_usado"),
+        # Marca con qué versión de la matriz se hizo esta evaluación. Si la
+        # matriz vuelve a cambiar en el futuro, este campo permite detectar
+        # qué registros hay que volver a migrar (ver migrar_historial_v2.py
+        # como referencia de cómo se hizo la última migración, V1 -> V2).
+        "matriz_version": "v2",
     }
 
     historial = []
@@ -116,6 +125,66 @@ def buscar_duplicado(id_caso: str) -> dict | None:
     if not coincidencias:
         return None
     return sorted(coincidencias, key=lambda r: r.get("timestamp", ""), reverse=True)[0]
+
+
+def buscar_evaluacion_completa(id_caso: str) -> dict | None:
+    """Busca si existe una evaluación CONFIRMADA anterior del mismo caso que
+    incluya la evaluación completa (con justificaciones, lo_positivo,
+    oportunidades_mejora) — no solo los puntajes numéricos del historial.
+
+    Revisa primero si hay un borrador confirmado guardado en salidas/ con
+    los datos completos; si no, devuelve None (no se puede reutilizar una
+    evaluación de la que solo quedan los números, porque le faltarían las
+    justificaciones que son justamente lo más valioso del análisis).
+    """
+    id_caso = (id_caso or "").strip()
+    if not id_caso:
+        return None
+
+    # Busca en el directorio de salidas si existe un archivo de evaluación
+    # completa previamente guardado para este caso.
+    ruta_evaluacion = _SALIDAS_DIR / f"evaluacion_completa_{id_caso}.json"
+    if not ruta_evaluacion.exists():
+        return None
+
+    try:
+        with open(ruta_evaluacion, encoding="utf-8") as f:
+            datos = json.load(f)
+        # Validar que tenga la estructura mínima esperada
+        if "evaluacion" not in datos or "metadata" not in datos or "nota" not in datos:
+            return None
+        return datos
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def guardar_evaluacion_completa(id_caso: str, metadata: dict, evaluacion: dict, nota: dict) -> None:
+    """Guarda la evaluación completa (con justificaciones, lo_positivo,
+    oportunidades_mejora) para poder reutilizarla si alguien vuelve a subir
+    el mismo caso. Se llama al momento de CONFIRMAR la evaluación (no al
+    crear el borrador), para que lo que se guarde sea la versión final
+    ajustada por el auditor humano — no la versión cruda de la IA.
+
+    Solo se guarda si hay un id_caso real (no se puede indexar por nada más
+    de forma confiable — dos PDFs distintos pueden tener conversaciones
+    distintas del mismo asesor)."""
+    id_caso = (id_caso or "").strip()
+    if not id_caso:
+        return
+
+    datos = {
+        "metadata": metadata,
+        "evaluacion": evaluacion,
+        "nota": nota,
+        "guardado_en": datetime.now().isoformat(timespec="seconds"),
+        "matriz_version": "v2",
+    }
+    ruta = _SALIDAS_DIR / f"evaluacion_completa_{id_caso}.json"
+    try:
+        with open(ruta, "w", encoding="utf-8") as f:
+            json.dump(datos, f, ensure_ascii=False, indent=2)
+    except OSError:
+        pass  # no romper el flujo principal por esto
 
 
 def tendencia_por_asesor(registros: list = None) -> dict:

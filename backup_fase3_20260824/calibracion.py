@@ -16,10 +16,6 @@ def calcular_calibracion(evaluacion_ia: dict, evaluacion_final: dict, matriz: di
     items_ia = evaluacion_ia.get("items", {})
     items_final = evaluacion_final.get("items", {})
 
-    mapa_item_categoria = {
-        it["id"]: cat["nombre"] for cat in matriz["categorias"] for it in cat["items"]
-    }
-    items_comparados = []
     items_ajustados = []
     for iid, v_final in items_final.items():
         v_ia = items_ia.get(iid, {})
@@ -29,14 +25,8 @@ def calcular_calibracion(evaluacion_ia: dict, evaluacion_final: dict, matriz: di
         except (TypeError, ValueError):
             continue
         delta = round(p_final - p_ia, 4)
-        comp = {
-            "item_id": iid, "categoria": mapa_item_categoria.get(iid),
-            "puntaje_ia": p_ia, "puntaje_final": p_final, "delta": delta,
-            "ajustado": abs(delta) > 0.0005,
-        }
-        items_comparados.append(comp)
-        if comp["ajustado"]:  # ignorar diferencias de redondeo insignificantes
-            items_ajustados.append(comp.copy())
+        if abs(delta) > 0.0005:  # ignorar diferencias de redondeo insignificantes
+            items_ajustados.append({"item_id": iid, "puntaje_ia": p_ia, "puntaje_final": p_final, "delta": delta})
 
     total_items = len(items_final)
     items_sin_ajustar = total_items - len(items_ajustados)
@@ -53,6 +43,9 @@ def calcular_calibracion(evaluacion_ia: dict, evaluacion_final: dict, matriz: di
             criticos_cambiados.append({"item_id": cid, "ia": ocurrio_ia, "final": ocurrio_final})
 
     # Delta promedio por categoría (para detectar sesgo sistemático de la IA)
+    mapa_item_categoria = {
+        it["id"]: cat["nombre"] for cat in matriz["categorias"] for it in cat["items"]
+    }
     delta_por_categoria = defaultdict(list)
     for aj in items_ajustados:
         cat = mapa_item_categoria.get(aj["item_id"])
@@ -62,7 +55,6 @@ def calcular_calibracion(evaluacion_ia: dict, evaluacion_final: dict, matriz: di
     return {
         "total_items": total_items,
         "items_ajustados": items_ajustados,
-        "items_comparados": items_comparados,
         "porcentaje_acuerdo": porcentaje_acuerdo,
         "criticos_cambiados": criticos_cambiados,
         "delta_por_categoria": {cat: round(mean(v), 4) for cat, v in delta_por_categoria.items()},

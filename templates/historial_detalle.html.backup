@@ -1,0 +1,93 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block titulo %}Detalle — {{ r.agente }} — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .cabecera-det { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .mini-tabla { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .mini-tabla td { padding: 8px 4px; border-bottom: 1px solid var(--ink-100); }
+  .mini-tabla td:last-child { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .lista-simple { list-style: none; padding: 0; margin: 0; }
+  .lista-simple li { padding: 8px 0; border-bottom: 1px solid var(--ink-100); font-size: 13px; line-height: 1.5; }
+  .lista-simple li:last-child { border-bottom: none; }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<a href="/buscar" class="hint" style="display:inline-block;margin-bottom:14px;">← Volver a la búsqueda</a>
+
+<div class="eyebrow" style="margin-bottom:8px;">Manifiesto archivado</div>
+<div class="cabecera-det">
+  <div>
+    <h1 style="font-size:19px;">{{ r.agente }} — {{ r.bandeja }}</h1>
+    <div class="subt">ID {{ r.id_caso }} · {{ r.pais }} · {{ r.fecha }}{% if r.evaluado_por %} · evaluado por {{ r.evaluado_por }}{% endif %}</div>
+  </div>
+  {{ m.sello_puntaje(r.nota_final * 100, tamano=80) }}
+</div>
+
+{% if r.critico_activado %}
+  <div class="flash" style="background:var(--rojo-100);color:var(--rojo-600);">⚠ Ítem crítico activado: {{ r.critico_activado }} — la nota quedó forzada a 0%.</div>
+{% endif %}
+
+{% if r.guia_utilizada %}
+  {% if r.guia_utilizada.encontrada %}
+    <div class="badge badge-verde" style="margin-bottom:16px;">📘 Guía usada: {{ r.guia_utilizada.titulo }}</div>
+  {% else %}
+    <div class="badge badge-ambar" style="margin-bottom:16px;">⬜ Sin guía operativa aplicable a este caso</div>
+  {% endif %}
+{% endif %}
+
+{% if r.satisfaccion %}
+  {% set emojis = {"muy_insatisfecho": "😠 Muy insatisfecho", "insatisfecho": "🙁 Insatisfecho", "neutral": "😐 Neutral", "satisfecho": "🙂 Satisfecho", "muy_satisfecho": "😄 Muy satisfecho"} %}
+  <div class="card card-pad" style="margin-bottom:16px;">
+    <div style="font-weight:700;margin-bottom:4px;">Satisfacción del cliente: {{ emojis.get(r.satisfaccion, r.satisfaccion) }}</div>
+    {% if r.satisfaccion_comentarios %}
+      <div style="color:var(--ink-500);font-style:italic;font-size:13px;">{{ r.satisfaccion_comentarios }}</div>
+    {% endif %}
+  </div>
+{% endif %}
+
+<div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+  <div class="card card-pad">
+    <h2 style="font-size:14px;margin:0 0 10px;">Desempeño por categoría</h2>
+    <table class="mini-tabla">
+      {% for cat, val in (r.categorias or {}).items() %}
+        <tr><td>{{ cat }}</td><td>{{ (val*100)|round(1) }}%</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="card card-pad">
+    <h2 style="font-size:14px;margin:0 0 10px;">Descargas</h2>
+    {% if word_disponible %}
+      <a class="btn btn-primario" style="margin-bottom:8px;" href="/descargar/{{ word_nombre }}">Descargar Word</a>
+    {% else %}
+      <div class="hint" style="margin-bottom:8px;">El Word ya no está disponible en este servidor.</div>
+    {% endif %}
+    {% if excel_disponible %}
+      <a class="btn btn-secundario" href="/descargar/{{ excel_nombre }}">Descargar Excel</a>
+    {% else %}
+      <div class="hint">El Excel ya no está disponible en este servidor.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% if r.lo_positivo %}
+<div class="card seccion" style="margin-bottom:16px;">
+  <h2 style="font-size:14px;margin:0 0 10px;">✅ Lo positivo</h2>
+  <ul class="lista-simple">
+    {% for p in r.lo_positivo %}<li>{{ p }}</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if r.oportunidades_mejora %}
+<div class="card seccion">
+  <h2 style="font-size:14px;margin:0 0 10px;">📈 Oportunidades de mejora</h2>
+  <ul class="lista-simple">
+    {% for o in r.oportunidades_mejora %}<li>{{ o }}</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

@@ -17,7 +17,6 @@ from config import config
 from historial import cargar_historial, tendencia_por_asesor
 from kpi_report import calcular_kpis, rango_nota
 from areas import area_de_bandeja, normalizar_bandeja, nombre_canonico_si_existe, AREAS_DISPONIBLES
-from fase2 import ranking_perdida_puntos, cobertura_mes_actual, obtener_casos_criticos, obtener_metas_auditoria
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 MATRIZ_PATH = BASE_DIR / "config" / "matriz_calidad.json"
@@ -395,10 +394,6 @@ def obtener_datos_dashboard(periodo: str = "todo", pais: str = None, bandeja: st
         "promedio_por_pais": promedio_por_pais,
         "hay_texto_oportunidades": any(r.get("oportunidades_mejora") for r in registros),
         "comparacion": comparacion,
-        "ranking_perdida_puntos": ranking_perdida_puntos(registros),
-        "cobertura_auditorias": cobertura_mes_actual(base),
-        "casos_criticos_fase2": obtener_casos_criticos(registros),
-        "metas_auditoria": obtener_metas_auditoria(),
         "tendencia": {
             "fechas": fechas_ordenadas,
             "asesores": asesores_ordenados,

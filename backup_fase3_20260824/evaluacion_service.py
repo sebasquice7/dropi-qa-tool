@@ -14,16 +14,15 @@ from datetime import datetime
 from pathlib import Path
 
 from pdf_parser import cargar_conversacion_desde_pdf
-from evaluator import evaluar_conversacion
+from evaluator import evaluar_conversacion, PROVEEDORES_INFO
 from scoring import calcular_nota, normalizar_evaluacion
 from matriz_editor import cargar_matriz_editable
 from excel_writer import generar_excel_matriz
 from word_writer import generar_informe_word
 from drive_local import guardar_en_drive, respaldar_historial_en_drive
-from historial import registrar_evaluacion, HISTORIAL_PATH, cargar_historial
+from historial import registrar_evaluacion, HISTORIAL_PATH
 from calibracion import calcular_calibracion
 from alertas import enviar_alerta_critico
-from fase3 import analizar_riesgo_conversacion, confianza_global, confianza_por_item, construir_eventos_aprendizaje, guardar_eventos_aprendizaje
 from services.lote_service import marcar_completado_en_lote
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -43,7 +42,7 @@ def construir_metadata(asesor: str, bandeja: str, id_caso: str, pais: str, audit
     }
 
 
-def guardar_borrador(token: str, metadata: dict, evaluacion: dict, nota: dict, riesgo: dict = None, confianza_ia: dict = None, confianza_items: dict = None) -> Path:
+def guardar_borrador(token: str, metadata: dict, evaluacion: dict, nota: dict) -> Path:
     """Guarda en disco el borrador de la evaluación — incluye una copia de la
     evaluación TAL COMO la dio la IA (antes de que un humano la edite), que
     se usa después para calcular la calibración IA vs. humano.
@@ -54,9 +53,6 @@ def guardar_borrador(token: str, metadata: dict, evaluacion: dict, nota: dict, r
         "metadata": metadata,
         "evaluacion": evaluacion,
         "evaluacion_ia_original": evaluacion_ia_original,
-        "riesgo": riesgo,
-        "confianza_ia": confianza_ia,
-        "confianza_items": confianza_items or {},
     }
     ruta_borrador = SALIDAS_DIR / f"borrador_{token}.json"
     with open(ruta_borrador, "w", encoding="utf-8") as f:
@@ -84,20 +80,27 @@ def iniciar_evaluacion(ruta_pdf: str, asesor: str, token: str, bandeja: str = ""
     convierte en un mensaje flash; otro sistema podría manejarlo distinto).
     """
     conv = cargar_conversacion_desde_pdf(str(ruta_pdf))
-    texto = conv.texto_plano()
 
-    evaluacion = evaluar_conversacion(texto, asesor, pais=pais, bandeja=bandeja, texto_gali=conv.texto_de_gali(), texto_notas_internas=conv.texto_de_notas_internas())
+    evaluacion = evaluar_conversacion(conv.texto_plano(), asesor, pais=pais, bandeja=bandeja, texto_gali=conv.texto_de_gali(), texto_notas_internas=conv.texto_de_notas_internas())
     evaluacion = normalizar_evaluacion(evaluacion)
     nota = calcular_nota(evaluacion)
 
     metadata = construir_metadata(asesor, bandeja, id_caso, pais, auditor)
-    riesgo = analizar_riesgo_conversacion(texto, metadata)
-    historial_previo = cargar_historial()
-    confianza_ia = confianza_global(historial_previo)
-    confianza_items = {x["id"]: x for x in confianza_por_item(historial_previo)}
-    guardar_borrador(token, metadata, evaluacion, nota, riesgo=riesgo, confianza_ia=confianza_ia, confianza_items=confianza_items)
+    # Nombre visible del proveedor + el modelo específico que respondió esta
+    # vez (ej. "Gemini (Google) · gemini-2.5-flash-lite") — antes este campo
+    # existía en el template pero nunca se llenaba en el flujo normal, así
+    # que dos evaluaciones de la MISMA conversación podían caer en modelos
+    # distintos de la cadena de respaldo (por cupo agotado a mitad de una
+    # sesión) sin ninguna forma de notarlo. Ahora queda visible en pantalla
+    # y guardado en el historial.
+    proveedor_usado = evaluacion.get("proveedor_usado")
+    modelo_usado = evaluacion.get("modelo_usado")
+    if proveedor_usado:
+        nombre_proveedor = PROVEEDORES_INFO.get(proveedor_usado, {}).get("nombre", proveedor_usado)
+        metadata["evaluado_con_ia"] = f"{nombre_proveedor} · {modelo_usado}" if modelo_usado else nombre_proveedor
+    guardar_borrador(token, metadata, evaluacion, nota)
 
-    return {"token": token, "metadata": metadata, "evaluacion": evaluacion, "nota": nota, "riesgo": riesgo, "confianza_ia": confianza_ia, "confianza_items": confianza_items}
+    return {"token": token, "metadata": metadata, "evaluacion": evaluacion, "nota": nota}
 
 
 def criticos_activados_de(evaluacion: dict) -> set:
@@ -109,7 +112,7 @@ def criticos_activados_de(evaluacion: dict) -> set:
     }
 
 
-def datos_para_revision(token: str, metadata: dict, evaluacion: dict, nota: dict, riesgo: dict = None, confianza_ia: dict = None, confianza_items: dict = None) -> dict:
+def datos_para_revision(token: str, metadata: dict, evaluacion: dict, nota: dict) -> dict:
     """Empaqueta todo lo que necesita la pantalla de 'revisar y ajustar' —
     separado de _guardar_borrador_y_revisar de antes, esta función ya no
     sabe nada de Flask ni de templates."""
@@ -122,9 +125,6 @@ def datos_para_revision(token: str, metadata: dict, evaluacion: dict, nota: dict
         "categorias": matriz["categorias"],
         "items_criticos": matriz["items_criticos"],
         "criticos_activados": criticos_activados_de(evaluacion),
-        "riesgo": riesgo,
-        "confianza_ia": confianza_ia,
-        "confianza_items": confianza_items or {},
     }
 
 
@@ -151,8 +151,6 @@ def aplicar_ajustes_y_confirmar(token: str, ajustes: dict) -> dict:
     borrador = cargar_borrador(token)
     metadata = borrador["metadata"]
     evaluacion = borrador["evaluacion"]
-    riesgo = borrador.get("riesgo")
-    confianza_ia = borrador.get("confianza_ia")
     matriz = cargar_matriz_editable()
 
     for iid, puntaje in ajustes.get("puntajes", {}).items():
@@ -192,16 +190,14 @@ def aplicar_ajustes_y_confirmar(token: str, ajustes: dict) -> dict:
     if evaluacion_ia_original:
         calibracion = calcular_calibracion(evaluacion_ia_original, evaluacion, matriz)
 
-    motivos_correccion = ajustes.get("motivos_correccion", {})
-    eventos_aprendizaje = []
-    if evaluacion_ia_original:
-        eventos_aprendizaje = construir_eventos_aprendizaje(
-            evaluacion_ia_original, evaluacion, metadata, motivos=motivos_correccion
-        )
-        guardar_eventos_aprendizaje(eventos_aprendizaje)
-
-    registrar_evaluacion(metadata, evaluacion, nota, calibracion=calibracion, riesgo=riesgo, confianza_ia=confianza_ia)
+    registrar_evaluacion(metadata, evaluacion, nota, calibracion=calibracion)
     respaldar_historial_en_drive(str(HISTORIAL_PATH))
+
+    # Guardar la evaluación COMPLETA (con justificaciones) para poder
+    # reutilizarla si alguien vuelve a subir el mismo caso — evita llamar a
+    # la IA de nuevo y garantiza consistencia 100% para el mismo ticket.
+    from historial import guardar_evaluacion_completa
+    guardar_evaluacion_completa(metadata.get("id_caso", ""), metadata, evaluacion, nota)
 
     alerta_resultado = None
     if nota.get("critico_activado"):
@@ -231,7 +227,4 @@ def aplicar_ajustes_y_confirmar(token: str, ajustes: dict) -> dict:
         "drive_resultado": drive_resultado,
         "viene_de_lote": viene_de_lote,
         "alerta_resultado": alerta_resultado,
-        "riesgo": riesgo,
-        "confianza_ia": confianza_ia,
-        "aprendizajes_guardados": len(eventos_aprendizaje),
     }

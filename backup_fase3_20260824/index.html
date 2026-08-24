@@ -112,15 +112,11 @@
     </div>
     <hr class="perforado">
     <div class="campo-bloque">
-      <div class="hint" style="margin-bottom:12px;">Puedes evaluar todos los PDFs o hacer primero una <strong>priorización inteligente sin gastar IA</strong>: 60% muestra aleatoria + 20% riesgo + 10% reincidencias + 10% complejidad.</div>
+      <div class="hint" style="margin-bottom:12px;">Cada uno se detecta y evalúa automáticamente, sin pantalla de revisión. Si un PDF tiene 0 asesores detectados, queda listo para completar con un clic.</div>
       <form action="/evaluar_lote" method="post" enctype="multipart/form-data">
         <input type="hidden" name="auditor">
         <input type="file" name="pdfs" accept="application/pdf" multiple required>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;align-items:end;">
-          <div><label>Tamaño de muestra</label><input type="number" name="cantidad_muestra" min="1" value="50" title="Solo se usa al priorizar"></div>
-          <button type="submit" formaction="/priorizar_lote" class="btn btn-primario">Priorizar muestra</button>
-        </div>
-        <button type="submit" class="btn btn-secundario" style="margin-top:10px;">Evaluar todos en lote</button>
+        <button type="submit" class="btn btn-secundario" style="margin-top:16px;">Evaluar en lote</button>
       </form>
     </div>
   </div>
@@ -160,11 +156,34 @@
       if (info.pais_es_sugerencia) {
         mensaje += "El País también es una sugerencia, verifícalo. ";
       }
-      if (info.riesgo) {
-        mensaje += `Riesgo preliminar: ${info.riesgo.nivel.toUpperCase()} (${info.riesgo.score}/100). `;
-      }
       if (info.duplicado) {
         mensaje += `⚠ Este ID ya se evaluó antes (${info.duplicado.fecha}, ${info.duplicado.agente}, ${Math.round(info.duplicado.nota_final*100)}%).`;
+        if (info.reutilizable) {
+          mensaje += ' Puedes usar la evaluación anterior o evaluar de nuevo.';
+          // Mostrar botón de reutilizar
+          let btnReutilizar = document.getElementById('btn-reutilizar');
+          if (!btnReutilizar) {
+            btnReutilizar = document.createElement('button');
+            btnReutilizar.id = 'btn-reutilizar';
+            btnReutilizar.type = 'button';
+            btnReutilizar.className = 'btn btn-secundario';
+            btnReutilizar.style.marginTop = '10px';
+            btnReutilizar.textContent = `♻ Usar evaluación anterior (${Math.round(info.duplicado.nota_final*100)}%)`;
+            btnReutilizar.addEventListener('click', function() {
+              const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = '/reutilizar';
+              const input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = 'id_caso';
+              input.value = info.id_caso;
+              form.appendChild(input);
+              document.body.appendChild(form);
+              form.submit();
+            });
+            document.querySelector('.acciones-bloque').appendChild(btnReutilizar);
+          }
+        }
       }
       statusEl.textContent = mensaje;
     } catch (e) {

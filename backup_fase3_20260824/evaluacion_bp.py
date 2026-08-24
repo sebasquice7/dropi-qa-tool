@@ -15,8 +15,7 @@ from werkzeug.utils import secure_filename
 
 from pdf_parser import cargar_conversacion_desde_pdf, extraer_texto_pdf, parsear_conversacion, detectar_metadata
 from evaluator import proveedores_configurados, PROVEEDORES_INFO
-from historial import buscar_duplicado
-from fase3 import analizar_riesgo_conversacion, priorizar_muestra, guardar_priorizacion, cargar_priorizacion
+from historial import buscar_duplicado, buscar_evaluacion_completa
 from logging_config import obtener_logger
 
 from services import evaluacion_service as ev_srv
@@ -36,11 +35,7 @@ def _renderizar_revision(resultado: dict) -> ResponseReturnValue:
     """Arma los datos que necesita revisar.html y la renderiza — el paso
     final compartido por el flujo individual, el de completar un omitido del
     lote, y el de elegir cuál IA usar tras comparar."""
-    datos = ev_srv.datos_para_revision(
-        resultado["token"], resultado["metadata"], resultado["evaluacion"], resultado["nota"],
-        riesgo=resultado.get("riesgo"), confianza_ia=resultado.get("confianza_ia"),
-        confianza_items=resultado.get("confianza_items")
-    )
+    datos = ev_srv.datos_para_revision(resultado["token"], resultado["metadata"], resultado["evaluacion"], resultado["nota"])
     return render_template("revisar.html", activo="evaluar", **datos)
 
 
@@ -76,7 +71,7 @@ def detectar() -> ResponseReturnValue:
         meta = detectar_metadata(conv, texto_crudo, nombre_archivo=nombre_seguro)
         asesores = list(conv.remitentes_staff().keys())
         duplicado = buscar_duplicado(meta.get("id_caso"))
-        riesgo = analizar_riesgo_conversacion(conv.texto_plano(), meta)
+        tiene_evaluacion_reutilizable = buscar_evaluacion_completa(meta.get("id_caso")) is not None
 
         return {
             "bandeja": meta.get("bandeja") or "",
@@ -85,12 +80,12 @@ def detectar() -> ResponseReturnValue:
             "pais": meta.get("pais") or "",
             "pais_es_sugerencia": meta.get("pais_es_sugerencia", False),
             "asesores": asesores,
-            "riesgo": riesgo,
             "duplicado": {
                 "fecha": duplicado.get("fecha"),
                 "agente": duplicado.get("agente"),
                 "nota_final": duplicado.get("nota_final"),
             } if duplicado else None,
+            "reutilizable": tiene_evaluacion_reutilizable,
         }
     except Exception as e:
         log.error("Error al detectar metadata del PDF: %s", e)
@@ -140,6 +135,34 @@ def evaluar() -> ResponseReturnValue:
     return _renderizar_revision(resultado)
 
 
+@evaluacion_bp.route("/reutilizar", methods=["POST"])
+def reutilizar() -> ResponseReturnValue:
+    """Carga la evaluación completa guardada de una evaluación anterior del
+    mismo caso, en vez de volver a llamar a la IA. Garantiza consistencia
+    100% para el mismo ticket: misma nota, mismas justificaciones, mismos
+    positivos y oportunidades de mejora."""
+    id_caso = request.form.get("id_caso", "").strip()
+    if not id_caso:
+        flash("No se puede reutilizar sin un ID de caso.")
+        return redirect(url_for("evaluacion.index"))
+
+    datos_anteriores = buscar_evaluacion_completa(id_caso)
+    if not datos_anteriores:
+        flash("No se encontró una evaluación completa guardada para este caso. Evalúa de nuevo.")
+        return redirect(url_for("evaluacion.index"))
+
+    metadata = datos_anteriores["metadata"]
+    evaluacion = datos_anteriores["evaluacion"]
+    nota = datos_anteriores["nota"]
+
+    # Crear un borrador con los datos reutilizados para que la pantalla de
+    # revisión funcione igual (el auditor puede ajustar si quiere).
+    token = uuid.uuid4().hex[:8]
+    ev_srv.guardar_borrador(token, metadata, evaluacion, nota)
+
+    return _renderizar_revision({"token": token, "metadata": metadata, "evaluacion": evaluacion, "nota": nota})
+
+
 @evaluacion_bp.route("/evaluar-con-asesor", methods=["POST"])
 def evaluar_con_asesor() -> ResponseReturnValue:
     """Continúa la evaluación de un caso donde el asesor se pidió explícito
@@ -175,7 +198,6 @@ def generar() -> ResponseReturnValue:
     matriz = cargar_matriz_editable()
 
     puntajes, justificaciones, criticos_ocurrieron, criticos_justificaciones = {}, {}, {}, {}
-    motivos_correccion = {}
     for cat in matriz["categorias"]:
         for it in cat["items"]:
             iid = it["id"]
@@ -186,7 +208,6 @@ def generar() -> ResponseReturnValue:
                 except ValueError:
                     continue
                 justificaciones[iid] = request.form.get(f"justificacion__{iid}", "")
-                motivos_correccion[iid] = request.form.get(f"motivo_correccion__{iid}", "")
 
     for c in matriz["items_criticos"]:
         cid = c["id"]
@@ -198,7 +219,6 @@ def generar() -> ResponseReturnValue:
         "justificaciones": justificaciones,
         "criticos_ocurrieron": criticos_ocurrieron,
         "criticos_justificaciones": criticos_justificaciones,
-        "motivos_correccion": motivos_correccion,
         "lo_positivo": [l.strip() for l in request.form.get("lo_positivo", "").split("\n") if l.strip()],
         "oportunidades_mejora": [l.strip() for l in request.form.get("oportunidades_mejora", "").split("\n") if l.strip()],
         "resumen_caso": request.form.get("resumen_caso", ""),
@@ -323,91 +343,6 @@ def elegir_comparacion(proveedor: str, token: str) -> ResponseReturnValue:
 
 
 # -------------------------------------------------------------------- Lote
-
-@evaluacion_bp.route("/priorizar_lote", methods=["POST"])
-def priorizar_lote() -> ResponseReturnValue:
-    """Lee muchos PDFs SIN llamar a la IA y propone una muestra inteligente.
-
-    La mezcla predeterminada es 60% aleatoria, 20% riesgo, 10% reincidencia
-    y 10% complejidad. El auditor puede desmarcar/marcar casos antes de evaluar.
-    """
-    archivos = [f for f in request.files.getlist("pdfs") if f and f.filename]
-    if not archivos:
-        flash("Selecciona al menos un PDF para priorizar.")
-        return redirect(url_for("evaluacion.index"))
-    try:
-        cantidad = int(request.form.get("cantidad_muestra") or len(archivos))
-    except ValueError:
-        cantidad = len(archivos)
-
-    candidatos = []
-    for pdf_file in archivos:
-        token = uuid.uuid4().hex[:8]
-        ruta_pdf = UPLOADS_DIR / f"muestra_{token}_{secure_filename(pdf_file.filename)}"
-        pdf_file.save(ruta_pdf)
-        try:
-            texto_crudo = extraer_texto_pdf(str(ruta_pdf))
-            conv = parsear_conversacion(texto_crudo)
-            meta = detectar_metadata(conv, texto_crudo, nombre_archivo=pdf_file.filename)
-            asesores = list(conv.remitentes_staff().keys())
-            asesor = " y ".join(asesores) if asesores else ""
-            riesgo = analizar_riesgo_conversacion(conv.texto_plano(), meta)
-            candidatos.append({
-                "token": token, "archivo": pdf_file.filename, "ruta_pdf": str(ruta_pdf),
-                "asesor": asesor, "bandeja": meta.get("bandeja") or "",
-                "id_caso": meta.get("id_caso") or "", "pais": meta.get("pais") or "",
-                "riesgo": riesgo,
-            })
-        except Exception as e:
-            candidatos.append({
-                "token": token, "archivo": pdf_file.filename, "ruta_pdf": str(ruta_pdf),
-                "asesor": "", "bandeja": "", "id_caso": "", "pais": "",
-                "riesgo": {"score": 0, "nivel": "bajo", "senales": []}, "error": str(e),
-            })
-
-    # Señal de reincidencia: cantidad de ítems reincidentes del asesor.
-    reinc = {}
-    try:
-        from fase2 import reincidencias_asesor
-        for c in candidatos:
-            a = c.get("asesor")
-            if a and a not in reinc:
-                reinc[a] = len(reincidencias_asesor(a))
-    except Exception:
-        reinc = {}
-
-    resultado = priorizar_muestra(candidatos, cantidad, reincidencias_por_asesor=reinc)
-    guardar_priorizacion(resultado)
-    return render_template("lote_priorizado.html", candidatos=resultado["todos"], cantidad=resultado["cantidad"], activo="evaluar")
-
-
-@evaluacion_bp.route("/evaluar_lote_priorizado", methods=["POST"])
-def evaluar_lote_priorizado() -> ResponseReturnValue:
-    """Evalúa únicamente los casos confirmados en la pantalla de priorización."""
-    seleccionados = set(request.form.getlist("tokens"))
-    auditor = request.form.get("auditor", "").strip()
-    estado = cargar_priorizacion()
-    candidatos = estado.get("todos") or []
-    rutas = []
-    for c in candidatos:
-        ruta = Path(c.get("ruta_pdf", ""))
-        if c.get("token") in seleccionados and ruta.exists():
-            rutas.append((ruta, c.get("archivo") or ruta.name))
-        elif ruta.exists():
-            try:
-                ruta.unlink()
-            except OSError:
-                pass
-    if not rutas:
-        flash("No seleccionaste ningún caso para evaluar.")
-        return redirect(url_for("evaluacion.index"))
-
-    from historial import HISTORIAL_PATH
-    from drive_local import respaldar_historial_en_drive
-    respaldar = lambda: respaldar_historial_en_drive(str(HISTORIAL_PATH))
-    resultados = lote_srv.procesar_lote(rutas, auditor, respaldar_historial=respaldar)
-    return render_template("lote_resultado.html", resultados=resultados, activo="evaluar")
-
 
 @evaluacion_bp.route("/evaluar_lote", methods=["POST"])
 def evaluar_lote() -> ResponseReturnValue:

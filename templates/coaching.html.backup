@@ -1,0 +1,162 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block titulo %}Coaching — {{ asesor }} — Dropi QA{% endblock %}
+
+{% block estilos_extra %}
+<style>
+  .cabecera-coach { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .cabecera-coach .periodo { color: var(--ink-500); font-size: 13px; margin-top: 3px; }
+
+  .seccion { margin-bottom: 18px; }
+  .seccion h2 { font-size: 14px; color: var(--ink-700); margin: 0 0 12px; font-weight: 700; }
+
+  .lista-check { list-style: none; padding: 0; margin: 0; }
+  .lista-check li { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; line-height: 1.5; }
+  .lista-check li:last-child { border-bottom: none; }
+  .lista-check .ic { flex-shrink: 0; margin-top: 1px; }
+  .lista-check.fortalezas .ic { color: var(--verde-postal); }
+  .lista-check.accion .ic { color: var(--naranja-600); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+  .area-card { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px; }
+  .area-card:last-child { margin-bottom: 0; }
+  .area-card .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .area-card .nombre { font-weight: 700; font-size: 13.5px; color: var(--ink); }
+  .area-card .evidencia { font-size: 12.5px; color: var(--ink-500); line-height: 1.5; }
+
+  .impacto-alto { background: var(--rojo-bg); color: var(--rojo); }
+  .impacto-medio { background: var(--ambar-bg); color: var(--ambar); }
+  .impacto-bajo { background: var(--verde-postal-bg); color: var(--verde-postal); }
+
+  .mini-tabla { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .mini-tabla td { padding: 7px 4px; border-bottom: 1px solid var(--line); }
+  .mini-tabla td:last-child { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+  .categoria-desplegable { border-bottom: 1px solid var(--line); }
+  .categoria-desplegable summary {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 4px; cursor: pointer; list-style: none; font-size: 13px;
+  }
+  .categoria-desplegable summary::-webkit-details-marker { display: none; }
+  .categoria-desplegable summary::before {
+    content: "▸"; color: var(--ink-300); font-size: 11px; margin-right: 8px; transition: transform .15s;
+  }
+  .categoria-desplegable[open] summary::before { transform: rotate(90deg); }
+  .categoria-desplegable summary:hover { background: var(--naranja-50); }
+  .categoria-desplegable .valor-categoria { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .categoria-desplegable .mini-tabla { margin: 0 0 8px 19px; width: calc(100% - 19px); }
+
+  .vacio-coach { text-align: center; padding: 60px 30px; color: var(--ink-500); }
+  .vacio-coach .num { font-family: 'JetBrains Mono', monospace; font-size: 40px; font-weight: 700; color: var(--sello-tinta); }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+{% if not suficientes_datos %}
+  <div class="page-header">
+    <div class="eyebrow">Ficha de desarrollo</div>
+    <h1>Plan de coaching — {{ asesor }}</h1>
+  </div>
+  <div class="card vacio-coach">
+    <div class="num">{{ total }}</div>
+    <div>{{ asesor }} tiene {{ total }} evaluación(es) registrada(s). Se necesitan al menos <strong>{{ minimo }}</strong> para poder detectar un patrón real y generar un plan de coaching útil.</div>
+  </div>
+
+{% elif error %}
+  <div class="page-header">
+    <div class="eyebrow">Ficha de desarrollo</div>
+    <h1>Plan de coaching — {{ asesor }}</h1>
+  </div>
+  <div class="flash">No se pudo generar el plan: {{ error }}</div>
+
+{% else %}
+  <div class="cabecera-coach">
+    <div>
+      <h1 style="font-size:20px;">Plan de coaching — {{ asesor }}</h1>
+      <div class="periodo">{{ datos.primera_fecha }} → {{ datos.ultima_fecha }} · {{ datos.total }} evaluaciones analizadas</div>
+      <a href="/coaching/{{ asesor }}/word" class="btn btn-primario" style="width:auto;padding:9px 16px;margin-top:10px;display:inline-flex;">📄 Descargar como Word</a>
+    </div>
+    {{ m.sello_puntaje(datos.nota_promedio * 100, tamano=80) }}
+  </div>
+
+  {% if plan.seguimiento_compromisos and "no hay compromisos previos" not in plan.seguimiento_compromisos %}
+    <div class="card seccion card-pad" style="border-left:3px solid var(--naranja-500);">
+      <h2>🔁 Seguimiento del compromiso anterior</h2>
+      <p style="margin:0;font-size:13.5px;line-height:1.6;color:var(--ink);">{{ plan.seguimiento_compromisos }}</p>
+    </div>
+  {% endif %}
+
+  <div class="card seccion card-pad">
+    <h2>Resumen general</h2>
+    <p style="margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--ink);">{{ plan.resumen_general }}</p>
+
+    {% if plan.alerta_tendencia == "critica" %}
+      <div class="badge badge-rojo" style="margin-bottom:8px;">🔴 Requiere atención — caída significativa en el periodo</div>
+    {% elif plan.alerta_tendencia == "atencion" %}
+      <div class="badge badge-ambar" style="margin-bottom:8px;">🟠 A vigilar — baja moderada en el periodo</div>
+    {% endif %}
+
+    <p style="margin:0;font-size:13px;line-height:1.6;color:var(--ink-500);"><strong>Tendencia:</strong> {{ plan.tendencia }}</p>
+  </div>
+
+  <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card seccion card-pad" style="margin-bottom:0;">
+      <h2>✅ Fortalezas consistentes</h2>
+      <ul class="lista-check fortalezas">
+        {% for f in plan.fortalezas_consistentes %}
+          <li><span class="ic">●</span> {{ f }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card seccion card-pad" style="margin-bottom:0;">
+      <h2>Desempeño por categoría</h2>
+      <div class="card-hint" style="margin-bottom:6px;">Haz clic en una categoría para ver (u ocultar) el desglose de sus ítems individuales</div>
+
+      {% for cat, val in datos.categorias_ordenadas %}
+        <details class="categoria-desplegable">
+          <summary>
+            <span style="display:flex;align-items:center;gap:8px;flex:1;">{{ cat }}</span>
+            <span class="valor-categoria">{{ (val*100)|round(0)|int }}%</span>
+          </summary>
+          <table class="mini-tabla">
+            {% for it in datos.items_ordenados if it.categoria == cat %}
+              <tr>
+                <td>{{ it.nombre }} <span style="color:var(--ink-300);font-size:10.5px;">— {{ it.peso }}% de esta categoría ({{ it.veces_evaluado }}x)</span></td>
+                <td>{{ (it.porcentaje*100)|round(0)|int }}%</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card seccion card-pad" style="margin-top:16px;">
+    <h2>⚠ Áreas prioritarias</h2>
+    {% for area in plan.areas_prioritarias %}
+      <div class="area-card">
+        <div class="top">
+          <div class="nombre">{{ area.area }}</div>
+          <span class="badge impacto-{{ area.impacto }}">{{ area.impacto }}</span>
+        </div>
+        <div class="evidencia">{{ area.evidencia }}</div>
+      </div>
+    {% else %}
+      <div class="hint">No se detectaron áreas de mejora claras en el periodo analizado.</div>
+    {% endfor %}
+  </div>
+
+  <div class="card seccion card-pad">
+    <h2>📋 Plan de acción para la próxima conversación de desarrollo</h2>
+    <ul class="lista-check accion">
+      {% for accion in plan.plan_accion %}
+        <li><span class="ic">{{ loop.index }}.</span> {{ accion }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="hint" style="text-align:center;margin-top:10px;">Generado por IA a partir del historial real de evaluaciones — revísalo antes de usarlo en la conversación con el asesor.</div>
+{% endif %}
+
+{% endblock %}

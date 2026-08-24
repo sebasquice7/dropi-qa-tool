@@ -8,7 +8,6 @@ from pathlib import Path
 from statistics import mean
 
 from historial import cargar_historial
-from fase2 import reincidencias_asesor, tendencia_periodica_asesor
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 MATRIZ_PATH = BASE_DIR / "config" / "matriz_calidad.json"
@@ -220,6 +219,4 @@ def datos_para_coaching(asesor: str) -> dict:
         "oportunidades_recientes": oportunidades_recientes,
         "positivos_recientes": positivos_recientes,
         "hay_evidencia_textual": bool(oportunidades_recientes or positivos_recientes),
-        "reincidencias": reincidencias_asesor(asesor),
-        "tendencia_periodica": tendencia_periodica_asesor(asesor),
     }

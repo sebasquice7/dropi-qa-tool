@@ -20,7 +20,6 @@ from drive_local import guardar_en_drive
 from historial import registrar_evaluacion, buscar_duplicado
 from alertas import enviar_alerta_critico
 from logging_config import obtener_logger
-from fase3 import analizar_riesgo_conversacion
 
 log = obtener_logger("lote_service")
 
@@ -97,7 +96,6 @@ def procesar_un_pdf_de_lote(ruta_pdf: Path, nombre_original: str, auditor: str) 
     asesor = " y ".join(asesores)  # 1 solo nombre queda igual; 2+ se juntan y se evalúan sin pausas
     id_detectado = meta_detectada.get("id_caso") or token
     duplicado = buscar_duplicado(id_detectado)
-    riesgo = analizar_riesgo_conversacion(conv.texto_plano(), meta_detectada)
 
     evaluacion = evaluar_conversacion(
         conv.texto_plano(), asesor,
@@ -124,7 +122,7 @@ def procesar_un_pdf_de_lote(ruta_pdf: Path, nombre_original: str, auditor: str) 
     drive_resultado = guardar_en_drive(
         str(ruta_excel), str(ruta_word), metadata["agente"], metadata["id_caso"], pais=metadata["pais"]
     )
-    registrar_evaluacion(metadata, evaluacion, nota, riesgo=riesgo)
+    registrar_evaluacion(metadata, evaluacion, nota)
     if nota.get("critico_activado"):
         enviar_alerta_critico(metadata, nota)
 
@@ -143,7 +141,6 @@ def procesar_un_pdf_de_lote(ruta_pdf: Path, nombre_original: str, auditor: str) 
         "bandeja_es_sugerencia": meta_detectada.get("bandeja_es_sugerencia", False),
         "pais_es_sugerencia": meta_detectada.get("pais_es_sugerencia", False),
         "duplicado": duplicado,
-        "riesgo": riesgo,
     }
     return resultado, False
 

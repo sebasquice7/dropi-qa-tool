@@ -56,14 +56,6 @@
       {% endif %}
     {% endif %}
 
-    {% if riesgo %}
-      <div class="aviso {{ 'aviso-off' if riesgo.nivel == 'alto' else 'aviso-ok' }}">🧭 Riesgo del caso: <strong>{{ riesgo.nivel|upper }} · {{ riesgo.score }}/100</strong>{% if riesgo.senales %}<br>{{ riesgo.senales[:3]|join(' · ') }}{% endif %}</div>
-    {% endif %}
-
-    {% if aprendizajes_guardados %}
-      <div class="aviso aviso-ok">🧠 Se guardaron {{ aprendizajes_guardados }} corrección(es) del auditor como aprendizaje para calibraciones futuras.</div>
-    {% endif %}
-
     {% if alerta_resultado %}
       {% if alerta_resultado.ok %}
         <div class="aviso aviso-ok">🚨 {{ alerta_resultado.motivo }}</div>

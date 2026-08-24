@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+{% block titulo %}Muestra priorizada — Dropi QA{% endblock %}
+{% block estilos_extra %}
+<style>
+  .resumen-muestra{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.mini{padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-size:12px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}th{font-size:10.5px;text-transform:uppercase;color:var(--ink-500)}
+  .risk{font-family:'JetBrains Mono',monospace;font-weight:700}.alto{color:#b8342a}.medio{color:#9c6b12}.bajo{color:#24443e}.motivo{font-size:11px;color:var(--ink-500)}
+</style>
+{% endblock %}
+{% block contenido %}
+<div class="page-header"><div class="eyebrow">Fase 3 · Muestreo inteligente</div><h1>Muestra priorizada</h1><div class="subt">La priorización leyó los PDFs sin llamar a la IA. Revisa la selección antes de consumir evaluaciones.</div></div>
+<div class="resumen-muestra"><div class="mini"><strong>{{ cantidad }}</strong> seleccionados</div><div class="mini">60% aleatoria</div><div class="mini">20% riesgo</div><div class="mini">10% reincidencia</div><div class="mini">10% complejidad</div></div>
+<form action="/evaluar_lote_priorizado" method="post">
+  <input type="hidden" name="auditor">
+  <div class="card card-pad">
+    <table><thead><tr><th>Evaluar</th><th>Archivo / ID</th><th>Asesor</th><th>Bandeja</th><th>Riesgo</th><th>Por qué entró</th></tr></thead><tbody>
+    {% for c in candidatos %}
+      <tr>
+        <td><input type="checkbox" name="tokens" value="{{ c['token'] }}" {% if c['seleccionado'] %}checked{% endif %}></td>
+        <td><strong>{{ c['id_caso'] or c['archivo'] }}</strong>{% if c.get('error') %}<div class="motivo">Error de lectura: {{ c['error'] }}</div>{% endif %}</td>
+        <td>{{ c['asesor'] or 'No detectado' }}</td><td>{{ c['bandeja'] or '—' }}</td>
+        <td><span class="risk {{ c['riesgo']['nivel'] }}">{{ c['riesgo']['nivel']|upper }} {{ c['riesgo']['score'] }}/100</span><div class="motivo">{{ c['riesgo']['senales'][:2]|join(' · ') }}</div></td>
+        <td>{{ c['motivo_seleccion'] or 'No seleccionado' }}</td>
+      </tr>
+    {% endfor %}
+    </tbody></table>
+  </div>
+  <button class="btn btn-primario" type="submit" style="margin-top:14px;">Evaluar casos seleccionados</button>
+  <a class="btn btn-secundario" href="/" style="margin-top:14px;">Cancelar</a>
+</form>
+{% endblock %}

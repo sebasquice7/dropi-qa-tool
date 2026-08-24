@@ -25,8 +25,6 @@
   textarea.bloque { width: 100%; min-height: 120px; font-size: 13.5px; }
 
   .btn-generar { position: sticky; bottom: 16px; box-shadow: 0 4px 20px rgba(26,22,19,0.18); font-size: 15px; padding: 15px; }
-  .fase3-status {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-  .fase3-status .card{padding:14px 16px;margin:0}.fase3-status .v{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:20px;margin-top:3px}.fase3-status .l{font-size:10.5px;color:var(--ink-500);text-transform:uppercase;letter-spacing:.05em}.correccion-ia{margin-top:6px;font-size:11px;width:100%;padding:7px 9px;border:1px dashed var(--line-fuerte);border-radius:6px;background:var(--paper);}
 </style>
 {% endblock %}
 
@@ -40,22 +38,6 @@
     {{ m.sello_puntaje(nota.nota_final * 100, tamano=76) }}
   </div>
 </div>
-
-
-{% if riesgo or confianza_ia %}
-<div class="fase3-status">
-  <div class="card">
-    <div class="l">Riesgo del caso</div>
-    <div class="v">{{ riesgo.nivel|upper if riesgo else 'N/D' }}{% if riesgo %} · {{ riesgo.score }}/100{% endif %}</div>
-    {% if riesgo and riesgo.senales %}<div class="hint" style="margin-top:5px;">{{ riesgo.senales[:3]|join(' · ') }}</div>{% endif %}
-  </div>
-  <div class="card">
-    <div class="l">Confianza histórica IA</div>
-    <div class="v">{% if confianza_ia and confianza_ia.hay_datos %}{{ (confianza_ia.confianza*100)|round(0)|int }}% · {{ confianza_ia.nivel|upper }}{% else %}SIN DATOS{% endif %}</div>
-    <div class="hint" style="margin-top:5px;">Se calcula con correcciones reales del auditor; no reemplaza la revisión humana.</div>
-  </div>
-</div>
-{% endif %}
 
 <form action="/generar" method="post">
   <input type="hidden" name="token" value="{{ token }}">
@@ -84,26 +66,10 @@
     <div class="cat-title">{{ cat.nombre }} ({{ (cat.peso_categoria*100) | round(0) | int }}%)</div>
     {% for it in cat['items'] %}
       {% set ev = evaluacion['items'][it.id] %}
-      {% if it.id == 'apego_guia_operativa' and evaluacion.guia_utilizada %}
-        <div class="item" style="border-bottom:none;padding-bottom:0;">
-          <div style="grid-column: 1 / -1;">
-            {% if evaluacion.guia_utilizada.encontrada %}
-              <span class="badge badge-verde">📘 Guía usada: {{ evaluacion.guia_utilizada.titulo }}</span>
-            {% else %}
-              <span class="badge badge-ambar">⬜ Sin guía operativa aplicable a este caso</span>
-            {% endif %}
-          </div>
-        </div>
-      {% endif %}
       <div class="item">
         <div>
-          {% set ci = confianza_items.get(it.id) if confianza_items else none %}
-          <div class="item-nombre">{{ it.nombre }} <span class="item-peso">(máx {{ (it.peso*100)|round(0)|int }}%)</span>
-            {% if ci %}<span class="badge {{ 'badge-verde' if ci.nivel == 'alta' else ('badge-ambar' if ci.nivel == 'media' else 'badge-rojo') }}" style="margin-left:6px;">Confianza {{ ci.nivel }} · {{ (ci.confianza*100)|round(0)|int }}%</span>{% endif %}
-            {% if ci and ci.nivel == 'baja' %}<span class="hint" style="margin-left:5px;">⚠ revisión recomendada</span>{% endif %}
-          </div>
+          <div class="item-nombre">{{ it.nombre }} <span class="item-peso">(máx {{ (it.peso*100)|round(0)|int }}%)</span></div>
           <textarea name="justificacion__{{ it.id }}">{{ ev.justificacion }}</textarea>
-          <input class="correccion-ia" type="text" name="motivo_correccion__{{ it.id }}" placeholder="Si corriges el puntaje de la IA: motivo breve (opcional, ayuda al aprendizaje)">
         </div>
         <input type="number" step="0.001" min="0" max="{{ it.peso }}" name="puntaje__{{ it.id }}" value="{{ ev.puntaje }}">
       </div>
