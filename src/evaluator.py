@@ -100,7 +100,10 @@ def _construir_prompt(conversacion_texto: str, asesor: str, matriz: dict, politi
             )
 
     criticos_desc = "\n".join(
-        f"- id: \"{c['id']}\" | \"{c['nombre']}\"" for c in matriz["items_criticos"]
+        f"- id: \"{c['id']}\" | \"{c['nombre']}\""
+        + (f"\n  EXCEPCIÓN (no marcar 'Sí' en estos casos, sin importar la bandeja): {c['excepciones']}" if c.get("excepciones") else "")
+        + (f"\n  CÓMO DETECTARLO: {c['senales_deteccion']}" if c.get("senales_deteccion") else "")
+        for c in matriz["items_criticos"]
     )
 
     items_json_ids = [it["id"] for cat in matriz["categorias"] for it in cat["items"]]
