@@ -72,6 +72,18 @@ def normalizar_evaluacion(evaluacion: dict) -> dict:
         if "justificacion" in v:
             v["justificacion"] = _quitar_markdown(v["justificacion"])
 
+    # Si la IA se saltó algún ítem crítico en su respuesta (pasa de vez en
+    # cuando, sobre todo con modelos más chicos bajo carga), se rellena con
+    # "No" por defecto — nunca se asume "Sí" por un dato faltante, y así la
+    # plantilla de revisión siempre encuentra los 6 ítems, sin importar si
+    # la IA los trajo completos o no.
+    criticos = evaluacion.setdefault("items_criticos", {})
+    with open(MATRIZ_PATH, encoding="utf-8") as f:
+        criticos_esperados = json.load(f).get("items_criticos", [])
+    for c in criticos_esperados:
+        if c["id"] not in criticos:
+            criticos[c["id"]] = {"ocurrio": "No", "justificacion": "(la IA no evaluó este ítem explícitamente — se asume 'No' por seguridad, revísalo a mano si el caso lo amerita)"}
+
     evaluacion["lo_positivo"] = [_quitar_markdown(p) for p in evaluacion.get("lo_positivo", [])]
     evaluacion["oportunidades_mejora"] = [_quitar_markdown(p) for p in evaluacion.get("oportunidades_mejora", [])]
     if "resumen_caso" in evaluacion:

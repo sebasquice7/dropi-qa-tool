@@ -26,5 +26,8 @@
   "aprobación de producto": "COMERCIAL",
   "busqueda de producto": "COMERCIAL",
   "búsqueda de producto": "COMERCIAL",
-  "triage general": "TRIAGE"
+  "triage general": "TRIAGE",
+  "actualizacion de estatus": "LOGISTICA",
+  "guia generada sin movimiento": "LOGISTICA",
+  "triage logistica": "LOGISTICA"
 }

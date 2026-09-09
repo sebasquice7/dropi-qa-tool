@@ -1,5 +1,22 @@
 # Modelo Guía Detallada Lineal General
 
+⚠️ ACTUALIZACIÓN DE ALCANCE (vigente desde esta versión — reemplaza el alcance anterior más amplio de este documento)
+
+Línea General SOLO debe atender directamente estos 3 tipos de caso:
+1. Publicidad engañosa.
+2. Baneos que impiden el ingreso a la plataforma (desbaneo de acceso).
+3. Autenticación de doble factor (2FA) — no llega el código, problemas para validar el segundo factor.
+
+CUALQUIER otro tipo de solicitud (anulaciones, devoluciones, Error 500, gestión de comunidades, consultas informativas, bloqueo de IP, cambio de correo, inactivación de cuenta, atención a usuarios finales, etc.) NO le corresponde resolverlo directamente a Línea General — debe redirigir al cliente al botón flotante, que lo dirige al canal correcto según su caso.
+
+INSTRUCCIÓN PARA LA EVALUACIÓN DE CALIDAD (importante, leer antes de calificar):
+Si la conversación es sobre un tema que NO es publicidad engañosa, baneo de acceso, ni 2FA — y el asesor redirigió correctamente al cliente al botón flotante (en vez de intentar resolver el caso él mismo, o de escalarlo manualmente por otro medio) — esto es el comportamiento CORRECTO y esperado, no una falla. En ese escenario:
+- Los ítems de "Procedimiento y Solución" (precisión técnica, resuelve en primer contacto, etc.) deben calificarse como CUMPLIDOS — redirigir al botón flotante ES la solución correcta para un caso fuera de este alcance, no la ausencia de una solución.
+- NO se debe penalizar al asesor por "no resolver el caso" cuando lo correcto era, precisamente, no intentar resolverlo directamente y redirigir.
+- Si en cambio el asesor SÍ intentó resolver un caso fuera de este alcance (sin redirigir al botón flotante), ahí sí corresponde señalarlo como una desviación del proceso correcto.
+
+--- El resto de este documento (secciones 5.1 a 5.10) describe el detalle operativo histórico de cuando Línea General sí gestionaba directamente estos temas. Se conserva como referencia de contexto, pero el ALCANCE VIGENTE es el que se define arriba. ---
+
 OBJETIVO
 Establecer una guía detallada para la correcta gestión, clasificación y escalamiento de solicitudes recibidas por Línea General dentro de la plataforma Dropi, garantizando una atención adecuada según el tipo de caso reportado por el usuario.
 ALCANCE
