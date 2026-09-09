@@ -102,6 +102,7 @@ def procesar_un_pdf_de_lote(ruta_pdf: Path, nombre_original: str, auditor: str) 
     evaluacion = evaluar_conversacion(
         conv.texto_plano(), asesor,
         pais=meta_detectada.get("pais") or "", bandeja=meta_detectada.get("bandeja") or "",
+        texto_gali=conv.texto_plano(), texto_notas_internas=conv.texto_de_notas_internas(),
     )
     evaluacion = normalizar_evaluacion(evaluacion)
     nota = calcular_nota(evaluacion)

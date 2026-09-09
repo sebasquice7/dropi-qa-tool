@@ -86,7 +86,7 @@ def iniciar_evaluacion(ruta_pdf: str, asesor: str, token: str, bandeja: str = ""
     conv = cargar_conversacion_desde_pdf(str(ruta_pdf))
     texto = conv.texto_plano()
 
-    evaluacion = evaluar_conversacion(texto, asesor, pais=pais, bandeja=bandeja, texto_gali=conv.texto_de_gali(), texto_notas_internas=conv.texto_de_notas_internas())
+    evaluacion = evaluar_conversacion(texto, asesor, pais=pais, bandeja=bandeja, texto_gali=texto, texto_notas_internas=conv.texto_de_notas_internas())
     evaluacion = normalizar_evaluacion(evaluacion)
     nota = calcular_nota(evaluacion)
 

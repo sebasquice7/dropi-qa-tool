@@ -193,3 +193,52 @@ CASOS.append({
 # operativa" — la guía operativa sigue cargándose como contexto (ver
 # guias.py) pero ya no se evalúa como un ítem independiente, sino como
 # respaldo del ítem "precision_tecnica_fondo" (ver src/evaluator.py).
+
+
+# ============================================================ Caso 9 (excepción Cartera — NO debe penalizar)
+def _verificar_redireccion_cartera_valida(evaluacion, nota):
+    ocurrio = _critico(evaluacion, "transferencia_injustificada")
+    if ocurrio == "no":
+        return True, "NO penalizó la redirección a WhatsApp de Cartera (correcto — es el proceso oficial)"
+    return False, f"Penalizó una redirección a Cartera que SÍ era válida (crítico quedó en '{ocurrio}', esperaba 'No') — revisar el campo 'excepciones' de transferencia_injustificada"
+
+
+CASOS.append({
+    "nombre": "Redirección válida a WhatsApp de Cartera (no debe penalizar, aunque llegue por Triage Administrativo)",
+    "asesor": "Asesor Prueba",
+    "pais": "Colombia",
+    "bandeja": "Triage Administrativo",
+    "texto": """
+--- 2026-09-04 ---
+10:00 AM [CLIENTE] Marcela Ruiz: Hola, tengo mi cartera congelada y no entiendo por qué, necesito que me ayuden
+10:02 AM [STAFF] Asesor Prueba: Hola Marcela, entiendo tu inquietud. Los casos de congelación de cartera los gestiona directamente el equipo de Cartera para poder revisar tu cuenta a fondo. Te comparto el WhatsApp oficial de Cartera para que te atiendan: +57 300 000 0000
+10:03 AM [CLIENTE] Marcela Ruiz: Ok, muchas gracias
+10:04 AM [STAFF] Asesor Prueba: Con gusto Marcela, cualquier otra cosa aquí estamos. ¡Buen día!
+""",
+    "verificar": _verificar_redireccion_cartera_valida,
+})
+
+
+# ============================================================ Caso 10 (control: transferencia SIN relación a Cartera SÍ debe penalizar)
+def _verificar_transferencia_no_cartera_si_penaliza(evaluacion, nota):
+    ocurrio = _critico(evaluacion, "transferencia_injustificada")
+    if ocurrio == "si":
+        return True, "SÍ penalizó la transferencia injustificada sin relación a Cartera (correcto — la excepción no se sobre-aplicó)"
+    return False, f"NO penalizó una transferencia injustificada real (crítico quedó en '{ocurrio}', esperaba 'Si') — la excepción de Cartera puede estarse aplicando de más"
+
+
+CASOS.append({
+    "nombre": "Control: transferencia injustificada SIN relación a Cartera (SÍ debe penalizar, para confirmar que la excepción no se sobre-aplica)",
+    "asesor": "Asesor Prueba",
+    "pais": "Colombia",
+    "bandeja": "Triage Administrativo",
+    "texto": """
+--- 2026-09-04 ---
+10:00 AM [CLIENTE] Julian Torres: Hola, mi pedido llegó incompleto, faltó un producto
+10:02 AM [STAFF] Asesor Prueba: Hola Julian, para eso escríbenos por WhatsApp al +57 300 111 2222, ahí te ayudan
+10:03 AM [CLIENTE] Julian Torres: ¿Pero ustedes no me pueden ayudar aquí?
+10:04 AM [STAFF] Asesor Prueba: No, debes escribir por ese canal. Buen día.
+""",
+    "verificar": _verificar_transferencia_no_cartera_si_penaliza,
+})
+

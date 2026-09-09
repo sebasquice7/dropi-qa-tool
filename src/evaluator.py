@@ -32,9 +32,32 @@ GEMINI_MODELOS_A_INTENTAR = [
     "gemini-2.5-flash-lite",
     "gemini-flash-lite-latest",
     "gemini-flash-latest",
-    "gemini-2.5-flash",
+    # "gemini-2.5-flash" — RETIRADO por Google (404 permanente, no temporal:
+    # "no longer available to new users"). Se quitó de la cadena para no
+    # perder tiempo llamando a un modelo que sabemos que siempre va a fallar.
+    "gemini-3.6-flash",  # el reemplazo que el propio error de Google recomienda
 ]
 ANTHROPIC_MODEL_DEFAULT = "claude-sonnet-4-6"
+
+# Salvedades a nivel de ÁREA (no de bandeja individual) — para reglas que
+# aplican parejo a TODAS las bandejas de un área, sin tener que repetir el
+# mismo texto en cada guía operativa por separado. Se determina el área real
+# de la bandeja (ver areas.py) y, si hay una salvedad definida para esa área,
+# se inyecta en el prompt sin importar cuál guía específica haya coincidido
+# (o incluso si ninguna coincidió).
+SALVEDADES_POR_AREA = {
+    "LOGISTICA": (
+        "En logística, el cliente puede llegar a distintas bandejas por caminos distintos (otros "
+        "botones/flujos de Intercom), así que no siempre el caso corresponde exactamente al alcance de "
+        "esa bandeja. Cuando el caso es sobre un siniestro, novedad, indemnización, o cualquier gestión "
+        "que le corresponde al módulo CAS de Dropi con las transportadoras — y el asesor redirige "
+        "correctamente al cliente al CAS (por ejemplo, guiándolo con el video explicativo de YouTube "
+        "sobre cómo usarlo) en vez de intentar resolverlo él mismo — ESO ES LO CORRECTO, no una falla. "
+        "En ese escenario, califica los ítems de Procedimiento y Solución como CUMPLIDOS: redirigir al "
+        "CAS es la solución correcta para ese tipo de caso, no la ausencia de una solución. No penalices "
+        "al asesor por 'no resolver' cuando lo correcto era, precisamente, redirigir."
+    ),
+}
 
 # Igual que con Gemini: cadena de modelos de OpenAI a intentar en orden, para no
 # depender de un solo nombre que Google... digo, OpenAI, puede renombrar o
@@ -65,7 +88,7 @@ def _cargar_politica_sla() -> str:
         return f.read()
 
 
-def _construir_prompt(conversacion_texto: str, asesor: str, matriz: dict, politica: str, politica_sla: str = "", guia_relevante: dict = None, contexto_gali: str = "", texto_notas_internas: str = None, contexto_aprendizaje: str = "") -> str:
+def _construir_prompt(conversacion_texto: str, asesor: str, matriz: dict, politica: str, politica_sla: str = "", guia_relevante: dict = None, contexto_gali: str = "", texto_notas_internas: str = None, contexto_aprendizaje: str = "", salvedad_area: str = None) -> str:
     items_desc = []
     for cat in matriz["categorias"]:
         items_desc.append(f"\n### {cat['nombre']} (peso total: {cat['peso_categoria']*100:.0f}%)")
@@ -106,7 +129,9 @@ Tu tarea es evaluar la gestión del asesor **{asesor}** en la siguiente conversa
 
 {"=== POLÍTICA DE TIEMPOS DE RESPUESTA (SLA) ===" + chr(10) + politica_sla if politica_sla else ""}
 
-{("=== GUÍA OPERATIVA DE REFERENCIA PARA ESTE CASO (\"" + guia_relevante["titulo"] + "\") ===" + chr(10) + "Esta es la guía oficial del proceso que aplica a este caso específico. Úsala como referencia real para el ítem \"apego_guia_operativa\" — compara los pasos que dio el asesor contra los pasos documentados aquí." + chr(10) + chr(10) + guia_relevante["texto"]) if guia_relevante else "=== GUÍA OPERATIVA: no se encontró ninguna guía documentada que aplique específicamente a este caso. El ítem \"apego_guia_operativa\" debe calificarse con el puntaje máximo (no aplica, no es una falla). ==="}
+{("=== GUÍA OPERATIVA DE REFERENCIA PARA ESTE CASO (\"" + guia_relevante["titulo"] + "\") ===" + chr(10) + "Esta es la guía oficial del proceso que aplica a este caso específico. Úsala como referencia real para el ítem \"apego_guia_operativa\" — compara los pasos que dio el asesor contra los pasos documentados aquí. IMPORTANTE: si esta guía trae una sección explícita de \"INSTRUCCIÓN PARA LA EVALUACIÓN\" o similar, esas instrucciones tienen prioridad y aplican a TODOS los ítems relevantes (no solo apego_guia_operativa) — por ejemplo, si la guía dice que redirigir a cierto canal es la respuesta correcta para casos fuera de su alcance, eso también debe reflejarse en los ítems de Procedimiento y Solución, no solo en el de apego a la guía." + chr(10) + chr(10) + guia_relevante["texto"]) if guia_relevante else "=== GUÍA OPERATIVA: no se encontró ninguna guía documentada que aplique específicamente a este caso. El ítem \"apego_guia_operativa\" debe calificarse con el puntaje máximo (no aplica, no es una falla). ==="}
+
+{("=== SALVEDAD DEL ÁREA (aplica a todas las bandejas de esta área, sin importar cuál coincidió arriba) ===" + chr(10) + salvedad_area) if salvedad_area else ""}
 
 {("=== BASE DE CONOCIMIENTO DE GALI (referencia oficial) ===" + chr(10) + contexto_gali) if contexto_gali else "=== BASE DE CONOCIMIENTO DE GALI: no se encontró ninguna pregunta/respuesta oficial que aplique a lo que Gali dijo en este caso. Los ítems sobre Gali deben calificarse según el criterio general (no penalizar por falta de una referencia específica). ==="}
 
@@ -351,6 +376,14 @@ def evaluar_conversacion(
         except Exception as e:
             log.warning("No se pudo buscar la guía operativa: %s", e)
 
+    salvedad_area = None
+    if bandeja:
+        try:
+            from areas import area_de_bandeja
+            salvedad_area = SALVEDADES_POR_AREA.get(area_de_bandeja(bandeja))
+        except Exception as e:
+            log.warning("No se pudo determinar el área de la bandeja: %s", e)
+
     contexto_gali = ""
     if texto_gali and pais:
         try:
@@ -366,7 +399,7 @@ def evaluar_conversacion(
     except Exception as e:
         log.warning("No se pudo cargar aprendizaje de calibraciones: %s", e)
 
-    prompt = _construir_prompt(conversacion_texto, asesor, matriz, politica, politica_sla, guia_relevante, contexto_gali, texto_notas_internas, contexto_aprendizaje)
+    prompt = _construir_prompt(conversacion_texto, asesor, matriz, politica, politica_sla, guia_relevante, contexto_gali, texto_notas_internas, contexto_aprendizaje, salvedad_area)
 
     if proveedor == "gemini":
         api_key = api_key or config.gemini_api_key

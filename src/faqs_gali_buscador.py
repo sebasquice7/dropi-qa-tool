@@ -48,28 +48,28 @@ def _score_entrada(palabras_conversacion: set, entrada: dict) -> tuple:
     score = 0.0
     palabras_en_comun = set()
 
-    palabras_tags = _palabras_clave(entrada.get("tags", ""))
-    if palabras_tags:
-        comunes = palabras_conversacion & palabras_tags
+    palabras_pregunta = _palabras_clave(entrada.get("pregunta", ""))
+    if palabras_pregunta:
+        comunes = palabras_conversacion & palabras_pregunta
         palabras_en_comun |= comunes
-        score += 3.0 * len(comunes) / len(palabras_tags)
+        score += 2.5 * len(comunes) / len(palabras_pregunta)
 
     palabras_variaciones = _palabras_clave(entrada.get("variaciones", ""))
     if palabras_variaciones:
         comunes = palabras_conversacion & palabras_variaciones
         palabras_en_comun |= comunes
-        score += 2.0 * len(comunes) / len(palabras_variaciones)
+        score += 2.5 * len(comunes) / len(palabras_variaciones)
 
-    palabras_pregunta = _palabras_clave(entrada.get("pregunta", ""))
-    if palabras_pregunta:
-        comunes = palabras_conversacion & palabras_pregunta
+    palabras_tags = _palabras_clave(entrada.get("tags", ""))
+    if palabras_tags:
+        comunes = palabras_conversacion & palabras_tags
         palabras_en_comun |= comunes
-        score += 1.0 * len(comunes) / len(palabras_pregunta)
+        score += 1.0 * len(comunes) / len(palabras_tags)
 
     return score, len(palabras_en_comun)
 
 
-def buscar_faqs_relevantes(texto_conversacion: str, entradas_pais: list, top_n: int = 8, umbral_minimo: float = 0.35) -> list:
+def buscar_faqs_relevantes(texto_conversacion: str, entradas_pais: list, top_n: int = 4, umbral_minimo: float = 0.35) -> list:
     """Revisa TODAS las entradas de FAQ de ese país (sin excepción) y devuelve
     solo las que tuvieron una coincidencia real — hasta `top_n`, pero puede
     devolver menos (o ninguna) si no hay coincidencias genuinas."""
@@ -105,7 +105,7 @@ def _cargar_entradas_pais(pais: str) -> list:
         return json.load(f)
 
 
-def contexto_faqs_gali(texto_de_gali: str, pais: str, top_n: int = 8) -> str:
+def contexto_faqs_gali(texto_de_gali: str, pais: str, top_n: int = 4) -> str:
     """Arma el bloque de texto listo para inyectar en el prompt de evaluación:
     las preguntas/respuestas oficiales más relevantes para lo que Gali dijo en
     esta conversación específica. Si Gali no habló, o no hay FAQs para ese
@@ -122,7 +122,7 @@ def contexto_faqs_gali(texto_de_gali: str, pais: str, top_n: int = 8) -> str:
     if not relevantes:
         return ""
 
-    partes = ["Preguntas/respuestas OFICIALES de la base de conocimiento de Gali, relevantes a esta conversación (úsalas como referencia para juzgar si Gali dio información correcta):"]
+    partes = ["Preguntas/respuestas OFICIALES de la base de conocimiento de Gali, relevantes a los temas de esta conversación (úsalas como referencia para verificar si la información dada por CUALQUIERA en la conversación —asesor o bot— es correcta):"]
     for r in relevantes:
         partes.append(f"- P: {r['pregunta']}\n  R oficial: {r['respuesta']}")
     return "\n".join(partes)

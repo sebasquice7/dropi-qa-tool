@@ -32,6 +32,7 @@ def ejecutar_validacion():
         try:
             evaluacion = evaluar_conversacion(
                 caso["texto"], caso["asesor"], pais=caso["pais"], bandeja=caso["bandeja"],
+                texto_gali=caso["texto"],
             )
             evaluacion = normalizar_evaluacion(evaluacion)
             nota = calcular_nota(evaluacion)

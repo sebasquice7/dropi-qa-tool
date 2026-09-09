@@ -23,12 +23,12 @@
     },
     {
       "nombre": "CONEXIÓN EMPÁTICA Y ESCUCHA ACTIVA",
-      "peso_categoria": 0.20,
+      "peso_categoria": 0.2,
       "items": [
         {
           "id": "escucha_cobertura_multiconsulta",
           "nombre": "Lectura Integral y Cobertura Multi-Consulta",
-          "peso": 0.10,
+          "peso": 0.1,
           "que_evalua": "Responde a todas y cada una de las inquietudes planteadas en el mensaje inicial (ej. entrega + falla de alertas en la plataforma).",
           "que_tener_en_cuenta": "Si el usuario consulta por 2 cosas y el asesor solo responde 1, pierde la totalidad del puntaje de este ítem."
         },
@@ -55,21 +55,21 @@
         {
           "id": "precision_tecnica_fondo",
           "nombre": "Efectividad y Precisión Técnica de Fondo",
-          "peso": 0.10,
+          "peso": 0.1,
           "que_evalua": "Aporta la solución o soporte oficial correcto (prueba de entrega, guía de reemplazo, estado real con la transportadora).",
           "que_tener_en_cuenta": "Dar información inventada o errónea castiga fuertemente este punto. Si en este prompt se incluyó una guía operativa de referencia para este caso, úsala como respaldo adicional para validar que los pasos técnicos dados fueron correctos."
         },
         {
           "id": "gestion_proactiva_fallas_sistema",
           "nombre": "Gestión Proactiva de Fallas del Sistema",
-          "peso": 0.10,
+          "peso": 0.1,
           "que_evalua": "Ante problemas de sincronización o alertas no enviadas por la plataforma, asume la responsabilidad del sistema, genera ticket/reporte a IT y proporciona el ID de escalamiento al usuario.",
           "que_tener_en_cuenta": "Prohibido responder solo con evasivas genéricas (ej. \"a veces hay desfases\") sin asumir la falla ni dar un canal de seguimiento concreto."
         },
         {
           "id": "minimizacion_esfuerzo_cliente",
           "nombre": "Minimización del Esfuerzo del Cliente (CES)",
-          "peso": 0.10,
+          "peso": 0.1,
           "que_evalua": "Le facilita el proceso al usuario evitando que deba hacer gestiones adicionales.",
           "que_tener_en_cuenta": "Penaliza si el usuario tiene que reiterar solicitudes por falta de claridad del asesor."
         },
@@ -89,7 +89,7 @@
         {
           "id": "cierre_verificado_no_apresurado",
           "nombre": "Cierre Verificado y No Apresurado",
-          "peso": 0.10,
+          "peso": 0.1,
           "que_evalua": "Valida que el cliente haya revisado la solución y confirma si tiene alguna duda adicional antes de enviar despedidas automáticas o posponer/cerrar la conversación.",
           "que_tener_en_cuenta": "Penaliza si el asesor da la explicación y anuncia el cierre en el mismo mensaje, sin esperar confirmación del cliente."
         },
@@ -156,11 +156,13 @@
     },
     {
       "id": "informacion_falsa_enganosa",
-      "nombre": "Información falsa o engañosa"
+      "nombre": "Información falsa o engañosa",
+      "senales_deteccion": "Si el bloque \"BASE DE CONOCIMIENTO OFICIAL\" (más abajo) muestra una respuesta oficial que CONTRADICE claramente un dato, plazo, política o procedimiento que el asesor le comunicó al cliente como si fuera correcto, marca \"Sí\" — esa contradicción es evidencia suficiente por sí sola, incluso si el resto de la conversación se ve bien manejada y el tono es correcto. No necesitas otra señal adicional: una afirmación del asesor que choque con la fuente oficial ya es información falsa o engañosa, sin importar si parece un error honesto o intencional."
     },
     {
       "id": "transferencia_injustificada",
-      "nombre": "Transferencia injustificada (\"Pasear al cliente\")"
+      "nombre": "Transferencia injustificada (\"Pasear al cliente\")",
+      "excepciones": "NO marcar este crítico cuando el asesor redirige al cliente al canal oficial de WhatsApp de Cartera para gestionar cualquier solicitud relacionada con Cartera (por ejemplo, congelación de cartera u otros trámites que dependen de esa área). Esto aplica sin importar en qué bandeja llegó el caso: por la alta demanda de estas solicitudes, es frecuente que el cliente no entre por el canal correcto y termine en Triage, Retiros, Facturación, Compliance u otra bandeja administrativa. Identificar que el caso es de Cartera y dirigir al cliente a ese canal oficial es el proceso correcto, no una transferencia injustificada."
     }
   ],
   "nota": "Si CUALQUIER item critico ocurre ('Si'), la nota final de la evaluacion es 0%, sin importar el puntaje acumulado en las categorias normales."
