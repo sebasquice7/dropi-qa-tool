@@ -1,0 +1,251 @@
+{% extends "_base.html" %}
+{% block titulo %}Informe de desempeño · Dropi QA{% endblock %}
+{% block estilos_extra %}
+<style>
+  .modo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .modo-card{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--paper);cursor:pointer}
+  .modo-card.activo{border-color:var(--naranja-500);background:var(--naranja-50)}
+  .filtros{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:end}
+  .acciones{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.acciones .btn{width:auto}
+  .selector-box{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line)}
+  .selector-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+  textarea{min-height:160px;resize:vertical}
+  .check-list{max-height:210px;overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:8px}
+  .check-item{display:flex;gap:7px;align-items:center;padding:5px 6px;font-size:12px}
+  .check-item input{width:auto}
+  .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0}
+  .kpi{padding:16px 18px}.kpi .v{font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:700;margin-top:5px}
+  .kpi .l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-500)}
+  .alerta-principal{padding:20px 22px;border-left:5px solid var(--rojo);margin-bottom:18px}
+  .alerta-principal h2{font-size:18px;margin-bottom:12px}.principal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .dato{border-top:1px dashed var(--line);padding-top:8px}.dato small{display:block;color:var(--ink-500);font-size:10px;text-transform:uppercase}.dato strong{display:block;margin-top:3px}
+  .seccion{margin-top:20px}.seccion h2{font-size:17px;margin-bottom:10px}.tabla-wrap{overflow:auto}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}th{text-align:left;padding:9px 10px;border-bottom:2px solid var(--line-fuerte);color:var(--ink-500);font-size:10px;text-transform:uppercase;white-space:nowrap}
+  td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}.num{font-family:'JetBrains Mono',monospace;white-space:nowrap}
+  .risk-alto{color:var(--rojo);font-weight:700}.risk-medio{color:var(--ambar);font-weight:700}.risk-bajo{color:var(--verde-postal);font-weight:700}
+  .mini{color:var(--ink-500);font-size:11px}.vacio{padding:28px;text-align:center;color:var(--ink-500)}
+  .muestra-rojo{color:var(--rojo);font-weight:700}.muestra-ambar{color:var(--ambar);font-weight:700}.muestra-verde{color:var(--verde-postal);font-weight:700}.muestra-gris{color:var(--ink-500);font-weight:700}
+  .status-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  @media(max-width:900px){.filtros,.kpis,.principal-grid,.selector-grid,.modo-grid{grid-template-columns:1fr 1fr}}
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+  <div class="eyebrow">Analítica · Gestión de calidad</div>
+  <h1>Informe integral de desempeño QA</h1>
+  <div class="subt">Analiza la población, revisa la vista previa y descarga un informe ejecutivo completo con tablas y gráficos.</div>
+</div>
+
+<div class="card card-pad">
+  <form method="post" action="/informe-desempeno" enctype="multipart/form-data" id="formInforme">
+    <div class="modo-grid">
+      <label class="modo-card {% if filtros.modo=='completo' %}activo{% endif %}">
+        <input type="radio" name="modo" value="completo" {% if filtros.modo=='completo' %}checked{% endif %} onchange="cambiarModo()">
+        <strong>Población completa</strong>
+        <div class="mini">Usa todos los asesores y exige el mínimo de auditorías.</div>
+      </label>
+      <label class="modo-card {% if filtros.modo=='seleccion' %}activo{% endif %}">
+        <input type="radio" name="modo" value="seleccion" {% if filtros.modo=='seleccion' %}checked{% endif %} onchange="cambiarModo()">
+        <strong>Grupo seleccionado</strong>
+        <div class="mini">Analiza exactamente los asesores que tú definas, aunque tengan poca muestra.</div>
+      </label>
+    </div>
+
+    <div class="filtros">
+      <div><label>Período</label><select name="periodo">
+        <option value="mes" {% if filtros.periodo=='mes' %}selected{% endif %}>Mes actual</option>
+        <option value="30d" {% if filtros.periodo=='30d' %}selected{% endif %}>Últimos 30 días</option>
+        <option value="90d" {% if filtros.periodo=='90d' %}selected{% endif %}>Últimos 90 días</option>
+        <option value="todo" {% if filtros.periodo=='todo' %}selected{% endif %}>Todo el historial</option>
+        <option value="personalizado" {% if filtros.periodo=='personalizado' %}selected{% endif %}>Personalizado</option>
+      </select></div>
+      <div><label>Región / país</label><select name="pais"><option value="">Todas</option>{% for p in paises %}<option value="{{ p }}" {% if filtros.pais==p %}selected{% endif %}>{{ p }}</option>{% endfor %}</select></div>
+      <div><label>Bandeja</label><select name="bandeja"><option value="">Todas</option>{% for b in bandejas %}<option value="{{ b }}" {% if filtros.bandeja==b %}selected{% endif %}>{{ b }}</option>{% endfor %}</select></div>
+      <div><label>Desde</label><input type="text" name="fecha_desde" value="{{ filtros.fecha_desde or '' }}" placeholder="YYYY-MM-DD"></div>
+      <div><label>Hasta</label><input type="text" name="fecha_hasta" value="{{ filtros.fecha_hasta or '' }}" placeholder="YYYY-MM-DD"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:220px 220px 1fr;gap:12px;margin-top:12px;align-items:end">
+      <div id="minimoWrap"><label>Mínimo auditorías <span class="hint">modo completo</span></label><input type="number" min="1" max="500" name="minimo" value="{{ filtros.minimo }}"></div>
+      <div><label>Mostrar peores</label><input type="number" min="1" max="500" name="top_n" value="{{ filtros.top_n }}"><div class="mini">Ej.: 10 = Top 10</div></div>
+      <div class="acciones">
+        <button class="btn btn-fantasma" type="submit">Actualizar vista previa</button>
+        <button class="btn btn-primario" type="submit"
+                formaction="/informe-desempeno/excel"
+                formmethod="post">
+          Generar y descargar informe
+        </button>
+      </div>
+    </div>
+
+    <div class="selector-box" id="selectorBox">
+      <h3 style="font-size:15px;margin-bottom:8px">Seleccionar población</h3>
+      <div class="mini">Puedes usar una sola forma o combinarlas. El sistema elimina nombres duplicados.</div>
+      <div class="selector-grid" style="margin-top:12px">
+        <div>
+          <label>Pegar listado <span class="hint">un asesor por línea</span></label>
+          <textarea name="asesores_texto" placeholder="Laura Criollo&#10;Danna Trujillo&#10;Andrés Pino">{{ filtros.asesores_texto }}</textarea>
+          <div style="margin-top:10px">
+            <label>O cargar data externa</label>
+            <input type="file" name="archivo_asesores" accept=".xlsx,.xlsm,.csv">
+            <div class="mini">Busca una columna llamada Asesor, Agente o Nombre. Si no existe, usa la primera columna.</div>
+          </div>
+        </div>
+        <div>
+          <label>Selección manual desde historial</label>
+          <input type="text" id="buscarAsesor" placeholder="Buscar asesor..." oninput="filtrarAsesores()">
+          <div class="check-list" id="listaAsesores" style="margin-top:8px">
+            {% for a in asesores %}
+            <label class="check-item" data-nombre="{{ a|lower }}">
+              <input type="checkbox" name="asesores_check" value="{{ a }}"> <span>{{ a }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% if informe.modo == 'seleccion' %}
+<div class="card card-pad" style="margin-top:14px">
+  <div class="eyebrow">Cruce de población externa</div>
+  <strong>{{ informe.total_solicitados }} solicitados · {{ informe.total_encontrados }} con auditorías QA · {{ informe.sin_datos|length }} sin datos</strong>
+  <div class="status-grid">
+    {% for x in informe.resolucion_seleccion %}
+      {% if x.encontrado %}
+        <span class="badge badge-verde">✓ {{ x.solicitado }}</span>
+      {% else %}
+        <span class="badge badge-rojo">Sin QA · {{ x.solicitado }}</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<div class="kpis">
+  <div class="card kpi"><div class="l">Auditorías analizadas</div><div class="v">{{ informe.total_auditorias }}</div></div>
+  <div class="card kpi"><div class="l">Asesores con QA</div><div class="v">{{ informe.total_asesores }}</div></div>
+  <div class="card kpi"><div class="l">En ranking</div><div class="v">{{ informe.asesores_clasificados }}</div></div>
+  <div class="card kpi"><div class="l">Top mostrado</div><div class="v">{{ informe.ranking|length }}</div></div>
+  <div class="card kpi"><div class="l">Regiones</div><div class="v">{{ informe.regiones|length }}</div></div>
+</div>
+
+{% if informe.peor_global %}
+{% set p = informe.peor_global %}
+<div class="card alerta-principal">
+  <div class="eyebrow">Peor calificado {% if informe.modo=='seleccion' %}del grupo seleccionado{% else %}global · muestra válida{% endif %}</div>
+  <h2>{{ p.asesor }} · {{ '%.1f'|format(p.promedio*100) }}%</h2>
+  {% if informe.modo=='seleccion' and p.auditorias < filtros.minimo %}
+    <div class="badge badge-ambar" style="margin-bottom:12px">⚠ {{ p.estado_muestra.texto }} · resultado incluido porque la población fue seleccionada por el usuario</div>
+  {% endif %}
+  <div class="principal-grid">
+    <div class="dato"><small>Región</small><strong>{{ p.region }}</strong></div>
+    <div class="dato"><small>Auditorías</small><strong>{{ p.auditorias }}</strong></div>
+    <div class="dato"><small>Estado muestra</small><strong class="muestra-{{ p.estado_muestra.nivel }}">{{ p.estado_muestra.texto }}</strong></div>
+    <div class="dato"><small>Casos críticos</small><strong>{{ p.criticos }}</strong></div>
+    <div class="dato"><small>Riesgo QA</small><strong class="risk-{{ p.nivel_riesgo|lower }}">{{ p.riesgo_qa }}/100 · {{ p.nivel_riesgo }}</strong></div>
+    <div class="dato"><small>Reincidencias</small><strong>{{ p.criterios_reincidentes }} criterios</strong></div>
+    <div class="dato"><small>Tendencia</small><strong>{{ p.tendencia }}{% if p.tendencia_delta is not none %} · {{ '%+.1f'|format(p.tendencia_delta*100) }} pts{% endif %}</strong></div>
+    <div class="dato"><small>Principal falla</small><strong>{{ p.peor_item.nombre if p.peor_item else 'Sin detalle' }}</strong></div>
+  </div>
+</div>
+{% else %}
+<div class="card vacio">No hay auditorías QA disponibles para la población y período seleccionados.</div>
+{% endif %}
+
+<div class="seccion">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <h2>{% if informe.filtros.top_n %}Top {{ informe.filtros.top_n }} peor desempeño{% else %}Ranking general{% endif %}</h2>
+    <form method="post" action="/informe-desempeno/excel">
+      <input type="hidden" name="modo" value="{{ filtros.modo }}">
+      <input type="hidden" name="periodo" value="{{ filtros.periodo }}">
+      <input type="hidden" name="pais" value="{{ filtros.pais or '' }}">
+      <input type="hidden" name="bandeja" value="{{ filtros.bandeja or '' }}">
+      <input type="hidden" name="fecha_desde" value="{{ filtros.fecha_desde or '' }}">
+      <input type="hidden" name="fecha_hasta" value="{{ filtros.fecha_hasta or '' }}">
+      <input type="hidden" name="minimo" value="{{ filtros.minimo }}">
+      <input type="hidden" name="top_n" value="{{ filtros.top_n }}">
+      <textarea name="asesores_texto" style="display:none">{{ filtros.asesores_texto }}</textarea>
+      <button class="btn btn-fantasma" style="width:auto" type="submit">Descargar Excel</button>
+    </form>
+  </div>
+  <div class="card tabla-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Asesor</th><th>Región</th><th>Auditorías</th><th>Muestra</th><th>Promedio QA</th><th>Críticos</th><th>Reincidencias</th><th>Tendencia</th><th>Principal falla</th><th>Riesgo QA</th></tr></thead>
+      <tbody>
+      {% for x in informe.ranking %}
+        <tr>
+          <td class="num">{{ x.posicion }}</td>
+          <td><strong>{{ x.asesor }}</strong><div class="mini">{{ x.bandeja_principal }}</div></td>
+          <td>{{ x.region }}</td>
+          <td class="num">{{ x.auditorias }}</td>
+          <td><span class="muestra-{{ x.estado_muestra.nivel }}">{{ x.estado_muestra.texto }}</span></td>
+          <td class="num"><strong>{{ '%.1f'|format(x.promedio*100) }}%</strong></td>
+          <td class="num">{{ x.criticos }}</td>
+          <td class="num">{{ x.criterios_reincidentes }}</td>
+          <td>{{ x.tendencia }}{% if x.tendencia_delta is not none %}<div class="mini">{{ '%+.1f'|format(x.tendencia_delta*100) }} pts</div>{% endif %}</td>
+          <td>{{ x.peor_item.nombre if x.peor_item else 'Sin detalle' }}</td>
+          <td class="num risk-{{ x.nivel_riesgo|lower }}">{{ x.riesgo_qa }} · {{ x.nivel_riesgo }}</td>
+        </tr>
+      {% else %}<tr><td colspan="11" class="vacio">Sin asesores con auditorías en este corte.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if informe.sin_datos %}
+<div class="seccion">
+  <h2>Asesores seleccionados sin información QA</h2>
+  <div class="card card-pad">
+    <div class="mini">No se eliminan de la población solicitada; se reportan explícitamente como “sin datos” y no reciben una posición artificial.</div>
+    <div class="status-grid">{% for x in informe.sin_datos %}<span class="badge badge-rojo">{{ x.asesor }} · 0 auditorías</span>{% endfor %}</div>
+  </div>
+</div>
+{% endif %}
+
+<div class="seccion">
+  <h2>Comparación entre regiones de la población analizada</h2>
+  <div class="card tabla-wrap"><table>
+    <thead><tr><th>Región</th><th>Auditorías</th><th>Asesores</th><th>Promedio QA</th><th>Críticos</th><th>Peor asesor</th></tr></thead>
+    <tbody>{% for r in informe.regiones %}
+      {% set peor = (informe.peor_por_region | selectattr('region','equalto',r.region) | list | first) %}
+      <tr><td><strong>{{ r.region }}</strong></td><td class="num">{{ r.auditorias }}</td><td class="num">{{ r.asesores }}</td><td class="num">{{ '%.1f'|format(r.promedio*100) }}%</td><td class="num">{{ r.criticos }}</td><td>{% if peor %}{{ peor.asesor }} · {{ '%.1f'|format(peor.promedio*100) }}%{% else %}—{% endif %}</td></tr>
+    {% else %}<tr><td colspan="6" class="vacio">Sin datos regionales.</td></tr>{% endfor %}</tbody>
+  </table></div>
+</div>
+
+<div class="seccion">
+  <h2>Principales pérdidas de puntos</h2>
+  <div class="card tabla-wrap"><table>
+    <thead><tr><th>Subítem</th><th>Categoría</th><th>Evaluado</th><th>Casos con falla</th><th>Cumplimiento</th><th>Puntos perdidos</th></tr></thead>
+    <tbody>{% for x in informe.perdida_global %}
+      <tr><td><strong>{{ x.nombre }}</strong></td><td>{{ x.categoria }}</td><td class="num">{{ x.veces_evaluado }}</td><td class="num">{{ x.fallas }}</td><td class="num">{{ '%.1f'|format(x.cumplimiento*100) }}%</td><td class="num">{{ '%.1f'|format(x.puntos_perdidos*100) }}</td></tr>
+    {% else %}<tr><td colspan="6" class="vacio">Sin detalle suficiente por subítem.</td></tr>{% endfor %}</tbody>
+  </table></div>
+</div>
+
+{% if informe.muestra_insuficiente and informe.modo == 'completo' %}
+<div class="seccion"><h2>Muestra insuficiente</h2><div class="card card-pad"><div class="mini">Solo en población completa se excluyen del ranking oficial.</div><div class="status-grid">{% for x in informe.muestra_insuficiente %}<span class="badge badge-ambar">{{ x.asesor }} · {{ x.auditorias }} auditorías · {{ '%.1f'|format(x.promedio*100) }}%</span>{% endfor %}</div></div></div>
+{% endif %}
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+function cambiarModo(){
+  const modo=document.querySelector('input[name="modo"]:checked').value;
+  document.getElementById('selectorBox').style.display=modo==='seleccion'?'block':'none';
+  document.getElementById('minimoWrap').style.opacity=modo==='seleccion'?'.45':'1';
+  document.querySelectorAll('.modo-card').forEach(x=>x.classList.remove('activo'));
+  document.querySelector('input[name="modo"]:checked').closest('.modo-card').classList.add('activo');
+}
+function filtrarAsesores(){
+  const q=(document.getElementById('buscarAsesor').value||'').toLowerCase();
+  document.querySelectorAll('#listaAsesores .check-item').forEach(x=>{
+    x.style.display=x.dataset.nombre.includes(q)?'flex':'none';
+  });
+}
+document.addEventListener('DOMContentLoaded',cambiarModo);
+</script>
+{% endblock %}
