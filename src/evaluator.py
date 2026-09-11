@@ -55,9 +55,56 @@ SALVEDADES_POR_AREA = {
         "sobre cómo usarlo) en vez de intentar resolverlo él mismo — ESO ES LO CORRECTO, no una falla. "
         "En ese escenario, califica los ítems de Procedimiento y Solución como CUMPLIDOS: redirigir al "
         "CAS es la solución correcta para ese tipo de caso, no la ausencia de una solución. No penalices "
-        "al asesor por 'no resolver' cuando lo correcto era, precisamente, redirigir."
+        "al asesor por 'no resolver' cuando lo correcto era, precisamente, redirigir.\n\n"
+        "Adicionalmente, en las bandejas de Anulaciones y Órdenes sin despacho, decirle al cliente que "
+        "'se va a gestionar' (sin dar una resolución inmediata en el mismo chat) ES el proceso correcto "
+        "— esas solicitudes requieren coordinación interna o con la transportadora que no se resuelve al "
+        "instante. No penalices al asesor por no resolver en el momento cuando el proceso documentado "
+        "es, precisamente, escalar la gestión y comunicarle al cliente que quedó en trámite. IMPORTANTE: "
+        "esto NO exime del tiempo de SLA ya establecido para estas bandejas (ver Política de Tiempos de "
+        "Respuesta, Cierre Final de Anulaciones/Órdenes sin despachar) — 'se va a gestionar' es la "
+        "respuesta correcta EN EL MOMENTO, pero el caso completo debe seguir resolviéndose dentro del "
+        "tiempo de SLA que ya le corresponde a ese proceso; no uses esta salvedad para justificar un "
+        "caso que se demoró más de lo que el SLA permite."
+    ),
+    "GARANTÍAS": (
+        "En Garantías, solo se puede atender UNA garantía por conversación — si el cliente necesita "
+        "reportar otra garantía distinta, debe abrir un chat nuevo, no continuar en el mismo. Por esta "
+        "razón, NO se debe esperar ni penalizar al asesor por no preguntar '¿hay algo más en lo que te "
+        "pueda ayudar?' al cerrar — en esta bandeja específica, esa pregunta no aplica y no debe tratarse "
+        "como una falla de cierre incompleto. Al contrario: si el asesor SÍ intenta atender una SEGUNDA "
+        "garantía distinta dentro del mismo chat (en vez de pedirle al cliente que abra una conversación "
+        "nueva para esa otra garantía), eso SÍ es un error de proceso y debe señalarse como tal — no es "
+        "un gesto de buena atención, es una desviación del proceso correcto de esta bandeja."
     ),
 }
+
+# Reglas generales de evaluación — SIEMPRE se incluyen en el prompt, sin
+# importar la bandeja, el área, o si hay guía operativa que coincida.
+# Cada una viene de una corrección real señalada por el equipo, tras
+# encontrar que la IA estaba penalizando comportamientos que en realidad
+# son correctos.
+REGLAS_GENERALES_EVALUACION = """1. CIERRE POR DOBLE CHAT: si el asesor cierra la conversación porque el cliente abrió un chat duplicado
+   sobre el mismo tema (ya existe otra conversación abierta con el mismo caso), NO penalices esto como
+   cierre prematuro o abandono — es el manejo correcto de un chat duplicado, no una falla de servicio.
+
+2. MENSAJE DE VALIDACIÓN, NO DE CIERRE: el siguiente mensaje, cuando aparece justo después de dar una
+   respuesta o solución (no al final de la conversación), es una validación de si el cliente necesita algo
+   más — NO es un mensaje de cierre ni de despedida, y no debe evaluarse como tal ni penalizarse por
+   "cerrar sin confirmar satisfacción":
+   "¡Ha sido un gusto poder ayudarte! Si tienes otra consulta o hay algo más en lo que te pueda colaborar,
+   por favor indícamelo aquí abajo y con gusto lo validamos."
+
+3. NÚMERO DE GUÍA vs. NÚMERO DE ORDEN: el número de guía (de la transportadora) y el número de orden (de
+   Dropi) usan sistemas de numeración DISTINTOS para el mismo pedido — es normal y esperado que las CIFRAS
+   no coincidan entre sí; eso por sí solo NO es un error. Lo que sí debes verificar es que ambos números
+   correspondan realmente al MISMO pedido/conversación que se está atendiendo — si el asesor da un número
+   de guía u orden que pertenece a un pedido distinto al del cliente, eso sí es un error real de precisión,
+   distinto de la simple diferencia de formato entre los 2 sistemas de numeración.
+
+(Nota: el cierre por inactividad del cliente después de un tiempo sin respuesta ya está definido con su
+regla exacta — incluyendo el requisito de avisar antes de cerrar — en la Política de Tiempos de Respuesta
+(SLA) que se incluye más abajo; no la dupliques ni la contradigas aquí.)"""
 
 # Igual que con Gemini: cadena de modelos de OpenAI a intentar en orden, para no
 # depender de un solo nombre que Google... digo, OpenAI, puede renombrar o
@@ -100,10 +147,7 @@ def _construir_prompt(conversacion_texto: str, asesor: str, matriz: dict, politi
             )
 
     criticos_desc = "\n".join(
-        f"- id: \"{c['id']}\" | \"{c['nombre']}\""
-        + (f"\n  EXCEPCIÓN (no marcar 'Sí' en estos casos, sin importar la bandeja): {c['excepciones']}" if c.get("excepciones") else "")
-        + (f"\n  CÓMO DETECTARLO: {c['senales_deteccion']}" if c.get("senales_deteccion") else "")
-        for c in matriz["items_criticos"]
+        f"- id: \"{c['id']}\" | \"{c['nombre']}\"" for c in matriz["items_criticos"]
     )
 
     items_json_ids = [it["id"] for cat in matriz["categorias"] for it in cat["items"]]
@@ -129,6 +173,9 @@ Tu tarea es evaluar la gestión del asesor **{asesor}** en la siguiente conversa
 
 === POLÍTICA DE COMUNICACIÓN Y REDACCIÓN ===
 {politica}
+
+=== REGLAS GENERALES DE EVALUACIÓN (aplican siempre, a cualquier bandeja o caso) ===
+{REGLAS_GENERALES_EVALUACION}
 
 {"=== POLÍTICA DE TIEMPOS DE RESPUESTA (SLA) ===" + chr(10) + politica_sla if politica_sla else ""}
 

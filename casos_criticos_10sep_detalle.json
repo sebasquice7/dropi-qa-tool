@@ -1,0 +1,225 @@
+[
+  {
+    "id_caso": "215475382498314",
+    "fecha": "2026-09-10",
+    "agente": "Ashley Erazo",
+    "bandeja": "Triage General",
+    "pais": "Colombia",
+    "critico": "cierre_prematuro_abandono",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Cobertura multiconsulta incompleta. El asesor debe responder a todas las inquietudes planteadas por el usuario, incluyendo en este caso el inconveniente con la integración.",
+      "Cierre anticipado sin verificación. No se debe cerrar la conversación en el mismo mensaje de respuesta sin validar previamente si el cliente quedó satisfecho o tiene más dudas."
+    ],
+    "lo_positivo": [
+      "Ortografía correcta. El mensaje del asesor cuenta con una redacción clara y sin faltas ortográficas.",
+      "Tono profesional. Se dirigió al usuario con respeto y mantuvo el trato adecuado durante la interacción."
+    ]
+  },
+  {
+    "id_caso": "215475459555158",
+    "fecha": "2026-09-10",
+    "agente": "Camilo Martinez",
+    "bandeja": "Desarrollo",
+    "pais": "Colombia",
+    "critico": "cierre_prematuro_abandono",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Incumplimiento de SLA. El tiempo transcurrido desde el mensaje de la clienta hasta la respuesta del asesor excedió el límite establecido para casos administrativos.",
+      "Omisión de resolución técnica. El asesor no brindó soporte sobre el fallo de la DropiCard y derivó al usuario de forma innecesaria.",
+      "Falta de empatía y saludo formal. El asesor inició con un mensaje predeterminado sin saludar a la clienta ni conectar con su situación.",
+      "Cierre prematuro del caso. Se dio por finalizada la conversación en Intercom sin verificar si el requerimiento principal había sido solucionado."
+    ],
+    "lo_positivo": [
+      "Ortografía impecable. El mensaje enviado por el asesor no presenta errores de ortografía ni de puntuación.",
+      "Claridad en la instrucción. La indicación del número de WhatsApp al que debía dirigirse la clienta fue clara y legible."
+    ]
+  },
+  {
+    "id_caso": "215475589544742",
+    "fecha": "2026-09-10",
+    "agente": "Ashley Erazo",
+    "bandeja": "Triage General",
+    "pais": "Colombia",
+    "critico": "cierre_prematuro_abandono",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Gestión integral de consultas. Es necesario revisar detalladamente todos los elementos aportados por el usuario, como comprobantes de pago y alternativas propuestas.",
+      "Evitar cierres prematuros. No se debe finalizar la conversación y despedir al cliente en el mismo mensaje de respuesta sin validar su conformidad.",
+      "Cumplimiento de tiempos SLA. Se debe procurar atender las transferencias del bot dentro de los tiempos estipulados para evitar demoras prolongadas."
+    ],
+    "lo_positivo": [
+      "Identificación clara. El asesor se presentó adecuadamente indicando su nombre y rol al iniciar la atención.",
+      "Uso correcto del tuteo. Mantuvo un trato profesional y respetuoso hacia el usuario empleando el pronombre tú.",
+      "Ortografía adecuada. La redacción general del mensaje del asesor presentó una estructura gramatical limpia y sin errores graves."
+    ]
+  },
+  {
+    "id_caso": "215475689368971",
+    "fecha": "2026-09-10",
+    "agente": "Ashley Erazo",
+    "bandeja": "Triage General",
+    "pais": "Colombia",
+    "critico": "cierre_prematuro_abandono",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Cobertura integral de consultas. El asesor omitió responder sobre la guía perdida reportada por el cliente, afectando la resolución de la multiconsulta.",
+      "Cierre de conversación verificado. El asesor dio por terminada la charla en el mismo mensaje sin validar la conformidad del usuario.",
+      "Empatía contextualizada profunda. Falta conectar de manera genuina con la gravedad de tener dinero retenido por tres meses."
+    ],
+    "lo_positivo": [
+      "Tono respetuoso en la comunicación. El asesor mantuvo un trato cordial y formal a pesar de la alta frustración del usuario.",
+      "Identificación clara en la interacción. El asesor se presentó adecuadamente al retomar la conversación en Intercom."
+    ]
+  },
+  {
+    "id_caso": "215475701304480",
+    "fecha": "2026-09-10",
+    "agente": "Ashley Erazo",
+    "bandeja": "Triage General",
+    "pais": "Colombia",
+    "critico": "cierre_prematuro_abandono",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Cierre prematuro de la conversación. El asesor no debe anunciar y ejecutar el cierre del ticket en el mismo mensaje sin verificar si el cliente quedó satisfecho o si tiene más dudas.",
+      "Validación integral del caso. Es fundamental revisar el historial de novedades previas reportadas por el usuario en lugar de exigir un documento de forma aislada tras 20 días de espera.",
+      "Cumplimiento del SLA de respuesta. Se debe agilizar el tiempo de atención inicial para evitar demoras prolongadas que afecten la experiencia del dropshipper."
+    ],
+    "lo_positivo": [
+      "Tono profesional y respetuoso. El asesor mantuvo un trato adecuado y uso correcto del tuteo durante su única intervención en el chat.",
+      "Redacción formal. Los mensajes redactados por el asesor cumplieron con las normas de ortografía y gramática establecidas."
+    ]
+  },
+  {
+    "id_caso": "215475757459664",
+    "fecha": "2026-09-10",
+    "agente": "Natalia Mosquera",
+    "bandeja": "Facturación",
+    "pais": "Colombia",
+    "critico": "cierre_prematuro_abandono",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Cierre prematuro de la conversación. La asesora cerró el chat de forma apresurada sin dar solución a la consulta del usuario sobre la ubicación del botón.",
+      "Omisión de inquietudes. Se ignoró la pregunta directa del cliente sobre dónde encontrar el botón flotante para agendar su cita.",
+      "Falta de trazabilidad. No se documentaron notas internas que justificaran el cierre por supuesta duplicidad de conversaciones."
+    ],
+    "lo_positivo": [
+      "Identificación adecuada. El asesor incluyó el saludo inicial dirigiéndose al usuario por su nombre de manera correcta.",
+      "Toma de contacto ágil. La respuesta del asesor se emitió con rapidez tras el mensaje final del cliente.",
+      "Ortografía correcta. El mensaje emitido por la asesora cumple con las normas básicas de redacción y ortografía."
+    ]
+  },
+  {
+    "id_caso": "215475785727956",
+    "fecha": "2026-09-10",
+    "agente": "Ashley Erazo",
+    "bandeja": "Triage General",
+    "pais": "Colombia",
+    "critico": "cierre_prematuro_abandono",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Atención a la multiconsulta. Es fundamental leer detalladamente los requerimientos del usuario para no omitir temas centrales como las propuestas comerciales.",
+      "Precisión de la información. Se debe evitar dar respuestas genéricas o inventadas sobre pesos y medidas que no aplican al contexto del negocio del dropshipper.",
+      "Evitar cierres apresurados. No se debe finalizar una charla unilateralmente sin antes confirmar con el usuario si su solicitud principal fue atendida."
+    ],
+    "lo_positivo": [
+      "Redacción formal. El asesor mantuvo una correcta ortografía y gramática en su mensaje.",
+      "Tratamiento adecuado. Se dirigió al usuario utilizando el pronombre de tuteo establecido por la política."
+    ]
+  },
+  {
+    "id_caso": "215475315963148",
+    "fecha": "2026-09-10",
+    "agente": "Camilo Martinez",
+    "bandeja": "Desarrollo",
+    "pais": "Colombia",
+    "critico": "omision_respuesta_ignora_inquietudes",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Evitar transferencias injustificadas. El asesor desvió al usuario a WhatsApp sin justificación técnica, aumentando el esfuerzo del cliente.",
+      "Cobertura multiconsulta integral. El asesor omitió responder al problema de la Dropi Card que el usuario había detallado previamente.",
+      "Documentación de trazabilidad interna. Faltó dejar notas internas registrando el estado del caso antes de proceder con el cierre.",
+      "Cierre verificado y no apresurado. El asesor anunció el cierre en el mismo mensaje de redirección sin validar la conformidad del usuario."
+    ],
+    "lo_positivo": [
+      "Cumplimiento del SLA temporal. El asesor respondió al ticket dentro del horario laboral establecido por la compañía.",
+      "Correcta ortografía. La redacción del mensaje presentado por el asesor no contiene faltas ortográficas ni de sintaxis.",
+      "Uso de canal formal. El asesor mantuvo un trato educado y profesional en su única intervención en el chat."
+    ]
+  },
+  {
+    "id_caso": "215475449969219",
+    "fecha": "2026-09-10",
+    "agente": "Ashley Erazo",
+    "bandeja": "Linea general",
+    "pais": "Colombia",
+    "critico": "omision_respuesta_ignora_inquietudes",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Escucha activa y comprensión. El asesor debió leer detalladamente que la usuaria había perdido su dispositivo por robo y no limitarse a reenviar el mismo manual.",
+      "Resolución efectiva de casos de 2FA. Faltó gestionar el escalamiento correspondiente o brindar una ruta alternativa para restablecer el acceso de la usuaria.",
+      "Validación de resolución antes del cierre. El asesor dio por finalizada la interacción mediante un mensaje automático sin confirmar si el problema había sido resuelto."
+    ],
+    "lo_positivo": [
+      "Uso de soportes visuales. El asesor compartió un manual en formato PDF para orientar a la usuaria en el proceso de autenticación.",
+      "Ortografía adecuada. La redacción de los mensajes enviados por el asesor se mantuvo libre de faltas ortográficas.",
+      "Identificación inicial. El asesor se presentó correctamente al retomar el caso asignado."
+    ]
+  },
+  {
+    "id_caso": "215475745823031",
+    "fecha": "2026-09-10",
+    "agente": "Laura Criollo",
+    "bandeja": "Ordenes sin despacho",
+    "pais": "Colombia",
+    "critico": "omision_respuesta_ignora_inquietudes",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Cobertura multiconsulta incompleta. Es fundamental leer detalladamente todo el mensaje del usuario para no omitir inquietudes secundarias como la devolución del dinero.",
+      "Verificación antes del cierre. Debe evitarse enviar mensajes de despedida o dar por concluido el caso sin confirmar que todas las preguntas del usuario han sido satisfechas."
+    ],
+    "lo_positivo": [
+      "Identificación adecuada. La asesora se presentó correctamente indicando su nombre y área de trabajo al iniciar la interacción.",
+      "Tono profesional. Mantuvo una postura respetuosa y un trato cordial acorde con los estándares de comunicación de Dropi.",
+      "Cumplimiento de SLA. La respuesta inicial y de seguimiento se gestionaron dentro de los tiempos estipulados para la bandeja."
+    ]
+  },
+  {
+    "id_caso": "215475805588149",
+    "fecha": "2026-09-10",
+    "agente": "Camilo Martinez",
+    "bandeja": "Desarrollo",
+    "pais": "Colombia",
+    "critico": "omision_respuesta_ignora_inquietudes",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Omisión de inquietudes clave. El asesor ignoró por completo los reclamos sobre la congelación de la cuenta y la falta de respuesta interna.",
+      "Falta de empatía y personalización. Las respuestas se sintieron automatizadas y frías ante la frustración evidente del usuario.",
+      "Ausencia de trazabilidad interna. No se documentaron notas internas detallando el estado de la cuenta ni las gestiones realizadas."
+    ],
+    "lo_positivo": [
+      "Redacción formal. El asesor mantiene una adecuada ortografía y corrección gramatical en sus mensajes.",
+      "Cumplimiento del tuteo. Se dirige al usuario utilizando el tratamiento correcto de tú en toda la interacción.",
+      "Uso de plantilla corporativa. Se incluye de manera correcta el saludo y la identificación institucional al iniciar la charla."
+    ]
+  },
+  {
+    "id_caso": "215475317820651",
+    "fecha": "2026-09-10",
+    "agente": "Camilo Martinez",
+    "bandeja": "Desarrollo",
+    "pais": "Ecuador",
+    "critico": "redundancia_con_gali",
+    "nota_final": 0.0,
+    "oportunidades_mejora": [
+      "Evitar redundancias con el bot. El asesor debe leer el historial de la conversación para no repetir la misma información que Gali ya le entregó al usuario.",
+      "Gestión proactiva de fallas. Ante la persistencia del error y el video enviado, se debió escalar técnicamente el caso en lugar de reenviar los mismos pasos.",
+      "Registro de notas internas. Es necesario documentar adecuadamente la trazabilidad y los soportes en las notas internas del ticket."
+    ],
+    "lo_positivo": [
+      "Redacción correcta. El texto de la respuesta mantiene una ortografía adecuada y sin errores gramaticales.",
+      "Uso de soporte visual. Se incluyó una imagen de apoyo adjunta en la respuesta brindada al usuario.",
+      "Tono profesional. El trato hacia el cliente se mantuvo respetuoso durante la interacción."
+    ]
+  }
+]

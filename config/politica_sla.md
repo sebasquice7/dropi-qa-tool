@@ -9,13 +9,32 @@
 Lunes a viernes 8:00 a.m. a 5:00 p.m., y sábados/lunes festivos 8:00 a.m. a 12:00 m. **Los tiempos fuera de este horario NO cuentan como demora del asesor** (ej. un mensaje del cliente a las 6pm que se responde a las 8am del día siguiente hábil está DENTRO del SLA, no es una demora).
 
 ## Cierre por inactividad del cliente (regla fija, aplica a TODOS los procesos)
-Si el **cliente** deja de responder durante **4 horas de tiempo laboral acumulado** después de la última gestión del asesor (mensaje del asesor con información, solución o instrucción clara), el asesor **puede cerrar la conversación válidamente** por abandono/inactividad del cliente — esto NO es una falla del asesor ni debe marcarse como ítem crítico de "cierra sin resolver", siempre que:
+El tiempo que se le da al cliente para responder antes de que el asesor pueda cerrar válidamente depende
+de QUÉ TIPO de mensaje envió el asesor justo antes del silencio:
+
+**Caso A — el asesor preguntó si necesita algo más / cerró un caso ya resuelto (mensaje tipo "¿hay algo más
+en lo que te pueda ayudar?", puede estar redactado de varias formas):** el cliente tiene **1 hora de tiempo
+laboral** para responder. Pasada esa hora sin respuesta, el asesor puede cerrar válidamente — esto NO es
+cierre prematuro ni abandono.
+
+**Caso B — el asesor pidió evidencias, información, o documentación al cliente para poder continuar
+gestionando el caso (ej. "envíame una captura del error", "necesito el número de guía"):** el cliente tiene
+**4 horas de tiempo laboral acumulado** para responder. Pasadas esas 4 horas sin respuesta, el asesor puede
+cerrar válidamente por abandono/inactividad del cliente.
+
+En ambos casos, para que el cierre sea válido:
 1. El asesor haya dado una gestión clara antes del silencio (no cerró sin haber dicho nada útil), y
 2. Haya avisado al cliente antes de cerrar (ej. "veo que te has ausentado, cerraremos por ahora").
 
-Las 4 horas se cuentan en **tiempo laboral** (dentro del horario de atención humana definido arriba) — un silencio nocturno o de fin de semana no cuenta para completar esas 4 horas.
+Las horas se cuentan en **tiempo laboral** (dentro del horario de atención humana definido arriba) — un
+silencio nocturno o de fin de semana no cuenta para completar ese tiempo.
 
-Si el asesor cierra la conversación con MENOS de 4 horas de inactividad del cliente, sin que el caso esté resuelto, eso es una posible falla de proceso (cierre prematuro) — refléjalo en el puntaje de "sla_tiempo_respuesta_concentracion" o activa el ítem crítico "cierre_prematuro_abandono" según qué tan injustificado sea, no lo ignores solo porque hubo un aviso de cierre.
+Si el asesor cierra la conversación con MENOS tiempo de inactividad del que corresponde según el caso (A o
+B) de arriba, sin que el caso esté resuelto, eso es una posible falla de proceso (cierre prematuro) —
+refléjalo en el puntaje de "sla_tiempo_respuesta_concentracion" o activa el ítem crítico
+"cierre_prematuro_abandono" según qué tan injustificado sea, no lo ignores solo porque hubo un aviso de
+cierre. Si no es claro cuál de los 2 casos (A o B) aplica al mensaje del asesor, usa el más estricto (4
+horas) como referencia.
 
 ## Tiempos por proceso (1ª Respuesta / Respuesta Intermedia / Cierre Final)
 
