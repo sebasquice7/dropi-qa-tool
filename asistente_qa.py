@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import html as _html
 import io
 import json
 import math
@@ -49,7 +50,7 @@ import unicodedata
 import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from flask import Blueprint, Flask, Response, abort, jsonify, request, send_file
 
@@ -1025,12 +1026,12 @@ def _widget_html(script_root: str) -> str:
     ico, ico_hd = _icono_html()
     js = (WIDGET_JS.replace("__PREFIJO__", PREFIJO).replace("__ICONO__", ico.replace("'", "\\'"))
           .replace("__ICONO_HD__", ico_hd.replace("'", "\\'")))
-    return f'<script data-base="{script_root}">{js}</script>'
+    return f'<script data-base="{_html.escape(script_root or "", quote=True)}">{js}</script>'
 
 
 def _inyectar(resp: Response) -> Response:
     try:
-        if (request.method != "GET" or resp.status_code != 200 or resp.direct_passthrough
+        if (request.method != "GET" or resp.status_code != 200 or resp.direct_passthrough or resp.is_streamed
                 or resp.mimetype != "text/html" or request.path.startswith(PREFIJO)):
             return resp
         html = resp.get_data(as_text=True)
