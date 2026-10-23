@@ -75,6 +75,9 @@ def _autenticado(auth: Authorization | None) -> bool:
 
 app = crear_app()
 
+from asistente_qa import registrar_asistente
+registrar_asistente(app)
+
 
 if __name__ == "__main__":
     print("\n🚀 Abre en tu navegador: http://127.0.0.1:5050\n")
